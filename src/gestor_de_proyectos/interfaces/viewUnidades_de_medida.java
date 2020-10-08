@@ -5,16 +5,19 @@
  */
 package gestor_de_proyectos.interfaces;
 
+import AccesoDatos.Entity_Main;
+import Controladores.UnidadesDeMedidaJpaController;
+
 /**
  *
  * @author Usuario
  */
-public class Unidades_de_medida extends javax.swing.JFrame {
+public class viewUnidades_de_medida extends javax.swing.JFrame {
 
     /**
      * Creates new form Unidades_de_medida
      */
-    public Unidades_de_medida() {
+    public viewUnidades_de_medida() {
         initComponents();
     }
 
@@ -29,35 +32,32 @@ public class Unidades_de_medida extends javax.swing.JFrame {
 
         label6 = new java.awt.Label();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        dgvUnidades = new javax.swing.JTable();
         txtBuscar = new javax.swing.JTextField();
         btnBuscar = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        btnNuevaUnidad = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         label6.setFont(new java.awt.Font("Impact", 0, 24)); // NOI18N
         label6.setText("Unidades de medida");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        dgvUnidades.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "ID", "Unidad", "Editar"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(dgvUnidades);
 
         btnBuscar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Buscar1.png"))); // NOI18N
         btnBuscar.setText("BUSCAR");
 
-        jButton2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jButton2.setText("NUEVA UNIDAD");
+        btnNuevaUnidad.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnNuevaUnidad.setText("NUEVA UNIDAD");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -71,7 +71,7 @@ public class Unidades_de_medida extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnBuscar))
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(jButton2)
+                        .addComponent(btnNuevaUnidad)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(90, 90, 90)
@@ -91,7 +91,7 @@ public class Unidades_de_medida extends javax.swing.JFrame {
                     .addComponent(btnBuscar)
                     .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(jButton2)
+                .addComponent(btnNuevaUnidad)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 355, Short.MAX_VALUE)
                 .addContainerGap())
@@ -117,30 +117,29 @@ public class Unidades_de_medida extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Unidades_de_medida.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(viewUnidades_de_medida.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Unidades_de_medida.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(viewUnidades_de_medida.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Unidades_de_medida.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(viewUnidades_de_medida.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Unidades_de_medida.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(viewUnidades_de_medida.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+        //</editor-fold>
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Unidades_de_medida().setVisible(true);
-            }
-        });
+        viewUnidades_de_medida view= new viewUnidades_de_medida();
+        UnidadesDeMedidaJpaController controlar= new UnidadesDeMedidaJpaController(Entity_Main.getInstance(), view);
+        controlar.iniciarForm();
+        view.setVisible(true);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnBuscar;
-    private javax.swing.JButton jButton2;
+    public javax.swing.JButton btnBuscar;
+    public javax.swing.JButton btnNuevaUnidad;
+    public javax.swing.JTable dgvUnidades;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     private java.awt.Label label6;
-    private javax.swing.JTextField txtBuscar;
+    public javax.swing.JTextField txtBuscar;
     // End of variables declaration//GEN-END:variables
 }
