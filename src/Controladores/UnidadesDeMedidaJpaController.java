@@ -172,8 +172,17 @@ public class UnidadesDeMedidaJpaController implements Serializable {
                     list= findUnidadSearch(view.txtBuscar.getText().trim().toString());
                     if (list!=null) {
                         llenarTabla(list);
-                    }                
-                }                
+                    }
+                    else
+                    {
+                        JOptionPane.showMessageDialog(view,"No existen Unidades relacionadas con: "+view.btnBuscar.getText());
+                    }
+                }
+                else
+                {
+                    List<UnidadesDeMedida> lista = findUnidadesDeMedidaEntities();
+                    llenarTabla(lista);
+                }
             }
         }
     };
@@ -215,7 +224,11 @@ public class UnidadesDeMedidaJpaController implements Serializable {
 
     }
     
-           //------------------------ Acciones del acceso a datos --------------------//
+    //------------------------ Métodos del acceso a datos --------------------//  
+    
+    public UnidadesDeMedidaJpaController(EntityManagerFactory emf) {
+        this.emf = emf;
+    }
     private EntityManagerFactory emf = null;
 
     public EntityManager getEntityManager() {
