@@ -5,16 +5,19 @@
  */
 package gestor_de_proyectos.interfaces;
 
+import AccesoDatos.Entity_Main;
+import Controladores.UsuariosJpaController;
+
 /**
  *
  * @author josse
  */
-public class Menu_Principal extends javax.swing.JFrame {
+public class ViewMenu_Principal extends javax.swing.JFrame {
 
     /**
      * Creates new form Menu_Principal
      */
-    public Menu_Principal() {
+    public ViewMenu_Principal() {
         initComponents();
     }
 
@@ -39,11 +42,26 @@ public class Menu_Principal extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         btnUsuarios.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/usuarios1.png"))); // NOI18N
+        btnUsuarios.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnUsuariosMouseClicked(evt);
+            }
+        });
 
         btnGeneral.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/cubos1.png"))); // NOI18N
         btnGeneral.setToolTipText("");
+        btnGeneral.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnGeneralMouseClicked(evt);
+            }
+        });
 
         btnProyectos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/proyecto1.png"))); // NOI18N
+        btnProyectos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnProyectosMouseClicked(evt);
+            }
+        });
 
         jLabel1.setText("Administrar Proyectos");
 
@@ -52,9 +70,14 @@ public class Menu_Principal extends javax.swing.JFrame {
         jLabel3.setText("Administrar Generalidades");
 
         lblNombre.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        lblNombre.setText("Planilla - Proyecto: ");
+        lblNombre.setText("Gestor de Proyectos");
 
         btnCerrar.setText("Cerrar sesión");
+        btnCerrar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnCerrarMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -79,25 +102,24 @@ public class Menu_Principal extends javax.swing.JFrame {
                         .addComponent(jLabel2)
                         .addGap(18, 18, 18)
                         .addComponent(jLabel3)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(124, 124, 124)
-                .addComponent(lblNombre)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap(20, Short.MAX_VALUE))))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(308, Short.MAX_VALUE)
                 .addComponent(btnCerrar)
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(116, 116, 116)
+                .addComponent(lblNombre)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(31, 31, 31)
-                        .addComponent(lblNombre))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(btnCerrar)))
-                .addGap(66, 66, 66)
+                .addContainerGap()
+                .addComponent(btnCerrar)
+                .addGap(10, 10, 10)
+                .addComponent(lblNombre)
+                .addGap(53, 53, 53)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnProyectos)
                     .addComponent(btnUsuarios)
@@ -113,6 +135,35 @@ public class Menu_Principal extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnProyectosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnProyectosMouseClicked
+        ViewAdministrar_Proyecto admin = new ViewAdministrar_Proyecto();
+        admin.setVisible(true);
+        admin.setLocationRelativeTo(null);
+        this.dispose();
+    }//GEN-LAST:event_btnProyectosMouseClicked
+
+    private void btnUsuariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnUsuariosMouseClicked
+        ViewUsuarios users = new ViewUsuarios();
+        users.setVisible(true);
+        users.setLocationRelativeTo(null);
+        this.dispose();
+    }//GEN-LAST:event_btnUsuariosMouseClicked
+
+    private void btnGeneralMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnGeneralMouseClicked
+        ViewGeneralidades general = new ViewGeneralidades();
+        general.setVisible(true);
+        general.setLocationRelativeTo(null);
+        this.dispose();
+    }//GEN-LAST:event_btnGeneralMouseClicked
+
+    private void btnCerrarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarMouseClicked
+        ViewLogin view = new ViewLogin();
+        UsuariosJpaController userjpa = new UsuariosJpaController(Entity_Main.getInstance(), view);
+        userjpa.iniciarForm();
+        view.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnCerrarMouseClicked
 
     /**
      * @param args the command line arguments
@@ -131,20 +182,21 @@ public class Menu_Principal extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Menu_Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewMenu_Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Menu_Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewMenu_Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Menu_Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewMenu_Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Menu_Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewMenu_Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Menu_Principal().setVisible(true);
+                new ViewMenu_Principal().setVisible(true);
             }
         });
     }
