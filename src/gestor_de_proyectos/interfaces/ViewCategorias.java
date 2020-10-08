@@ -5,16 +5,20 @@
  */
 package gestor_de_proyectos.interfaces;
 
+import AccesoDatos.Entity_Main;
+import Controladores.CargosJpaController;
+import Controladores.CategoriasJpaController;
+
 /**
  *
  * @author Manuel
  */
-public class Categorías extends javax.swing.JFrame {
+public class ViewCategorias extends javax.swing.JFrame {
 
     /**
      * Creates new form Categorías
      */
-    public Categorías() {
+    public ViewCategorias() {
         initComponents();
     }
 
@@ -30,8 +34,6 @@ public class Categorías extends javax.swing.JFrame {
         btngrupo2 = new javax.swing.ButtonGroup();
         label6 = new java.awt.Label();
         jPanel1 = new javax.swing.JPanel();
-        rdCategorias = new javax.swing.JRadioButton();
-        rdProyecto = new javax.swing.JRadioButton();
         btnNuevaCategoria = new javax.swing.JButton();
         btnReporte = new javax.swing.JButton();
         txtBuscar = new javax.swing.JTextField();
@@ -45,34 +47,18 @@ public class Categorías extends javax.swing.JFrame {
         label6.setFont(new java.awt.Font("Impact", 0, 24)); // NOI18N
         label6.setText("Categorías");
 
-        btngrupo2.add(rdCategorias);
-        rdCategorias.setSelected(true);
-        rdCategorias.setText("Categoría");
-
-        btngrupo2.add(rdProyecto);
-        rdProyecto.setText("Proyecto");
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(41, 41, 41)
-                .addComponent(rdCategorias)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
-                .addComponent(rdProyecto)
-                .addContainerGap())
+            .addGap(0, 222, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(0, 7, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(rdCategorias)
-                    .addComponent(rdProyecto)))
+            .addGap(0, 30, Short.MAX_VALUE)
         );
 
-        btnNuevaCategoria.setText("Nuevo Cargo");
+        btnNuevaCategoria.setText("Nueva Categoría");
 
         btnReporte.setText("Reporte");
 
@@ -176,36 +162,37 @@ public class Categorías extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Categorías.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewCategorias.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Categorías.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewCategorias.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Categorías.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewCategorias.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Categorías.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewCategorias.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Categorías().setVisible(true);
-            }
-        });
+        ViewCategorias view = new ViewCategorias();
+
+        CategoriasJpaController ct = new CategoriasJpaController(Entity_Main.getInstance(),view);
+        ct.iniciarForm();
+         view.setVisible(true);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnNuevaCategoria;
+    public javax.swing.JButton btnNuevaCategoria;
     private javax.swing.JButton btnReporte;
     private javax.swing.ButtonGroup btngrupo2;
-    private javax.swing.JComboBox<String> cmbTipodeCate;
-    private javax.swing.JTable dgvCategorias;
+    public javax.swing.JComboBox<String> cmbTipodeCate;
+    public javax.swing.JTable dgvCategorias;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private java.awt.Label label6;
-    private javax.swing.JRadioButton rdCategorias;
-    private javax.swing.JRadioButton rdProyecto;
-    private javax.swing.JTextField txtBuscar;
+    public javax.swing.JTextField txtBuscar;
     // End of variables declaration//GEN-END:variables
 }

@@ -9,12 +9,12 @@ package gestor_de_proyectos.interfaces;
  *
  * @author Manuel
  */
-public class Nueva_Categoria extends javax.swing.JFrame {
+public class ViewNueva_Categoria extends javax.swing.JFrame {
 
     /**
      * Creates new form Nueva_Categoria
      */
-    public Nueva_Categoria() {
+    public ViewNueva_Categoria() {
         initComponents();
     }
 
@@ -119,31 +119,32 @@ public class Nueva_Categoria extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Nueva_Categoria.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewNueva_Categoria.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Nueva_Categoria.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewNueva_Categoria.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Nueva_Categoria.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewNueva_Categoria.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Nueva_Categoria.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewNueva_Categoria.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Nueva_Categoria().setVisible(true);
+                new ViewNueva_Categoria().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnCancelar;
-    private javax.swing.JButton btnNuevacateg;
-    private javax.swing.JComboBox<String> cmbTipoCategoria;
+    public javax.swing.JButton btnCancelar;
+    public javax.swing.JButton btnNuevacateg;
+    public javax.swing.JComboBox<String> cmbTipoCategoria;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private java.awt.Label label6;
-    private javax.swing.JTextField txtNuevocategoria;
+    public javax.swing.JTextField txtNuevocategoria;
     // End of variables declaration//GEN-END:variables
 }

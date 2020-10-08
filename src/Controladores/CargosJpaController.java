@@ -314,7 +314,7 @@ public class CargosJpaController implements Serializable {
             } else if (e.getSource() == nuevocargo.btnCancelar) {
                 nuevocargo.dispose();
             } else if (e.getSource() == nuevocargo.btnNuevocargo) {
-                if (nuevocargo.txtNuevocargo.getText().isEmpty()) {
+                if (nuevocargo.txtNuevocargo.getText().trim().isEmpty()) {
                     JOptionPane.showMessageDialog(view, "Debe agregarle un nombre al nuevo cargo.");
                 } else {
                     try {
