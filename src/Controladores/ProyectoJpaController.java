@@ -11,8 +11,9 @@ import AccesoDatos.Proyecto;
 import Controladores.exceptions.NonexistentEntityException;
 import Controladores.exceptions.PreexistingEntityException;
 import gestor_de_proyectos.interfaces.ViewAdministrar_Proyecto;
-import gestor_de_proyectos.interfaces.ViewCrear_Editar_Proyecto;
+import gestor_de_proyectos.interfaces.ViewCrear_Proyecto;
 import gestor_de_proyectos.interfaces.ViewDetalles_Proyecto;
+import gestor_de_proyectos.interfaces.ViewEditar_Proyecto;
 import gestor_de_proyectos.interfaces.ViewMenu_Principal;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -53,9 +54,10 @@ import oracle.jdbc.OracleTypes;
 public class ProyectoJpaController implements Serializable {
     
     ViewAdministrar_Proyecto view = new ViewAdministrar_Proyecto();
-    ViewCrear_Editar_Proyecto CEproyecto = new ViewCrear_Editar_Proyecto();
+    ViewCrear_Proyecto CEproyecto = new ViewCrear_Proyecto();
     ViewMenu_Principal menu = new ViewMenu_Principal();
     ViewDetalles_Proyecto detalles = new ViewDetalles_Proyecto();
+    ViewEditar_Proyecto editarPro = new ViewEditar_Proyecto();
     int fila = -1;
     int columna = -1;
     Proyecto _proyectos; 
@@ -71,6 +73,8 @@ public class ProyectoJpaController implements Serializable {
         this.view.btnPrincipal.addActionListener(al);
         this.CEproyecto.btnCrear.addActionListener(al);
         this.CEproyecto.btnCancelar.addActionListener(al);
+        this.editarPro.btnEditar.addActionListener(al);
+        this.editarPro.btnCancelar.addActionListener(al);
         this.view.dgtProyectos.addMouseListener(new MouseListener(){
             @Override
             public void mouseClicked(MouseEvent me) {
@@ -217,11 +221,11 @@ public class ProyectoJpaController implements Serializable {
         else if (columna == 5) {
             _proyectos = new Proyecto();
             _proyectos = obtenerObjeto(fila);
-            CEproyecto.txtProyecto.setText(_proyectos.getProyNombre());
-            CEproyecto.cmbEstado.setSelectedIndex(Integer.parseInt(_proyectos.getProyEstado().toString()));
-            CEproyecto.spnFecha.setValue(_proyectos.getProyFecha());
-            CEproyecto.setVisible(true);
-            CEproyecto.setLocationRelativeTo(null);
+            editarPro.txtProyecto.setText(_proyectos.getProyNombre());
+            editarPro.cmbEstado.setSelectedIndex(Integer.parseInt(_proyectos.getProyEstado().toString()));
+            editarPro.spnFecha.setValue(_proyectos.getProyFecha());
+            editarPro.setVisible(true);
+            editarPro.setLocationRelativeTo(null);
         }
         else if (columna == 6) {
             int resp = JOptionPane.showConfirmDialog(null, "¿Realmente desea eliminar este proyecto?", "Confirmar", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
@@ -550,6 +554,16 @@ public class ProyectoJpaController implements Serializable {
             else if (ae.getSource() == CEproyecto.btnCancelar) {
                 CEproyecto.dispose();
             }
+            else if (ae.getSource() == editarPro.btnEditar){
+                try {
+                    formEditar();
+                } catch (ParseException ex) {
+                    Logger.getLogger(ProyectoJpaController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            else if (ae.getSource() == editarPro.btnCancelar) {
+                editarPro.dispose();
+            }
         }
     };
     
@@ -623,6 +637,44 @@ public class ProyectoJpaController implements Serializable {
                 agregarATabla(ls);
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(CEproyecto, "Asegúrese que los campos estén correctos");
+            }
+        }
+    }
+    
+    public void formEditar() throws ParseException{
+        if (editarPro.txtProyecto.getText().trim().toString().isEmpty()) {
+            JOptionPane.showMessageDialog(editarPro, "Ingrese el nombre del proyecto");
+        }
+        else if (editarPro.cmbEstado.getSelectedIndex()<0) {
+            JOptionPane.showMessageDialog(editarPro, "Seleccione un estado para el proyecto");
+        }
+        else{
+            String status;
+            if (editarPro.cmbEstado.getSelectedItem().equals("Activo")) {
+                status = "1";
+            }
+            else if (editarPro.cmbEstado.getSelectedItem().equals("Inactivo")) {
+                 status = "0";
+            }
+            else{
+                status = "2";
+            }
+            
+            SimpleDateFormat formater = new SimpleDateFormat("dd/MM/yyyy");
+            String spinnerValue = formater.format(editarPro.spnFecha.getValue());
+            Date date = formater.parse(spinnerValue);
+            
+            _proyectos = new Proyecto();
+            _proyectos.setProyNombre(editarPro.txtProyecto.getText().trim().toString());
+            _proyectos.setProyEstado(new BigInteger(String.valueOf(status)));
+            _proyectos.setProyFecha(date);
+            
+            try {
+                edit(_proyectos);
+                List<Proyecto> ls = findProyectoEntities();
+                agregarATabla(ls);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(editarPro, "Asegúrese que los campos estén correctos");
             }
         }
     }

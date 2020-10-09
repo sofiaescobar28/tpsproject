@@ -16,12 +16,12 @@ import javax.swing.SpinnerDateModel;
  *
  * @author josse
  */
-public class ViewCrear_Editar_Proyecto extends javax.swing.JFrame {
+public class ViewCrear_Proyecto extends javax.swing.JFrame {
 
     /**
      * Creates new form Crear_Editar_Proyecto
      */
-    public ViewCrear_Editar_Proyecto() {
+    public ViewCrear_Proyecto() {
         initComponents();
     }
 
@@ -130,21 +130,23 @@ public class ViewCrear_Editar_Proyecto extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ViewCrear_Editar_Proyecto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewCrear_Proyecto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ViewCrear_Editar_Proyecto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewCrear_Proyecto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ViewCrear_Editar_Proyecto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewCrear_Proyecto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ViewCrear_Editar_Proyecto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewCrear_Proyecto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ViewCrear_Editar_Proyecto().setVisible(true);
+                new ViewCrear_Proyecto().setVisible(true);
             }
         });
     }
