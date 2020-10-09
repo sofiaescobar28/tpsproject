@@ -55,7 +55,8 @@ public class CargosJpaController implements Serializable {
     int idglobal;
     int fila = -1;
     int columna = -1;
-
+ public CargosJpaController(EntityManagerFactory emf){
+  this.emf = emf;}
     public CargosJpaController(EntityManagerFactory emf, ViewCargos view) {
         this.emf = emf;
         this.view = view;
