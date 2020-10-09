@@ -9,12 +9,12 @@ package gestor_de_proyectos.interfaces;
  *
  * @author Usuario
  */
-public class Crea_Editar_Unidad_Medida extends javax.swing.JFrame {
+public class viewCrea_Editar_Unidad_Medida extends javax.swing.JFrame {
 
     /**
      * Creates new form Crea_Editar_Unidad_Medida
      */
-    public Crea_Editar_Unidad_Medida() {
+    public viewCrea_Editar_Unidad_Medida() {
         initComponents();
     }
 
@@ -96,28 +96,29 @@ public class Crea_Editar_Unidad_Medida extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Crea_Editar_Unidad_Medida.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(viewCrea_Editar_Unidad_Medida.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Crea_Editar_Unidad_Medida.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(viewCrea_Editar_Unidad_Medida.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Crea_Editar_Unidad_Medida.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(viewCrea_Editar_Unidad_Medida.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Crea_Editar_Unidad_Medida.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(viewCrea_Editar_Unidad_Medida.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Crea_Editar_Unidad_Medida().setVisible(true);
+                new viewCrea_Editar_Unidad_Medida().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnCancelar;
-    private javax.swing.JButton btnGuardar;
+    public javax.swing.JButton btnCancelar;
+    public javax.swing.JButton btnGuardar;
     private java.awt.Label label6;
-    private javax.swing.JTextField txtUnidadMed;
+    public javax.swing.JTextField txtUnidadMed;
     // End of variables declaration//GEN-END:variables
 }

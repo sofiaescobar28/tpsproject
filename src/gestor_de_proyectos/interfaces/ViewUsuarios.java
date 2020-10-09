@@ -5,16 +5,19 @@
  */
 package gestor_de_proyectos.interfaces;
 
+import AccesoDatos.Entity_Main;
+import Controladores.UsuariosJpaController;
+
 /**
  *
  * @author Usuario
  */
-public class Usuarios extends javax.swing.JFrame {
+public class ViewUsuarios extends javax.swing.JFrame {
 
     /**
      * Creates new form Usuarios
      */
-    public Usuarios() {
+    public ViewUsuarios() {
         initComponents();
     }
 
@@ -32,12 +35,10 @@ public class Usuarios extends javax.swing.JFrame {
         btnNuevo = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tUsuarios = new javax.swing.JTable();
+        dgvUsuarios = new javax.swing.JTable();
         label1 = new java.awt.Label();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        cmbEstado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         btnBuscar.setText("BUSCAR");
 
@@ -45,18 +46,15 @@ public class Usuarios extends javax.swing.JFrame {
 
         jLabel1.setText("Estado:");
 
-        tUsuarios.setModel(new javax.swing.table.DefaultTableModel(
+        dgvUsuarios.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "ID", "NOMBRE", "CLAVE", "CORREO", "ESTADO", "CONTRASEÑA", ""
             }
         ));
-        jScrollPane1.setViewportView(tUsuarios);
+        jScrollPane1.setViewportView(dgvUsuarios);
 
         label1.setName(""); // NOI18N
         label1.setText("NUEVO USUARIO");
@@ -128,31 +126,31 @@ public class Usuarios extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Usuarios.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewUsuarios.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Usuarios.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewUsuarios.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Usuarios.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewUsuarios.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Usuarios.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewUsuarios.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Usuarios().setVisible(true);
-            }
-        });
+        ViewUsuarios view = new ViewUsuarios();
+        UsuariosJpaController ctrl = new UsuariosJpaController(Entity_Main.getInstance(),view);
+        ctrl.iniciarFormUs();
+        view.setVisible(true);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnBuscar;
-    private javax.swing.JButton btnNuevo;
-    private javax.swing.JComboBox<String> cmbEstado;
+    public javax.swing.JButton btnBuscar;
+    public javax.swing.JButton btnNuevo;
+    public javax.swing.JComboBox<String> cmbEstado;
+    public javax.swing.JTable dgvUsuarios;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private java.awt.Label label1;
-    private javax.swing.JTable tUsuarios;
     // End of variables declaration//GEN-END:variables
 }
