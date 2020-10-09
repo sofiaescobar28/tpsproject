@@ -9,12 +9,12 @@ package gestor_de_proyectos.interfaces;
  *
  * @author Usuario
  */
-public class Nuevo_Editar_Usr extends javax.swing.JFrame {
+public class ViewNuevo_Editar_Usr extends javax.swing.JFrame {
 
     /**
      * Creates new form Nuevo_Editar_Usr
      */
-    public Nuevo_Editar_Usr() {
+    public ViewNuevo_Editar_Usr() {
         initComponents();
     }
 
@@ -30,7 +30,7 @@ public class Nuevo_Editar_Usr extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         txtNombUsr = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        txtArea = new javax.swing.JTextField();
+        txtClave = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         txtCorreo = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
@@ -38,27 +38,26 @@ public class Nuevo_Editar_Usr extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         txtContra = new javax.swing.JTextField();
         btnCancelar = new javax.swing.JButton();
-        btnCrear = new javax.swing.JButton();
+        btnGuardar = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setText("Nombre de usuario:");
 
-        jLabel2.setText("Alias:");
+        jLabel2.setText("Alias (clave):");
 
         jLabel3.setText("Correo:");
 
         jLabel4.setText("Estado:");
 
-        cmbEstado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cmbEstado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Inactivo", "Activo" }));
 
         jLabel5.setText("Contraseña:");
 
         btnCancelar.setText("CANCELAR");
-        btnCancelar.setActionCommand("CANCELAR");
 
-        btnCrear.setText("CREAR");
+        btnGuardar.setText("GUARDAR");
 
         jLabel6.setFont(new java.awt.Font("Impact", 0, 24)); // NOI18N
         jLabel6.setText("Usuario");
@@ -78,11 +77,11 @@ public class Nuevo_Editar_Usr extends javax.swing.JFrame {
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                             .addComponent(jLabel2)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(txtArea, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(txtClave, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnCancelar)
                         .addGap(18, 18, 18)
-                        .addComponent(btnCrear, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -113,7 +112,7 @@ public class Nuevo_Editar_Usr extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(txtArea, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtClave, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
@@ -129,7 +128,7 @@ public class Nuevo_Editar_Usr extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCancelar)
-                    .addComponent(btnCrear))
+                    .addComponent(btnGuardar))
                 .addGap(26, 26, 26))
         );
 
@@ -155,37 +154,40 @@ public class Nuevo_Editar_Usr extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Nuevo_Editar_Usr.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewNuevo_Editar_Usr.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Nuevo_Editar_Usr.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewNuevo_Editar_Usr.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Nuevo_Editar_Usr.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewNuevo_Editar_Usr.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Nuevo_Editar_Usr.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewNuevo_Editar_Usr.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+        //</editor-fold>
+        
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Nuevo_Editar_Usr().setVisible(true);
+                new ViewNuevo_Editar_Usr().setVisible(true);
+                  
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnCancelar;
-    private javax.swing.JButton btnCrear;
-    private javax.swing.JComboBox<String> cmbEstado;
+    public javax.swing.JButton btnCancelar;
+    public javax.swing.JButton btnGuardar;
+    public javax.swing.JComboBox<String> cmbEstado;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JTextField txtArea;
-    private javax.swing.JTextField txtContra;
-    private javax.swing.JTextField txtCorreo;
-    private javax.swing.JTextField txtNombUsr;
+    public javax.swing.JTextField txtClave;
+    public javax.swing.JTextField txtContra;
+    public javax.swing.JTextField txtCorreo;
+    public javax.swing.JTextField txtNombUsr;
     // End of variables declaration//GEN-END:variables
 }
