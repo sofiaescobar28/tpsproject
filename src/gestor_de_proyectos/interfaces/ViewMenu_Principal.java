@@ -6,6 +6,7 @@
 package gestor_de_proyectos.interfaces;
 
 import AccesoDatos.Entity_Main;
+import Controladores.ProyectoJpaController;
 import Controladores.UsuariosJpaController;
 
 /**
@@ -138,15 +139,18 @@ public class ViewMenu_Principal extends javax.swing.JFrame {
 
     private void btnProyectosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnProyectosMouseClicked
         ViewAdministrar_Proyecto admin = new ViewAdministrar_Proyecto();
+        ProyectoJpaController proyectojpa = new ProyectoJpaController(Entity_Main.getInstance(), admin);
+        proyectojpa.iniciarForm();
         admin.setVisible(true);
-        admin.setLocationRelativeTo(null);
         this.dispose();
     }//GEN-LAST:event_btnProyectosMouseClicked
 
     private void btnUsuariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnUsuariosMouseClicked
         ViewUsuarios users = new ViewUsuarios();
-        users.setVisible(true);
+//        UsuariosJpaController usersjpa = new UsuariosJpaController(Entity_Main.getInstance(), users);
+//        usersjpa.iniciarForm();
         users.setLocationRelativeTo(null);
+        users.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnUsuariosMouseClicked
 
