@@ -5,16 +5,19 @@
  */
 package gestor_de_proyectos.interfaces;
 
+import AccesoDatos.Entity_Main;
+import Controladores.EmpleadosJpaController;
+
 /**
  *
  * @author Manuel
  */
-public class Empleados extends javax.swing.JFrame {
+public class viewEmpleados extends javax.swing.JFrame {
 
     /**
      * Creates new form Empleados
      */
-    public Empleados() {
+    public viewEmpleados() {
         initComponents();
     }
 
@@ -31,7 +34,7 @@ public class Empleados extends javax.swing.JFrame {
         radEmpleado = new javax.swing.JRadioButton();
         rdCargo = new javax.swing.JRadioButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jTableEmpleados = new javax.swing.JTable();
         txtBuscar = new javax.swing.JTextField();
         btnNuevoempleado = new javax.swing.JButton();
         label6 = new java.awt.Label();
@@ -39,11 +42,14 @@ public class Empleados extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        buttonGroup1.add(radEmpleado);
         radEmpleado.setText("Empleado");
 
+        buttonGroup1.add(rdCargo);
+        rdCargo.setSelected(true);
         rdCargo.setText("Cargo");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jTableEmpleados.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -59,9 +65,9 @@ public class Empleados extends javax.swing.JFrame {
                 return types [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
-        if (jTable1.getColumnModel().getColumnCount() > 0) {
-            jTable1.getColumnModel().getColumn(1).setMinWidth(200);
+        jScrollPane1.setViewportView(jTableEmpleados);
+        if (jTableEmpleados.getColumnModel().getColumnCount() > 0) {
+            jTableEmpleados.getColumnModel().getColumn(1).setMinWidth(200);
         }
 
         btnNuevoempleado.setText("Nuevo empleado");
@@ -91,11 +97,8 @@ public class Empleados extends javax.swing.JFrame {
                                     .addGroup(layout.createSequentialGroup()
                                         .addGap(0, 0, Short.MAX_VALUE)
                                         .addComponent(label6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(rdCargo, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 329, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                                    .addComponent(rdCargo, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 329, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addGap(144, 144, 144)
                         .addComponent(btnNuevoempleado, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 669, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -139,33 +142,34 @@ public class Empleados extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Empleados.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(viewEmpleados.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Empleados.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(viewEmpleados.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Empleados.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(viewEmpleados.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Empleados.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(viewEmpleados.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Empleados().setVisible(true);
-            }
-        });
+       viewEmpleados view = new viewEmpleados();
+
+        EmpleadosJpaController ct = new EmpleadosJpaController(Entity_Main.getInstance(),view);
+        ct.iniciarForm();
+         view.setVisible(true);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnNuevoempleado;
+    public javax.swing.JButton btnNuevoempleado;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    public javax.swing.JTable jTableEmpleados;
     private java.awt.Label label6;
-    private javax.swing.JRadioButton radEmpleado;
-    private javax.swing.JRadioButton rdCargo;
-    private javax.swing.JTextField txtBuscar;
+    public javax.swing.JRadioButton radEmpleado;
+    public javax.swing.JRadioButton rdCargo;
+    public javax.swing.JTextField txtBuscar;
     // End of variables declaration//GEN-END:variables
 }

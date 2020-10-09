@@ -7,12 +7,14 @@ package AccesoDatos;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -24,6 +26,9 @@ import javax.persistence.Table;
 @NamedQueries({
     @NamedQuery(name = "Cargos.findAll", query = "SELECT c FROM Cargos c")})
 public class Cargos implements Serializable {
+
+    @OneToMany(mappedBy = "carId")
+    private List<Empleados> empleadosList;
 
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
@@ -86,6 +91,14 @@ public class Cargos implements Serializable {
     @Override
     public String toString() {
         return "AccesoDatos.Cargos[ cargosId=" + cargosId + " ]";
+    }
+
+    public List<Empleados> getEmpleadosList() {
+        return empleadosList;
+    }
+
+    public void setEmpleadosList(List<Empleados> empleadosList) {
+        this.empleadosList = empleadosList;
     }
     
 }

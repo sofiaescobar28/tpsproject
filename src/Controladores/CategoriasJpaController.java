@@ -56,7 +56,7 @@ public class CategoriasJpaController implements Serializable {
     int fila = -1;
     int columna = -1;
     Conexion claseConnect = new Conexion();
-    
+
     public CategoriasJpaController(EntityManagerFactory emf, ViewCategorias view) {
         this.emf = emf;
         this.viewCategorias = view;
@@ -149,7 +149,7 @@ public class CategoriasJpaController implements Serializable {
             
         } catch (SQLException ex) {
             
-            JOptionPane.showMessageDialog(viewCategorias, "El registro que intenta eliminar no existe.");
+            JOptionPane.showMessageDialog(viewCategorias, "Sucedió un problema al realizar la consulta.");
             
         }
         return null;
