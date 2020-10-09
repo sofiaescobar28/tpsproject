@@ -4,7 +4,7 @@
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <class>AccesoDatos.Cargos</class>
     <class>AccesoDatos.Categorias</class>
-    <class>AccedoDatos.UnidadesDeMedida</class>
+    <class>AccesoDatos.UnidadesDeMedida</class>
     <class>AccesoDatos.Usuarios</class>
     <class>AccesoDatos.Proyecto</class>
     <properties>

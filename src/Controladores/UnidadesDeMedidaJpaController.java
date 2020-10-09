@@ -17,6 +17,10 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.sql.CallableStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -26,6 +30,8 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import oracle.jdbc.OracleCallableStatement;
+import oracle.jdbc.OracleTypes;
 
 /**
  *
@@ -46,12 +52,12 @@ public class UnidadesDeMedidaJpaController implements Serializable {
         this.view = view;
         this.view.btnBuscar.addActionListener(al);        
         this.view.btnNuevaUnidad.addActionListener(al);
-        this.view.dgvUnidades.addMouseListener(new MouseListener() {
+        this.view.dgvUnidades.addMouseListener(new MouseListener() {                    
             @Override
-            public void mouseClicked(MouseEvent e) {  
+            public void mouseClicked(MouseEvent e) {
                 if (e.getSource()==view.dgvUnidades) {
                     leerTabla();
-                }
+                } 
             }
 
             @Override
@@ -67,7 +73,7 @@ public class UnidadesDeMedidaJpaController implements Serializable {
             }
 
             @Override
-            public void mouseExited(MouseEvent e) {                
+            public void mouseExited(MouseEvent e) {               
             }
         });
         
@@ -159,10 +165,70 @@ public class UnidadesDeMedidaJpaController implements Serializable {
             else if (e.getSource()==viewCrear_Editar.btnCancelar) {
                 viewCrear_Editar.dispose();
             }
+            else if (e.getSource()==view.btnBuscar)
+            {
+                if (!view.txtBuscar.getText().trim().isEmpty()) {
+                    ArrayList<UnidadesDeMedida> list ;
+                    list= findUnidadSearch(view.txtBuscar.getText().trim().toString());
+                    if (list!=null) {
+                        llenarTabla(list);
+                    }
+                    else
+                    {
+                        JOptionPane.showMessageDialog(view,"No existen Unidades relacionadas con: "+view.btnBuscar.getText());
+                    }
+                }
+                else
+                {
+                    List<UnidadesDeMedida> lista = findUnidadesDeMedidaEntities();
+                    llenarTabla(lista);
+                }
+            }
         }
     };
+    //------------------------ Método que extrae un valor en específico --------------------//
     
-    //------------------------ Acciones del acceso a datos --------------------//
+    public ArrayList<UnidadesDeMedida> findUnidadSearch(String s) {
+
+        try {
+            claseConnect.AbrirConexionBD();
+            CallableStatement cs
+                    = claseConnect.con.prepareCall("{call findUnidadNombre(?,?)}");
+            cs.setString(1, s);
+            cs.registerOutParameter(2, OracleTypes.CURSOR);
+
+            cs.executeQuery();
+
+            ResultSet rset = ((OracleCallableStatement) cs).getCursor(2);
+            ArrayList<UnidadesDeMedida> Datos = new ArrayList<UnidadesDeMedida>();
+            
+                while (rset.next()) {
+                    _unidad = new UnidadesDeMedida();
+                    _unidad.setUmId(rset.getBigDecimal("UM_ID"));
+                    _unidad.setUmNombre(rset.getString("UM_NOMBRE"));
+
+                    Datos.add(_unidad);
+                }
+               
+            
+
+            claseConnect.CerrarConexionBD();
+             return Datos;
+            
+        } catch (SQLException ex) {
+
+            JOptionPane.showMessageDialog(view, "El registro que intenta eliminar no existe.");
+
+        }
+        return null;
+
+    }
+    
+    //------------------------ Métodos del acceso a datos --------------------//  
+    
+    public UnidadesDeMedidaJpaController(EntityManagerFactory emf) {
+        this.emf = emf;
+    }
     private EntityManagerFactory emf = null;
 
     public EntityManager getEntityManager() {

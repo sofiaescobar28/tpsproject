@@ -142,6 +142,7 @@ public class ViewLogin extends javax.swing.JFrame {
         UsuariosJpaController userjpa = new UsuariosJpaController(Entity_Main.getInstance(), view);
         userjpa.iniciarForm();
         view.setVisible(true);
+        //
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
