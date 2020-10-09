@@ -42,6 +42,7 @@ public class ViewNuevo_Editar_Usr extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setUndecorated(true);
 
         jLabel1.setText("Nombre de usuario:");
 

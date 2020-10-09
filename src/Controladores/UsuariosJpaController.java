@@ -23,6 +23,7 @@ import java.math.BigInteger;
 import java.sql.CallableStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -238,6 +239,8 @@ public class UsuariosJpaController implements Serializable {
         this.viewUser.btnNuevo.addActionListener(al2);
         this.viewCrearEditar.btnCancelar.addActionListener(al2);
         this.viewCrearEditar.btnGuardar.addActionListener(al2);
+        this.viewUser.btnBuscar.addActionListener(al2);
+        this.viewUser.btnTodos.addActionListener(al2);
         this.viewUser.dgvUsuarios.addMouseListener( new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -298,11 +301,7 @@ public class UsuariosJpaController implements Serializable {
         viewUser.setLocationRelativeTo(null);   
         viewUser.cmbEstado.addItem("Inactivo");
         viewUser.cmbEstado.addItem("Activo");        
-    }
-    //public void iniciarFormCrearEditar(){
-    //    viewCrearEditar.setLocationRelativeTo(null);   
-    //    viewCrearEditar.setVisible(true);        
-    //}
+    }    
     
     
     public void llenarTabla (List<Usuarios> _ls)
@@ -337,18 +336,21 @@ public class UsuariosJpaController implements Serializable {
             }
             viewUser.dgvUsuarios.setModel(modelo);
         }
-    }    
-    
+    }        
+    public void limpiarTXT ()
+    {
+        viewCrearEditar.txtNombUsr.setText(null);
+        viewCrearEditar.txtClave.setText(null);
+        viewCrearEditar.txtCorreo.setText(null);
+        viewCrearEditar.txtContra.setText(null);
+        viewCrearEditar.cmbEstado.setSelectedItem(0);
+    }
     ActionListener al2 = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
             if (e.getSource()==viewUser.btnNuevo) {
                 _usuario=null;                
-                viewCrearEditar.txtNombUsr.setText(null);
-                viewCrearEditar.txtClave.setText(null);
-                viewCrearEditar.txtCorreo.setText(null);
-                viewCrearEditar.txtContra.setText(null);
-                viewCrearEditar.cmbEstado.setSelectedItem(0);
+                limpiarTXT();
                 viewCrearEditar.setLocationRelativeTo(null);
                 viewCrearEditar.setVisible(true);
             }
@@ -358,50 +360,148 @@ public class UsuariosJpaController implements Serializable {
             }
             else if (e.getSource()==viewCrearEditar.btnGuardar) {
                 if (!viewCrearEditar.txtNombUsr.getText().trim().isEmpty() || !viewCrearEditar.txtClave.getText().trim().isEmpty() ||
-                        viewCrearEditar.txtCorreo.getText().trim().isEmpty() ||viewCrearEditar.txtContra.getText().trim().isEmpty()) {
-                    if (_usuario==null) {
-                        _usuario= new Usuarios();
-                        _usuario.setUserNombres(viewCrearEditar.txtNombUsr.getText());
-                        _usuario.setUserClave(viewCrearEditar.txtClave.getText());
-                        _usuario.setUserCorreo(viewCrearEditar.txtCorreo.getText());
-                        _usuario.setUserContrasena(viewCrearEditar.txtContra.getText());
-                        if (viewCrearEditar.cmbEstado.getSelectedIndex()==1) {
-                            _usuario.setUserEstado(new BigInteger(String.valueOf("1")));
-                        }
-                        else
-                        {
-                            _usuario.setUserEstado(new BigInteger(String.valueOf("1")));
-                        }
-                        try {
-                            create(_usuario);
-                            llenarTabla(findUsuariosEntities());
-                            _usuario=null;
-                        } catch (Exception ex) {
-                            JOptionPane.showMessageDialog(viewCrearEditar,"Ocurrió un error al guardar el usuario, por favor vuelva a intentarlo");
+                        viewCrearEditar.txtCorreo.getText().trim().isEmpty() ||viewCrearEditar.txtContra.getText().trim().isEmpty()) {                    
+                    if (_usuario==null) {                        
+                        ArrayList<Usuarios> list=null;
+                        list= new ArrayList<Usuarios>();
+                        list=BuscarPorClave(viewCrearEditar.txtClave.getText().trim());
+                        if (list==null) {
+                            ///-------problemas
+                            viewCrearEditar.txtClave.setEditable(false);
+                            viewCrearEditar.txtClave.setEnabled(false);
+                            _usuario= new Usuarios();
+                            _usuario.setUserNombres(viewCrearEditar.txtNombUsr.getText());
+                            _usuario.setUserClave(viewCrearEditar.txtClave.getText());
+                            _usuario.setUserCorreo(viewCrearEditar.txtCorreo.getText());
+                            _usuario.setUserContrasena(viewCrearEditar.txtContra.getText());
+                            if (viewCrearEditar.cmbEstado.getSelectedIndex()==1) {
+                                _usuario.setUserEstado(new BigInteger(String.valueOf("1")));
+                            }
+                            else
+                            {
+                                _usuario.setUserEstado(new BigInteger(String.valueOf("1")));
+                            }
+                            try {
+                                create(_usuario);
+                                llenarTabla(findUsuariosEntities());
+                                _usuario=null;
+                                limpiarTXT();
+                            } catch (Exception ex) {
+                                JOptionPane.showMessageDialog(viewCrearEditar,"Ocurrió un error al guardar el usuario, por favor vuelva a intentarlo");
+                            }
+                        }else{
+                            JOptionPane.showMessageDialog(viewCrearEditar, "Este alias ya existe, escoja otro por favor");                            
                         }
                     }else{
+                        ///-------problemas
+                        viewCrearEditar.txtClave.setEditable(false);
+                        viewCrearEditar.txtClave.setEnabled(false);
                         _usuario.setUserNombres(viewCrearEditar.txtNombUsr.getText());
                         _usuario.setUserClave(viewCrearEditar.txtClave.getText());
                         _usuario.setUserCorreo(viewCrearEditar.txtCorreo.getText());
-                        _usuario.setUserContrasena(viewCrearEditar.txtContra.getText());
+                        _usuario.setUserContrasena(viewCrearEditar.txtContra.getText());                        
                         if (viewCrearEditar.cmbEstado.getSelectedIndex()==1) {
                             _usuario.setUserEstado(new BigInteger(String.valueOf("1")));
                         }
                         else
                         {
-                            _usuario.setUserEstado(new BigInteger(String.valueOf("1")));
+                            _usuario.setUserEstado(new BigInteger(String.valueOf("0")));
                         }
                         try {
                             edit(_usuario);
                             llenarTabla(findUsuariosEntities());
                             _usuario=null;
+                            limpiarTXT();
                         } catch (Exception ex) {
                             JOptionPane.showMessageDialog(viewCrearEditar,"Ocurrió un error al editar el usuario, por favor vuelva a intentarlo");
                         }
-                    }
+                    }                    
+                }
+            }
+            else if (e.getSource()==viewUser.btnTodos) {
+                llenarTabla(findUsuariosEntities());                
+            }
+            else if (e.getSource()==viewUser.btnBuscar) {
+                int _index = viewUser.cmbEstado.getSelectedIndex();
+                ArrayList<Usuarios> list;
+                list = BuscarPorEstado(_index);
+                if (list!=null) {
+                    llenarTabla(list);
+                }else {
+                    JOptionPane.showMessageDialog(view,"No existen usuarios relacionados");
                 }
             }
         }        
     };
-    
+    //-----------------------llamar a procedimientos-----------------------------
+    public ArrayList<Usuarios> BuscarPorClave(String s)
+    {
+        try {
+            claseConnect.AbrirConexionBD();
+            CallableStatement cs
+                    = claseConnect.con.prepareCall("{call findUsrClave(?,?)}");
+            cs.setString(1, s);
+            cs.registerOutParameter(2, OracleTypes.CURSOR);
+
+            cs.executeQuery();
+
+            ResultSet rset = ((OracleCallableStatement) cs).getCursor(2);
+            ArrayList<Usuarios> Datos = new ArrayList<Usuarios>();
+            Usuarios usu;
+            if (!rset.next()) {
+                return null;
+            }
+            else{
+                while (rset.next()) {
+                    usu = new Usuarios();                    
+                    usu.setUserId(new BigDecimal(rset.getString("USER_ID")));
+                    usu.setUserNombres(rset.getString("US.USER_NOMBRES"));
+                    usu.setUserClave(rset.getString("US.USER_CLAVE"));
+                    Datos.add(usu);
+                }
+                claseConnect.CerrarConexionBD();
+                return Datos;            
+            }
+            
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(view, "Error al buscar alias(Clave)");
+            return null;
+        }        
+    }
+    public ArrayList<Usuarios> BuscarPorEstado(int index)
+    {
+        try {
+            claseConnect.AbrirConexionBD();
+            CallableStatement cs
+                    = claseConnect.con.prepareCall("{call findUsrEstado(?,?)}");
+            cs.setString(1, String.valueOf( index));
+            cs.registerOutParameter(2, OracleTypes.CURSOR);
+
+            cs.executeQuery();
+
+            ResultSet rset = ((OracleCallableStatement) cs).getCursor(2);
+            ArrayList<Usuarios> Datos = new ArrayList<Usuarios>();
+            Usuarios usu;  
+            if (!rset.next()) {
+                return null;
+            }
+            else{
+                while (rset.next()) {
+                    usu = new Usuarios();
+                    usu.setUserId(new BigDecimal(rset.getString("USER_ID")));
+                    usu.setUserNombres(rset.getString("USER_NOMBRES"));
+                    usu.setUserClave(rset.getString("USER_CLAVE"));
+                    usu.setUserCorreo(rset.getString("USER_CORREO"));
+                    usu.setUserEstado(new BigInteger(rset.getString("USER_ESTADO")));
+                    usu.setUserContrasena(rset.getString("USER_CONTRASENA"));                
+                    Datos.add(usu);
+                }                           
+                claseConnect.CerrarConexionBD();
+                return Datos;            
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(view, "Error: "+ex.toString());
+        }
+        return null;
+    }
 }
