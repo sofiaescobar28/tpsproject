@@ -6,6 +6,7 @@
     <class>AccesoDatos.Categorias</class>
     <class>AccesoDatos.UnidadesDeMedida</class>
     <class>AccesoDatos.Usuarios</class>
+    <class>AccesoDatos.Empleados</class>
     <class>AccesoDatos.Proyecto</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:oracle:thin:@localhost:1521:XE"/>

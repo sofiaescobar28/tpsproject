@@ -5,6 +5,12 @@
  */
 package gestor_de_proyectos.interfaces;
 
+import AccesoDatos.Entity_Main;
+import Controladores.CargosJpaController;
+import Controladores.CategoriasJpaController;
+import Controladores.UnidadesDeMedidaJpaController;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Usuario
@@ -17,7 +23,7 @@ public class ViewGeneralidades extends javax.swing.JFrame {
     public ViewGeneralidades() {
         initComponents();
     }
-
+        
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -41,20 +47,40 @@ public class ViewGeneralidades extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         btnUnidades.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/UnidadMed1.png"))); // NOI18N
+        btnUnidades.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUnidadesActionPerformed(evt);
+            }
+        });
 
         jLabel1.setText("Unidades de medida");
 
         jLabel2.setText("Categorías");
 
         btnCat.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/categoria1.png"))); // NOI18N
+        btnCat.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCatActionPerformed(evt);
+            }
+        });
 
         jLabel3.setText("Cargos");
 
         btnCargos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Cargos1.png"))); // NOI18N
+        btnCargos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCargosActionPerformed(evt);
+            }
+        });
 
         jLabel4.setText("Empleados");
 
         btnEmp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Empleados1.png"))); // NOI18N
+        btnEmp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEmpActionPerformed(evt);
+            }
+        });
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel5.setText("Menú principal");
@@ -134,6 +160,44 @@ public class ViewGeneralidades extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnUnidadesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUnidadesActionPerformed
+        // TODO add your handling code here:
+        try{                                    
+            viewUnidades_de_medida view = new viewUnidades_de_medida();
+            UnidadesDeMedidaJpaController ctrl = new UnidadesDeMedidaJpaController(Entity_Main.getInstance(),view);     
+            ctrl.iniciarForm();
+            view.setLocationRelativeTo(null);
+            view.setVisible(true);
+        }
+        catch(Exception ex)
+        {
+            JOptionPane.showMessageDialog(this,"causa:"+ex.getCause()+", mensaje:"+ex.getMessage()+", ex:"+ex);
+        }
+        
+    }//GEN-LAST:event_btnUnidadesActionPerformed
+
+    private void btnCatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCatActionPerformed
+        // TODO add your handling code here:
+        ViewCategorias view = new ViewCategorias();
+        CategoriasJpaController ct = new CategoriasJpaController(Entity_Main.getInstance(),view);
+        ct.iniciarForm();
+        view.setLocationRelativeTo(null);
+        view.setVisible(true);
+    }//GEN-LAST:event_btnCatActionPerformed
+
+    private void btnEmpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEmpActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnEmpActionPerformed
+
+    private void btnCargosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCargosActionPerformed
+        // TODO add your handling code here:
+        ViewCargos view = new ViewCargos();                
+        CargosJpaController ct = new CargosJpaController(Entity_Main.getInstance(),view);
+        ct.iniciarForm();
+        view.setLocationRelativeTo(null);
+        view.setVisible(true);
+    }//GEN-LAST:event_btnCargosActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -163,11 +227,9 @@ public class ViewGeneralidades extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new ViewGeneralidades().setVisible(true);
-            }
-        });
+        ViewGeneralidades g = new ViewGeneralidades();
+        g.setLocationRelativeTo(g);
+        g.setVisible(true);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
