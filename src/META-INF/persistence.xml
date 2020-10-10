@@ -7,6 +7,7 @@
     <class>AccesoDatos.Categorias</class>
     <class>AccesoDatos.UnidadesDeMedida</class>
     <class>AccesoDatos.Usuarios</class>
+    <class>AccesoDatos.Empleados</class>
     <class>AccesoDatos.Proyecto</class>
     <class>AccesoDatos.IngresoEgreso</class>
     <properties>
