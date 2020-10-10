@@ -7,6 +7,7 @@ package Controladores;
 
 import AccesoDatos.Cargos;
 import AccesoDatos.Conexion;
+import AccesoDatos.Entity_Main;
 import AccesoDatos.Proyecto;
 import Controladores.exceptions.NonexistentEntityException;
 import Controladores.exceptions.PreexistingEntityException;
@@ -58,11 +59,14 @@ public class ProyectoJpaController implements Serializable {
     ViewMenu_Principal menu = new ViewMenu_Principal();
     ViewDetalles_Proyecto detalles = new ViewDetalles_Proyecto();
     ViewEditar_Proyecto editarPro = new ViewEditar_Proyecto();
+    
     int fila = -1;
     int columna = -1;
     Proyecto _proyectos; 
     Conexion claseConnect = new Conexion();
 
+    public ProyectoJpaController(EntityManagerFactory emf){
+        this.emf = emf;}
     
     public ProyectoJpaController(EntityManagerFactory emf, ViewAdministrar_Proyecto view) {
         this.emf = emf;
@@ -214,16 +218,22 @@ public class ProyectoJpaController implements Serializable {
         fila = view.dgtProyectos.getSelectedRow();
         columna = view.dgtProyectos.getSelectedColumn();
         if (columna == 4) {
-            detalles.setTitle("Detalles del Proyecto");
+            IngresoEgresoJpaController ctrlInEg = new IngresoEgresoJpaController(Entity_Main.getInstance(), detalles);
+            int id = Integer.parseInt(view.dgtProyectos.getValueAt(fila, 0).toString());
+            String nombre = view.dgtProyectos.getValueAt(fila, 1).toString();
+            ctrlInEg.iniciarForm(id, nombre);
             detalles.setVisible(true);
             detalles.setLocationRelativeTo(null);
+            view.dispose();
         }
         else if (columna == 5) {
             _proyectos = new Proyecto();
             _proyectos = obtenerObjeto(fila);
+            editarPro.jTextField1.setText(String.valueOf(_proyectos.getProyId()));
             editarPro.txtProyecto.setText(_proyectos.getProyNombre());
             editarPro.cmbEstado.setSelectedIndex(Integer.parseInt(_proyectos.getProyEstado().toString()));
             editarPro.spnFecha.setValue(_proyectos.getProyFecha());
+            editarPro.jTextField1.setVisible(false);
             editarPro.setVisible(true);
             editarPro.setLocationRelativeTo(null);
         }
@@ -259,11 +269,11 @@ public class ProyectoJpaController implements Serializable {
         } catch (ParseException e) {
             JOptionPane.showMessageDialog(view, e.getMessage());
         }
-        if (view.dgtProyectos.getValueAt(fila, 2).toString().equals("Activo")) {
+        if (view.dgtProyectos.getValueAt(fila, 3).toString().equals("Activo")) {
             status = "1";
             _proyectos.setProyEstado(new BigInteger(String.valueOf(status)));
         }
-        else if (view.dgtProyectos.getValueAt(fila, 2).toString().equals("Inactivo")) {
+        else if (view.dgtProyectos.getValueAt(fila, 3).toString().equals("Inactivo")) {
             status = "0";
             _proyectos.setProyEstado(new BigInteger(String.valueOf(status)));
         }
@@ -665,6 +675,7 @@ public class ProyectoJpaController implements Serializable {
             Date date = formater.parse(spinnerValue);
             
             _proyectos = new Proyecto();
+            _proyectos.setProyId(BigDecimal.valueOf(Double.parseDouble(editarPro.jTextField1.getText().trim().toString())));
             _proyectos.setProyNombre(editarPro.txtProyecto.getText().trim().toString());
             _proyectos.setProyEstado(new BigInteger(String.valueOf(status)));
             _proyectos.setProyFecha(date);

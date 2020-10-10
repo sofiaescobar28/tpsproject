@@ -45,7 +45,7 @@ public class UnidadesDeMedidaJpaController implements Serializable {
     Conexion claseConnect = new Conexion();    
     int idglobal;
     int fila = -1;
-    int columna = -1;  
+    int columna = -1; 
     
     public UnidadesDeMedidaJpaController(EntityManagerFactory emf,viewUnidades_de_medida view) {        
         this.emf = emf;

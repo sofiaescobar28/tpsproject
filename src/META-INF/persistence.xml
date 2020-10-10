@@ -3,10 +3,12 @@
   <persistence-unit name="Gestor_de_proyectosPU" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <class>AccesoDatos.Cargos</class>
+    <class>AccesoDatos.Empleados</class>
     <class>AccesoDatos.Categorias</class>
     <class>AccesoDatos.UnidadesDeMedida</class>
     <class>AccesoDatos.Usuarios</class>
     <class>AccesoDatos.Proyecto</class>
+    <class>AccesoDatos.IngresoEgreso</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:oracle:thin:@localhost:1521:XE"/>
       <property name="javax.persistence.jdbc.user" value="usuario_tps"/>

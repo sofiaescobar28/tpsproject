@@ -16,7 +16,9 @@ import AccesoDatos.Empleados;
 import AccesoDatos.Entity_Main;
 import Controladores.exceptions.NonexistentEntityException;
 import Controladores.exceptions.PreexistingEntityException;
+import gestor_de_proyectos.interfaces.ViewAdministrar_Proyecto;
 import gestor_de_proyectos.interfaces.ViewCargos;
+import gestor_de_proyectos.interfaces.ViewPlanilla;
 import gestor_de_proyectos.interfaces.viewEditar_Empleado;
 import gestor_de_proyectos.interfaces.viewEmpleados;
 import gestor_de_proyectos.interfaces.viewNuevo_Empleado;
@@ -56,10 +58,20 @@ public class EmpleadosJpaController implements Serializable {
     Empleados _emp = new Empleados();
     CargosJpaController ctrlCargos = new CargosJpaController(Entity_Main.getInstance());
     ViewCargos vcargos = new ViewCargos();
+    ViewPlanilla viewPlanilla = new ViewPlanilla();
+    ViewAdministrar_Proyecto viewProyectos = new ViewAdministrar_Proyecto();
     Cargos _cargos = new Cargos();
     Conexion claseConnect = new Conexion();
     int fila = -1;
     int columna = -1;
+    int id_proy;
+    
+    public EmpleadosJpaController(EntityManagerFactory emf, ViewPlanilla view2){
+        this.emf = emf;
+        this.viewPlanilla = view2;
+        this.viewPlanilla.btnAdministrar.addActionListener(alP);
+        this.viewPlanilla.btnBuscar.addActionListener(alP);
+    }
 
     public EmpleadosJpaController(EntityManagerFactory emf, viewEmpleados view) {
         this.view = view;
@@ -142,6 +154,14 @@ public class EmpleadosJpaController implements Serializable {
         agregarATabla(ls);
         view.setLocationRelativeTo(null);
     }
+    
+    public void iniciarFormPlanilla(int id, String nombre){
+        viewPlanilla.setTitle("Planilla");
+        viewPlanilla.lblNombre.setText("Planilla-Proyecto: " + nombre);
+        agregarATablaPlanilla(findEmpleadosEntities());
+        viewPlanilla.setVisible(true);
+        viewPlanilla.setLocationRelativeTo(null);
+    }
 
     public void leerTabla() {
         fila = view.jTableEmpleados.getSelectedRow();
@@ -172,6 +192,44 @@ public class EmpleadosJpaController implements Serializable {
             claseConnect.AbrirConexionBD();
             CallableStatement cs
                     = claseConnect.con.prepareCall("{call findempleadosNombreP(?,?)}");
+            cs.setString(1, s);
+            cs.registerOutParameter(2, OracleTypes.CURSOR);
+
+            cs.executeQuery();
+
+            ResultSet rset = ((OracleCallableStatement) cs).getCursor(2);
+            ArrayList<Empleados> Datos = new ArrayList<Empleados>();
+
+           while (rset.next()) {
+                _emp.setEmpId(rset.getBigDecimal("EMP_ID"));
+                _emp.setEmpNombre(rset.getString("EMP_NOMBRE"));
+                _cargos.setCargosId(rset.getBigDecimal("CAR_ID"));
+                _cargos.setCargos(ctrlCargos.findCargos(rset.getBigDecimal("CAR_ID")).getCargos());
+                _emp.setCarId(_cargos);
+                _emp.setEmpSalario(Double.valueOf(rset.getDouble("EMP_SALARIO")));
+                _emp.setEmpEstado(BigInteger.valueOf(rset.getInt("EMP_ESTADO")));
+                _emp.setEmpTelefono(rset.getString("EMP_TELEFONO"));
+                Datos.add(_emp);
+            }
+
+            claseConnect.CerrarConexionBD();
+            return Datos;
+
+        } catch (SQLException ex) {
+
+            JOptionPane.showMessageDialog(view, "Sucedió un problema al buscar.");
+
+        }
+        return null;
+
+    }
+    
+    public ArrayList<Empleados> findSearchEmpleadoL(String s) {
+
+        try {
+            claseConnect.AbrirConexionBD();
+            CallableStatement cs
+                    = claseConnect.con.prepareCall("{call findempleadosNombrePL(?,?)}");
             cs.setString(1, s);
             cs.registerOutParameter(2, OracleTypes.CURSOR);
 
@@ -379,6 +437,47 @@ public class EmpleadosJpaController implements Serializable {
         }
 
     }
+    
+    public void agregarATablaPlanilla(List<Empleados> obj) {
+        if (obj.size() > 0) {
+            Object Datos[] = new Object[8];// 1-id, 2-nombre, 3-Cantidad
+            DefaultTableModel model = new DefaultTableModel();
+            model.addColumn("ID");
+            model.addColumn("NOMBRE");
+            model.addColumn("CARGO");
+            model.addColumn("SALARIO");
+            model.addColumn("TELEFONO");
+            model.addColumn("ESTADO");
+            model.addColumn("");
+            model.addColumn("");
+
+            for (int i = 0; i < obj.size(); i++) {
+
+                Datos[0] = obj.get(i).getEmpId();
+                Datos[1] = obj.get(i).getEmpNombre();
+
+                if (obj.get(i).getCarId() != null) {
+                    Datos[2] = obj.get(i).getCarId().getCargos();
+                } else {
+                    Datos[2] = "No tiene cargo";
+                }
+
+                Datos[3] = obj.get(i).getEmpSalario();
+                Datos[4] = obj.get(i).getEmpTelefono();
+                if (obj.get(i).getEmpEstado() == BigInteger.valueOf(0)) {
+                    Datos[5] = "Inactivo";
+                } else if (obj.get(i).getEmpEstado() == BigInteger.valueOf(1)) {
+                    Datos[5] = "Activo";
+                }
+                Datos[6] = "Modificar";
+                Datos[7] = "Pagar";
+                model.addRow(Datos);
+            }
+
+            viewPlanilla.jTable1.setModel(model);
+        }
+
+    }
 
     public void agregarATabla(ArrayList<Empleados> obj) {
         if (obj.size() > 0) {
@@ -419,7 +518,46 @@ public class EmpleadosJpaController implements Serializable {
 
             view.jTableEmpleados.setModel(model);
         }
+    }
+    
+    public void agregarATablaPlanilla(ArrayList<Empleados> obj) {
+        if (obj.size() > 0) {
+            Object Datos[] = new Object[8];// 1-id, 2-nombre, 3-Cantidad
+            DefaultTableModel model = new DefaultTableModel();
+            model.addColumn("ID");
+            model.addColumn("NOMBRE");
+            model.addColumn("CARGO");
+            model.addColumn("SALARIO");
+            model.addColumn("TELEFONO");
+            model.addColumn("ESTADO");
+            model.addColumn("");
+            model.addColumn("");
 
+            for (int i = 0; i < obj.size(); i++) {
+
+                Datos[0] = obj.get(i).getEmpId();
+                Datos[1] = obj.get(i).getEmpNombre();
+
+                if (obj.get(i).getCarId() != null) {
+                    Datos[2] = obj.get(i).getCarId().getCargos();
+                } else {
+                    Datos[2] = "No tiene cargo";
+                }
+
+                Datos[3] = obj.get(i).getEmpSalario();
+                Datos[4] = obj.get(i).getEmpTelefono();
+                if (obj.get(i).getEmpEstado() == BigInteger.valueOf(0)) {
+                    Datos[5] = "Inactivo";
+                } else if (obj.get(i).getEmpEstado() == BigInteger.valueOf(1)) {
+                    Datos[5] = "Activo";
+                }
+                Datos[6] = "Modificar";
+                Datos[7] = "Pagar";
+                model.addRow(Datos);
+            }
+
+            viewPlanilla.jTable1.setModel(model);
+        }
     }
 
     public EntityManager getEntityManager() {
@@ -564,4 +702,24 @@ public class EmpleadosJpaController implements Serializable {
         }
     }
 
+    ActionListener alP = new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            if (ae.getSource() == viewPlanilla.btnAdministrar) {
+                ProyectoJpaController ctrlPtoyecto = new ProyectoJpaController(Entity_Main.getInstance(), viewProyectos);
+                ctrlPtoyecto.iniciarForm();
+                viewProyectos.setVisible(true);
+                viewProyectos.setLocationRelativeTo(null);
+                viewPlanilla.dispose();
+            }
+            else if (ae.getSource() == viewPlanilla.btnBuscar) {
+                if (!viewPlanilla.txtBuscar.getText().trim().toString().isEmpty()) {
+                    agregarATablaPlanilla(findSearchEmpleadoL(viewPlanilla.txtBuscar.getText()));
+                }
+                else{
+                    agregarATablaPlanilla(findEmpleadosEntities());
+                }
+            }
+        }
+    };
 }
