@@ -16,6 +16,8 @@ import gestor_de_proyectos.interfaces.ViewCrear_Proyecto;
 import gestor_de_proyectos.interfaces.ViewDetalles_Proyecto;
 import gestor_de_proyectos.interfaces.ViewEditar_Proyecto;
 import gestor_de_proyectos.interfaces.ViewMenu_Principal;
+import gestor_de_proyectos.interfaces.ViewPago_de_personal_Historico;
+import gestor_de_proyectos.interfaces.ViewPlanilla;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -128,12 +130,13 @@ public class ProyectoJpaController implements Serializable {
     public void agregarATabla(List<Proyecto> obj){
         if (obj.size() > 0) {
             SimpleDateFormat objSDF = new SimpleDateFormat("dd-MM-yyyy");
-            Object Datos[] = new Object[8];
+            Object Datos[] = new Object[9];
             DefaultTableModel model = new DefaultTableModel();
             model.addColumn("ID");
             model.addColumn("Proyecto");
             model.addColumn("Fecha inicio");
             model.addColumn("Estado");
+            model.addColumn("");
             model.addColumn("");
             model.addColumn("");
             model.addColumn("");
@@ -156,6 +159,7 @@ public class ProyectoJpaController implements Serializable {
                 Datos[5] = "Modificar";
                 Datos[6] = "Eliminar";
                 Datos[7] = "Pagos";
+                Datos[8] = "Historial Pago";
                 
                 cont = cont +1 ;
                 model.addRow(Datos);
@@ -168,12 +172,13 @@ public class ProyectoJpaController implements Serializable {
     public void agregarATabla(ArrayList<Proyecto> obj){
         if (obj.size() > 0) {
             SimpleDateFormat objSDF = new SimpleDateFormat("dd-MM-yyyy");
-            Object Datos[] = new Object[8];
+            Object Datos[] = new Object[9];
             DefaultTableModel model = new DefaultTableModel();
             model.addColumn("ID");
             model.addColumn("Proyecto");
             model.addColumn("Fecha inicio");
             model.addColumn("Estado");
+            model.addColumn("");
             model.addColumn("");
             model.addColumn("");
             model.addColumn("");
@@ -196,6 +201,7 @@ public class ProyectoJpaController implements Serializable {
                 Datos[5] = "Modificar";
                 Datos[6] = "Eliminar";
                 Datos[7] = "Pagos";
+                Datos[8] = "Historial Pago";
                 
                 cont = cont +1 ;
                 model.addRow(Datos);
@@ -251,7 +257,25 @@ public class ProyectoJpaController implements Serializable {
                 }
             }
         }
-        else if (columna == 7) {
+        else if (columna == 7) {            
+            ///--------------------------------------------------------------------------------
+            ///--------------------------------------------------------------------------------
+            ViewPlanilla pl = new ViewPlanilla();
+            EmpleadosJpaController ctrl = new EmpleadosJpaController(emf, pl);
+            int id = Integer.parseInt(view.dgtProyectos.getValueAt(fila, 0).toString());
+            String nombre = view.dgtProyectos.getValueAt(fila, 1).toString();
+            ctrl.iniciarFormPlanilla(id, nombre);
+            view.dispose();
+            ///--------------------------------------------------------------------------------
+            ///--------------------------------------------------------------------------------            
+        }
+        else if (columna == 8) {
+            GastoPersonalJpaController ctrl;
+            int id = Integer.parseInt(view.dgtProyectos.getValueAt(fila, 0).toString());
+            String nombre = view.dgtProyectos.getValueAt(fila, 1).toString();
+            ViewPago_de_personal_Historico vista = new ViewPago_de_personal_Historico();
+            GastoPersonalJpaController control = new GastoPersonalJpaController(Entity_Main.getInstance(), vista);
+            control.iniciarPagoH(nombre, id);
             
         }
     }

@@ -5,23 +5,36 @@
  */
 package Controladores;
 
+import AccesoDatos.Cargos;
+import AccesoDatos.Conexion;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import AccesoDatos.Empleados;
+import AccesoDatos.Entity_Main;
 import AccesoDatos.GastoPersonal;
 import AccesoDatos.Proyecto;
 import Controladores.exceptions.NonexistentEntityException;
 import Controladores.exceptions.PreexistingEntityException;
+import gestor_de_proyectos.interfaces.ViewPago_de_personal_Historico;
 import gestor_de_proyectos.interfaces.viewPagar;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.sql.CallableStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import oracle.jdbc.OracleCallableStatement;
+import oracle.jdbc.OracleTypes;
 
 /**
  *
@@ -205,7 +218,192 @@ public class GastoPersonalJpaController implements Serializable {
         }
     }
     
+    ViewPago_de_personal_Historico vPagoh = new ViewPago_de_personal_Historico();
+    int pro;
+    Conexion claseConnect = new Conexion();
+    Empleados emp = new Empleados();
     
     
+    public GastoPersonalJpaController(EntityManagerFactory emf,ViewPago_de_personal_Historico ph) {
+        this.emf = emf;
+        this.vPagoh = ph;
+        this.vPagoh.txtBuscar.addKeyListener(new KeyAdapter() {
+            public void keyTyped(KeyEvent e) {
+
+            }
+
+            public void keyPressed(KeyEvent e) {
+
+            }
+
+            public void keyReleased(KeyEvent e) {
+                if (!vPagoh.txtBuscar.getText().trim().isEmpty()) {
+                    if (e.getSource() == vPagoh.txtBuscar) {
+                        if (vPagoh.radEmp.isSelected()) {
+                            ArrayList<GastoPersonal> list = new ArrayList<GastoPersonal>();                                                    
+                            list = buscarPorEmp(vPagoh.txtBuscar.getText(),pro);
+                            if (list.size()>0) {
+                                llenarTabla(list,pro);
+                            }
+                        } else if (vPagoh.radCom.isSelected()) {
+                            ArrayList<GastoPersonal> list = new ArrayList<GastoPersonal>(); 
+                            list = buscarPorComentario(vPagoh.txtBuscar.getText(),pro);
+                            if (list.size()>0) {
+                                llenarTabla(list,pro);
+                            }
+                        }
+                        else if (vPagoh.radCarTemp.isSelected()) {
+                            ArrayList<GastoPersonal> list = new ArrayList<GastoPersonal>(); 
+                            list = buscarPorCargoT(vPagoh.txtBuscar.getText(),pro);
+                            if (list.size()>0) {
+                                llenarTabla(list,pro);
+                            }
+                        }
+                    }
+                    else{
+                        llenarTabla(findGastoPersonalEntities(),pro);
+                    }
+                }
+            }
+        });
+    }
     
+    public void iniciarPagoH (String nombrePr,int prId)
+    {
+        vPagoh.setTitle("Historial de pago de personal");
+        vPagoh.lblNomProy.setText("Proyecto: "+nombrePr);        
+        vPagoh.setLocationRelativeTo(null);
+        vPagoh.setVisible(true);
+        pro=prId;
+        llenarTabla(findGastoPersonalEntities(),pro);
+    }
+    private void llenarTabla(List<GastoPersonal> _listado,int proy)
+    {
+        if (_listado.size()>0) {
+            Object Datos[] = new Object[7];            
+            DefaultTableModel model = new DefaultTableModel();
+            model.addColumn("#");
+            model.addColumn("EMPLEADO");
+            model.addColumn("CARGO(original)");
+            model.addColumn("CARGO(Temporal)");
+            model.addColumn("FECHA");            
+            model.addColumn("PAGO");
+            model.addColumn("COMENTARIO");
+            
+            for (int i = 0; i < _listado.size(); i++) {
+                pro = _listado.get(i).getProyId().getProyId().intValueExact();
+                if (pro == proy ) {                                    
+                    Datos[0]=_listado.get(i).getGpId();
+                    if (_listado.get(i).getEmpId()!=null) {
+                        Datos[1]=_listado.get(i).getEmpId().getEmpNombre();                                        
+                        Datos[2]=_listado.get(i).getEmpId().getCarId().getCargos();
+                    }
+                    Cargos c = new Cargos();
+                    CargosJpaController ctrl = new CargosJpaController(Entity_Main.getInstance());
+                    c=ctrl.findCargos(new BigDecimal(_listado.get(i).getGpCargo()));
+                    Datos[3]=c.getCargos();                
+                    Datos[4]=_listado.get(i).getGpFecha();
+                    Datos[5]=_listado.get(i).getGpPago();
+                    Datos[6]=_listado.get(i).getGpComentario();
+                    model.addRow(Datos);
+                }
+            }
+            vPagoh.dgvpagos.setModel(model);
+        }
+    }
+    public ArrayList<GastoPersonal> buscarPorEmp (String nombre,int proy){
+        try {
+            claseConnect.AbrirConexionBD();
+            CallableStatement cs
+                    = claseConnect.con.prepareCall("{call ObtenerGpPorNombre(?,?,?)}");
+            cs.setString(1,nombre );
+            cs.setInt(2,proy );
+            cs.registerOutParameter(3, OracleTypes.CURSOR);
+
+            cs.executeQuery();
+
+            ResultSet rset = ((OracleCallableStatement) cs).getCursor(3);
+            ArrayList<GastoPersonal> Datos = new ArrayList<GastoPersonal>();
+
+           while (rset.next()) {
+               GastoPersonal _gp = new GastoPersonal();
+               BigDecimal id =rset.getBigDecimal("GP_ID");
+               _gp=findGastoPersonal(id);
+               Datos.add(_gp);
+            }
+
+            claseConnect.CerrarConexionBD();
+            return Datos;
+
+        } catch (SQLException ex) {
+
+            JOptionPane.showMessageDialog(null, "Sucedió un problema al buscar.");
+
+        }
+        return null;
+    }
+    
+    public ArrayList<GastoPersonal> buscarPorComentario (String comentario,int proy){
+        try {
+            claseConnect.AbrirConexionBD();
+            CallableStatement cs
+                    = claseConnect.con.prepareCall("{call ObtenerGpPorComentario(?,?,?)}");
+            cs.setString(1,comentario );
+            cs.setInt(2,proy );
+            cs.registerOutParameter(3, OracleTypes.CURSOR);
+
+            cs.executeQuery();
+
+            ResultSet rset = ((OracleCallableStatement) cs).getCursor(3);
+            ArrayList<GastoPersonal> Datos = new ArrayList<GastoPersonal>();
+
+           while (rset.next()) {
+               GastoPersonal _gp = new GastoPersonal();
+               BigDecimal id =rset.getBigDecimal("GP_ID");
+               _gp=findGastoPersonal(id);
+               Datos.add(_gp);
+            }
+
+            claseConnect.CerrarConexionBD();
+            return Datos;
+
+        } catch (SQLException ex) {
+
+            JOptionPane.showMessageDialog(null, "Sucedió un problema al buscar.");
+
+        }
+        return null;
+    }
+    
+    public ArrayList<GastoPersonal> buscarPorCargoT (String cargoT,int proy){
+        try {
+            claseConnect.AbrirConexionBD();
+            CallableStatement cs
+                    = claseConnect.con.prepareCall("{call ObtenerGpPorCargoT(?,?,?)}");
+            cs.setString(1,cargoT );
+            cs.setInt(2,proy );
+            cs.registerOutParameter(3, OracleTypes.CURSOR);
+
+            cs.executeQuery();
+
+            ResultSet rset = ((OracleCallableStatement) cs).getCursor(3);
+            ArrayList<GastoPersonal> Datos = new ArrayList<GastoPersonal>();
+
+           while (rset.next()) {
+               GastoPersonal _gp = new GastoPersonal();
+               BigDecimal id =rset.getBigDecimal("GP_ID");
+               _gp=findGastoPersonal(id);
+               Datos.add(_gp);
+            }
+
+            claseConnect.CerrarConexionBD();
+            return Datos;
+
+        } catch (SQLException ex) {
+
+            JOptionPane.showMessageDialog(null, "Sucedió un problema al buscar.");
+
+        }
+        return null;
+    }
 }

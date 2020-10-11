@@ -117,10 +117,7 @@ public class ViewAdministrar_Proyecto extends javax.swing.JFrame {
 
         dgtProyectos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null}
+
             },
             new String [] {
                 "#", "Projecto", "Fecha de incio", "Estado", "null", "null", "null", "null"
@@ -162,7 +159,7 @@ public class ViewAdministrar_Proyecto extends javax.swing.JFrame {
                 .addComponent(jScrollPane1)
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
-                .addGap(242, 242, 242)
+                .addGap(313, 313, 313)
                 .addComponent(lblNombre)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );

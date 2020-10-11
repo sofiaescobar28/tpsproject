@@ -27,23 +27,28 @@ public class ViewPago_de_personal_Historico extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
         txtBuscar = new javax.swing.JTextField();
-        rdempleado = new javax.swing.JRadioButton();
-        rdComentario = new javax.swing.JRadioButton();
-        lblNombredelproyecto = new java.awt.Label();
+        radEmp = new javax.swing.JRadioButton();
+        radCom = new javax.swing.JRadioButton();
+        lblNomProy = new java.awt.Label();
         btnReporte = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         dgvpagos = new javax.swing.JTable();
-        rdCargoTemporal = new javax.swing.JRadioButton();
+        radCarTemp = new javax.swing.JRadioButton();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        rdempleado.setText("Empleado");
+        buttonGroup1.add(radEmp);
+        radEmp.setSelected(true);
+        radEmp.setText("Empleado");
 
-        rdComentario.setText("Comentario");
+        buttonGroup1.add(radCom);
+        radCom.setText("Comentario");
 
-        lblNombredelproyecto.setText("Nombre del Proyecto");
+        lblNomProy.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        lblNomProy.setText("Nombre del Proyecto");
 
         btnReporte.setText("Reporte");
 
@@ -65,7 +70,8 @@ public class ViewPago_de_personal_Historico extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(dgvpagos);
 
-        rdCargoTemporal.setText("Cargo temporal");
+        buttonGroup1.add(radCarTemp);
+        radCarTemp.setText("Cargo temporal");
 
         jLabel1.setText("Filtro:");
 
@@ -82,37 +88,37 @@ public class ViewPago_de_personal_Historico extends javax.swing.JFrame {
                         .addGap(20, 20, 20)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(rdempleado)
+                                .addComponent(radEmp)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(rdComentario)
+                                .addComponent(radCom)
                                 .addGap(29, 29, 29)
-                                .addComponent(rdCargoTemporal))
+                                .addComponent(radCarTemp))
                             .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 157, Short.MAX_VALUE)
                         .addComponent(btnReporte, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
-                .addGap(288, 288, 288)
-                .addComponent(lblNombredelproyecto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(135, 135, 135)
+                .addComponent(lblNomProy, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(29, 29, 29)
-                .addComponent(lblNombredelproyecto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblNomProy, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(10, 10, 10)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(rdComentario)
-                    .addComponent(rdCargoTemporal)
-                    .addComponent(rdempleado))
+                    .addComponent(radCom)
+                    .addComponent(radCarTemp)
+                    .addComponent(radEmp))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnReporte)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel1)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 304, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(63, 63, 63))
         );
@@ -157,14 +163,15 @@ public class ViewPago_de_personal_Historico extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnReporte;
-    private javax.swing.JTable dgvpagos;
+    public javax.swing.JButton btnReporte;
+    private javax.swing.ButtonGroup buttonGroup1;
+    public javax.swing.JTable dgvpagos;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private java.awt.Label lblNombredelproyecto;
-    private javax.swing.JRadioButton rdCargoTemporal;
-    private javax.swing.JRadioButton rdComentario;
-    private javax.swing.JRadioButton rdempleado;
-    private javax.swing.JTextField txtBuscar;
+    public java.awt.Label lblNomProy;
+    public javax.swing.JRadioButton radCarTemp;
+    public javax.swing.JRadioButton radCom;
+    public javax.swing.JRadioButton radEmp;
+    public javax.swing.JTextField txtBuscar;
     // End of variables declaration//GEN-END:variables
 }

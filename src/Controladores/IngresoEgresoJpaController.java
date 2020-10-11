@@ -737,16 +737,7 @@ public class IngresoEgresoJpaController implements Serializable {
                 viewProyecto.setLocationRelativeTo(null);
                 view.dispose();
             }
-            else if (ae.getSource() == view.btnPlanilla) {  
-                ///--------------------------------------------------------------------------------
-                ///--------------------------------------------------------------------------------
-                ViewPlanilla pl = new ViewPlanilla();
-                EmpleadosJpaController ctrl = new EmpleadosJpaController(emf, pl);
-                ctrl.iniciarFormPlanilla(id_proy, nombre_proy);
-                view.dispose();
-                ///--------------------------------------------------------------------------------
-                ///--------------------------------------------------------------------------------
-            }
+            
             else if (ae.getSource() == view.btnNuevo) {
                 viewCreatRegistro.cmbUnidad.removeAllItems();
                 obtUnidadesACombo(viewCreatRegistro.cmbUnidad);
