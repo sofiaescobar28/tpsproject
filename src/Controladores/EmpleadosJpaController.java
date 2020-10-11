@@ -14,6 +14,8 @@ import AccesoDatos.Cargos;
 import AccesoDatos.Conexion;
 import AccesoDatos.Empleados;
 import AccesoDatos.Entity_Main;
+import AccesoDatos.GastoPersonal;
+import AccesoDatos.Proyecto;
 import Controladores.exceptions.NonexistentEntityException;
 import Controladores.exceptions.PreexistingEntityException;
 import gestor_de_proyectos.interfaces.ViewAdministrar_Proyecto;
@@ -22,6 +24,7 @@ import gestor_de_proyectos.interfaces.ViewPlanilla;
 import gestor_de_proyectos.interfaces.viewEditar_Empleado;
 import gestor_de_proyectos.interfaces.viewEmpleados;
 import gestor_de_proyectos.interfaces.viewNuevo_Empleado;
+import gestor_de_proyectos.interfaces.viewPagar;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -33,7 +36,9 @@ import java.math.BigInteger;
 import java.sql.CallableStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -55,6 +60,7 @@ public class EmpleadosJpaController implements Serializable {
     viewEmpleados view = new viewEmpleados();
     viewNuevo_Empleado vNuevoE = new viewNuevo_Empleado();
     viewEditar_Empleado vEditE = new viewEditar_Empleado();
+    viewPagar viewPago  = new viewPagar();
     Empleados _emp = new Empleados();
     CargosJpaController ctrlCargos = new CargosJpaController(Entity_Main.getInstance());
     ViewCargos vcargos = new ViewCargos();
@@ -66,11 +72,49 @@ public class EmpleadosJpaController implements Serializable {
     int columna = -1;
     int id_proy;
     
+    
+    //Constructor de planilla
     public EmpleadosJpaController(EntityManagerFactory emf, ViewPlanilla view2){
         this.emf = emf;
         this.viewPlanilla = view2;
         this.viewPlanilla.btnAdministrar.addActionListener(alP);
         this.viewPlanilla.btnBuscar.addActionListener(alP);
+        this.viewPlanilla.btnNuevoE.addActionListener(alP);
+        this.viewPlanilla.dgvP.addMouseListener(new MouseListener() {
+
+            public void mouseClicked(MouseEvent e) {
+                if (e.getSource() == viewPlanilla.dgvP) {
+                    leerTablaP();
+                }                
+            }
+
+            public void mousePressed(MouseEvent e) {
+                
+            }
+
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            public void mouseEntered(MouseEvent e) {
+
+            }
+
+            public void mouseExited(MouseEvent e) {
+
+            }
+        });
+        this.vNuevoE.btnGuardar.addActionListener(alP);
+        this.vNuevoE.btnCancelar.addActionListener(alP);
+        this.vEditE.btnCancelar.addActionListener(alP);
+        this.vEditE.btnGuardar.addActionListener(alP);
+        
+        ///--------------------------------------------------------------------------------
+        ///--------------------------------------------------------------------------------
+        this.viewPago.btnCancelar.addActionListener(alP);
+        this.viewPago.btnPagar.addActionListener(alP);
+        ///--------------------------------------------------------------------------------
+        ///--------------------------------------------------------------------------------
     }
 
     public EmpleadosJpaController(EntityManagerFactory emf, viewEmpleados view) {
@@ -156,9 +200,11 @@ public class EmpleadosJpaController implements Serializable {
     }
     
     public void iniciarFormPlanilla(int id, String nombre){
-        viewPlanilla.setTitle("Planilla");
+        
+        viewPlanilla.setTitle("Planilla");        
         viewPlanilla.lblNombre.setText("Planilla-Proyecto: " + nombre);
         agregarATablaPlanilla(findEmpleadosEntities());
+        id_proy = id;
         viewPlanilla.setVisible(true);
         viewPlanilla.setLocationRelativeTo(null);
     }
@@ -185,7 +231,42 @@ public class EmpleadosJpaController implements Serializable {
         }
 
     }
+    
+    
+    ///--------------------------------------------------------------------------------
+    ///--------------------------------------------------------------------------------    
+    public void leerTablaP() {
+        fila = viewPlanilla.dgvP.getSelectedRow();
+        columna = viewPlanilla.dgvP.getSelectedColumn();
+        if (columna == 6) {
+            obtenerObjetoP(fila);
 
+            vEditE.txtEmpleado.setText(_emp.getEmpNombre());
+            vEditE.txtTelefono.setText(_emp.getEmpTelefono());
+            vEditE.txtSalario.setText(_emp.getEmpSalario().toString());
+            vEditE.cmbestado.setSelectedIndex(Integer.parseInt(_emp.getEmpEstado().toString()));
+            vEditE.txtEmpleado.setText(_emp.getEmpNombre());
+            vEditE.cmbcargo.removeAllItems();
+            obtCargoACombo(vEditE.cmbcargo);
+            vEditE.cmbcargo.setSelectedItem(_cargos.getCargos());
+            vEditE.setLocationRelativeTo(null);
+            vEditE.setVisible(true);
+        }
+        else if (columna == 7) {
+            obtenerObjetoP(fila);
+            viewPago.txtEmpleado.setText(_emp.getEmpNombre());
+            viewPago.cmbcargo.removeAllItems();
+            obtCargoACombo(viewPago.cmbcargo);
+            viewPago.cmbcargo.setSelectedItem(_cargos.getCargos());            
+            viewPago.txtPago.setText(_emp.getEmpSalario().toString());
+            viewPago.setLocationRelativeTo(null);
+            viewPago.setVisible(true);
+        }
+    }
+    ///--------------------------------------------------------------------------------
+    ///--------------------------------------------------------------------------------
+    
+    
     public ArrayList<Empleados> findSearchEmpleado(String s) {
 
         try {
@@ -310,7 +391,26 @@ public class EmpleadosJpaController implements Serializable {
         _emp.setEmpTelefono(view.jTableEmpleados.getValueAt(fila, 4).toString());
         _emp.setEmpEstado(valorEstado(view.jTableEmpleados.getValueAt(fila, 5).toString()));
     }
-
+    
+    
+    ///--------------------------------------------------------------------------------
+    ///--------------------------------------------------------------------------------
+    int IdUsuario;
+    public void obtenerObjetoP(int fila) {
+        _emp = new Empleados();
+        _emp.setEmpId(BigDecimal.valueOf(Double.parseDouble(viewPlanilla.dgvP.getValueAt(fila, 0).toString())));
+        IdUsuario= Integer.parseInt(viewPlanilla.dgvP.getValueAt(fila, 0).toString());
+        _emp.setEmpNombre(viewPlanilla.dgvP.getValueAt(fila, 1).toString());
+        buscarCargoID(viewPlanilla.dgvP.getValueAt(fila, 2).toString());
+        _emp.setCarId(_cargos);
+        _emp.setEmpSalario(Double.parseDouble(viewPlanilla.dgvP.getValueAt(fila, 3).toString()));
+        _emp.setEmpTelefono(viewPlanilla.dgvP.getValueAt(fila, 4).toString());
+        _emp.setEmpEstado(valorEstado(viewPlanilla.dgvP.getValueAt(fila, 5).toString()));
+    }
+    ///--------------------------------------------------------------------------------
+    ///--------------------------------------------------------------------------------
+    
+    
     public void obtCargoACombo(JComboBox c) {
         List<Cargos> lst = ctrlCargos.findCargosEntities();
         for (Cargos carg : lst) {
@@ -474,7 +574,7 @@ public class EmpleadosJpaController implements Serializable {
                 model.addRow(Datos);
             }
 
-            viewPlanilla.jTable1.setModel(model);
+            viewPlanilla.dgvP.setModel(model);
         }
 
     }
@@ -556,7 +656,7 @@ public class EmpleadosJpaController implements Serializable {
                 model.addRow(Datos);
             }
 
-            viewPlanilla.jTable1.setModel(model);
+            viewPlanilla.dgvP.setModel(model);
         }
     }
 
@@ -701,7 +801,7 @@ public class EmpleadosJpaController implements Serializable {
             em.close();
         }
     }
-
+    GastoPersonalJpaController ctrl = new GastoPersonalJpaController(Entity_Main.getInstance());
     ActionListener alP = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent ae) {
@@ -719,7 +819,121 @@ public class EmpleadosJpaController implements Serializable {
                 else{
                     agregarATablaPlanilla(findEmpleadosEntities());
                 }
+            }                                        
+            else if(ae.getSource()== viewPlanilla.btnNuevoE)
+            {
+                obtCargoACombo(vNuevoE.cmbcargo);
+                vNuevoE.setVisible(true);
+                vNuevoE.setLocationRelativeTo(null);
+            } else if (ae.getSource() == vNuevoE.btnGuardar) {
+                if (!vNuevoE.txtEmpleado.getText().trim().isEmpty() && !vNuevoE.txtSalario.getText().trim().isEmpty()) {
+                    _emp.setEmpNombre(vNuevoE.txtEmpleado.getText());
+                    _emp.setEmpSalario(Double.valueOf(vNuevoE.txtSalario.getText()));
+                    _emp.setEmpTelefono(vNuevoE.txtTelefono.getText());
+                    buscarCargoID(vNuevoE.cmbcargo.getItemAt(vNuevoE.cmbcargo.getSelectedIndex()));
+                    _emp.setCarId(_cargos);
+                    _emp.setEmpEstado(BigInteger.valueOf(vNuevoE.cmbestado.getSelectedIndex()));
+
+                    try {
+                        create(_emp);
+                        agregarATablaPlanilla(findEmpleadosEntities());
+                    } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(vNuevoE, "Ha sucedido un error al guardar.");
+                        Logger.getLogger(EmpleadosJpaController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(vNuevoE, "Los campos no pueden quedar en blanco.");
+                }
+            } else if (ae.getSource() == vNuevoE.btnCancelar) {
+                vNuevoE.cmbcargo.removeAllItems();
+                vNuevoE.dispose();
+            } else if (ae.getSource() == vEditE.btnCancelar) {
+                vEditE.dispose();            
+            } else if (ae.getSource() == vEditE.btnGuardar) {
+                if (!vEditE.txtEmpleado.getText().trim().isEmpty() && !vEditE.txtSalario.getText().trim().isEmpty()) {
+                    _emp.setEmpNombre(vEditE.txtEmpleado.getText());
+                    _emp.setEmpSalario(Double.valueOf(vEditE.txtSalario.getText()));
+                    _emp.setEmpTelefono(vEditE.txtTelefono.getText());
+                    buscarCargoID(vEditE.cmbcargo.getItemAt(vEditE.cmbcargo.getSelectedIndex()));
+                    _emp.setCarId(_cargos);
+                    _emp.setEmpEstado(BigInteger.valueOf(vEditE.cmbestado.getSelectedIndex()));
+
+                    try {
+                        edit(_emp);
+                        agregarATablaPlanilla(findEmpleadosEntities());
+                    } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(vNuevoE, "Ha sucedido un error al modificar empleado..");
+                        Logger.getLogger(EmpleadosJpaController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(vNuevoE, "Los campos no pueden quedar en blanco.");
+                }
             }
+            ///--------------------------------------------------------------------------------
+            ///--------------------------------------------------------------------------------
+            else if (ae.getSource() == viewPago.btnCancelar) {
+                viewPago.dispose();
+                limpiarTxtPagos();
+            }
+            else if (ae.getSource() == viewPago.btnPagar) {
+                if (!viewPago.txtEmpleado.getText().trim().isEmpty() || !viewPago.txtPago.getText().trim().isEmpty()
+                        || !viewPago.txtComentario.getText().trim().isEmpty()) {
+                    GastoPersonal gp = new GastoPersonal();
+                    gp = llenarPago();
+                    try {
+                        ctrl.create(gp);
+                        JOptionPane.showMessageDialog(viewPago, "Pagado!!!");                    
+                    } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(viewPago,",," +ex.getMessage()+",Cause ," +ex.getCause());
+                    }
+                        
+                    _cargos = new Cargos();
+                    _emp= new Empleados();
+                    IdUsuario=-1;
+                    viewPago.dispose();
+                }
+                else
+                {
+                    JOptionPane.showMessageDialog(viewPago, "Faltan campos por llenar");
+                }
+            }
+            ///--------------------------------------------------------------------------------
+            ///--------------------------------------------------------------------------------
         }
     };
+    
+    ///--------------------------------------------------------------------------------
+    ///--------------------------------------------------------------------------------
+    public GastoPersonal llenarPago()
+    {
+        Date Hoy = new Date();
+        String strDateFormat = "dd-MMM-aaaa";
+        SimpleDateFormat objSDF = new SimpleDateFormat(strDateFormat);
+        objSDF.format(Hoy); 
+        Proyecto pr = new Proyecto();
+        ProyectoJpaController ctrlP = new ProyectoJpaController(emf);
+        pr = ctrlP.findProyecto(new BigDecimal(id_proy));
+        _emp = new Empleados();
+        _emp= findEmpleados(new BigDecimal(IdUsuario));
+        
+        buscarCargoID(viewPago.cmbcargo.getItemAt(viewPago.cmbcargo.getSelectedIndex()));
+        
+        GastoPersonal gasp = new GastoPersonal();
+        gasp.setEmpId(_emp);
+        gasp.setProyId(pr);
+        gasp.setGpCargo(Double.parseDouble(_cargos.getCargosId().toString()));
+        gasp.setGpPago(Double.parseDouble(viewPago.txtPago.getText()));
+        gasp.setGpFecha(Hoy);        
+        gasp.setGpComentario(viewPago.txtComentario.getText());        
+        return gasp;
+    }
+    public void limpiarTxtPagos()
+    {
+        viewPago.txtEmpleado.setText(null);
+        viewPago.txtComentario.setText(null);
+        viewPago.txtPago.setText(null);
+        viewPago.cmbcargo.setSelectedIndex(0);
+    }
+    ///--------------------------------------------------------------------------------
+    ///--------------------------------------------------------------------------------
 }

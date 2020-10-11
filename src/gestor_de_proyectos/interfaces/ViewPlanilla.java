@@ -32,9 +32,10 @@ public class ViewPlanilla extends javax.swing.JFrame {
         txtBuscar = new javax.swing.JTextField();
         btnReporte = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        dgvP = new javax.swing.JTable();
         btnBuscar = new javax.swing.JButton();
         btnAdministrar = new javax.swing.JButton();
+        btnNuevoE = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -45,12 +46,9 @@ public class ViewPlanilla extends javax.swing.JFrame {
 
         btnReporte.setText("Reporte");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        dgvP.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null}
+
             },
             new String [] {
                 "#", "Nombre", "Cargo", "Salario", "Estado", "Teléfono", "null", "null"
@@ -64,11 +62,13 @@ public class ViewPlanilla extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(dgvP);
 
         btnBuscar.setText("Buscar");
 
         btnAdministrar.setText("Administrar Proyectos");
+
+        btnNuevoE.setText("Nuevo Empleado");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -77,14 +77,14 @@ public class ViewPlanilla extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(btnAdministrar)
-                .addGap(47, 47, 47)
+                .addGap(46, 46, 46)
                 .addComponent(lblNombre)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 492, Short.MAX_VALUE))
+                        .addComponent(jScrollPane1))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addGap(27, 27, 27)
                         .addComponent(jLabel1)
@@ -92,6 +92,8 @@ public class ViewPlanilla extends javax.swing.JFrame {
                         .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnBuscar)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnNuevoE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnReporte)))
                 .addGap(20, 20, 20))
@@ -108,7 +110,8 @@ public class ViewPlanilla extends javax.swing.JFrame {
                     .addComponent(jLabel1)
                     .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnReporte)
-                    .addComponent(btnBuscar))
+                    .addComponent(btnBuscar)
+                    .addComponent(btnNuevoE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(27, Short.MAX_VALUE))
@@ -156,10 +159,11 @@ public class ViewPlanilla extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JButton btnAdministrar;
     public javax.swing.JButton btnBuscar;
+    public javax.swing.JButton btnNuevoE;
     public javax.swing.JButton btnReporte;
+    public javax.swing.JTable dgvP;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
-    public javax.swing.JTable jTable1;
     public javax.swing.JLabel lblNombre;
     public javax.swing.JTextField txtBuscar;
     // End of variables declaration//GEN-END:variables

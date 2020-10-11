@@ -10,6 +10,7 @@
     <class>AccesoDatos.Empleados</class>
     <class>AccesoDatos.Proyecto</class>
     <class>AccesoDatos.IngresoEgreso</class>
+    <class>AccesoDatos.GastoPersonal</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:oracle:thin:@localhost:1521:XE"/>
       <property name="javax.persistence.jdbc.user" value="usuario_tps"/>

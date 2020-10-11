@@ -8,7 +8,9 @@ package AccesoDatos;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -16,6 +18,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -27,6 +30,9 @@ import javax.persistence.Table;
 @NamedQueries({
     @NamedQuery(name = "Empleados.findAll", query = "SELECT e FROM Empleados e")})
 public class Empleados implements Serializable {
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "empId")
+    private List<GastoPersonal> gastoPersonalList;
 
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
@@ -124,6 +130,14 @@ public class Empleados implements Serializable {
     @Override
     public String toString() {
         return "AccesoDatos.Empleados[ empId=" + empId + " ]";
+    }
+
+    public List<GastoPersonal> getGastoPersonalList() {
+        return gastoPersonalList;
+    }
+
+    public void setGastoPersonalList(List<GastoPersonal> gastoPersonalList) {
+        this.gastoPersonalList = gastoPersonalList;
     }
     
 }

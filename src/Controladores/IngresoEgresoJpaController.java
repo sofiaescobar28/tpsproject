@@ -73,6 +73,7 @@ public class IngresoEgresoJpaController implements Serializable {
     ViewEditar_Registro viewEditRegistro = new ViewEditar_Registro();
     ViewCrear_Registro viewCreatRegistro = new ViewCrear_Registro();
 
+    //Constructor de detalle
     public IngresoEgresoJpaController(EntityManagerFactory emf, ViewDetalles_Proyecto view) {
         this.emf = emf;
         this.view = view;
@@ -736,10 +737,15 @@ public class IngresoEgresoJpaController implements Serializable {
                 viewProyecto.setLocationRelativeTo(null);
                 view.dispose();
             }
-            else if (ae.getSource() == view.btnPlanilla) {
-                ctrlEmpleados.iniciarFormPlanilla(id_proy, nombre_proy);
+            else if (ae.getSource() == view.btnPlanilla) {  
+                ///--------------------------------------------------------------------------------
+                ///--------------------------------------------------------------------------------
+                ViewPlanilla pl = new ViewPlanilla();
+                EmpleadosJpaController ctrl = new EmpleadosJpaController(emf, pl);
+                ctrl.iniciarFormPlanilla(id_proy, nombre_proy);
                 view.dispose();
-                
+                ///--------------------------------------------------------------------------------
+                ///--------------------------------------------------------------------------------
             }
             else if (ae.getSource() == view.btnNuevo) {
                 viewCreatRegistro.cmbUnidad.removeAllItems();

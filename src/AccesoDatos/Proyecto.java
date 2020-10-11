@@ -11,6 +11,7 @@ import java.math.BigInteger;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -30,6 +31,9 @@ import javax.persistence.TemporalType;
 @NamedQueries({
     @NamedQuery(name = "Proyecto.findAll", query = "SELECT p FROM Proyecto p")})
 public class Proyecto implements Serializable {
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "proyId")
+    private List<GastoPersonal> gastoPersonalList;
 
     @OneToMany(mappedBy = "proyId")
     private List<IngresoEgreso> ingresoEgresoList;
@@ -120,6 +124,14 @@ public class Proyecto implements Serializable {
 
     public void setIngresoEgresoList(List<IngresoEgreso> ingresoEgresoList) {
         this.ingresoEgresoList = ingresoEgresoList;
+    }
+
+    public List<GastoPersonal> getGastoPersonalList() {
+        return gastoPersonalList;
+    }
+
+    public void setGastoPersonalList(List<GastoPersonal> gastoPersonalList) {
+        this.gastoPersonalList = gastoPersonalList;
     }
     
 }

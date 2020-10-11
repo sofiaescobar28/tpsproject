@@ -9,12 +9,12 @@ package gestor_de_proyectos.interfaces;
  *
  * @author Manuel
  */
-public class Pago_de_personal_Historico extends javax.swing.JFrame {
+public class ViewPago_de_personal_Historico extends javax.swing.JFrame {
 
     /**
      * Creates new form Pago_de_personal_Historico
      */
-    public Pago_de_personal_Historico() {
+    public ViewPago_de_personal_Historico() {
         initComponents();
     }
 
@@ -137,20 +137,21 @@ public class Pago_de_personal_Historico extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Pago_de_personal_Historico.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewPago_de_personal_Historico.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Pago_de_personal_Historico.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewPago_de_personal_Historico.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Pago_de_personal_Historico.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewPago_de_personal_Historico.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Pago_de_personal_Historico.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewPago_de_personal_Historico.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Pago_de_personal_Historico().setVisible(true);
+                new ViewPago_de_personal_Historico().setVisible(true);
             }
         });
     }
