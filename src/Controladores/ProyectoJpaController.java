@@ -76,7 +76,6 @@ public class ProyectoJpaController implements Serializable {
         this.view.btnBuscar.addActionListener(al);
         this.view.btnTodos.addActionListener(al);
         this.view.btnNuevo.addActionListener(al);
-        this.view.btnPrincipal.addActionListener(al);
         this.CEproyecto.btnCrear.addActionListener(al);
         this.CEproyecto.btnCancelar.addActionListener(al);
         this.editarPro.btnEditar.addActionListener(al);
@@ -128,19 +127,21 @@ public class ProyectoJpaController implements Serializable {
     }
     
     public void agregarATabla(List<Proyecto> obj){
+        DefaultTableModel model = new DefaultTableModel();
+        model.addColumn("ID");
+        model.addColumn("Proyecto");
+        model.addColumn("Fecha inicio");
+        model.addColumn("Estado");
+        model.addColumn("");
+        model.addColumn("");
+        model.addColumn("");
+        model.addColumn("");
+        model.addColumn("");
+        
         if (obj.size() > 0) {
             SimpleDateFormat objSDF = new SimpleDateFormat("dd-MM-yyyy");
             Object Datos[] = new Object[9];
-            DefaultTableModel model = new DefaultTableModel();
-            model.addColumn("ID");
-            model.addColumn("Proyecto");
-            model.addColumn("Fecha inicio");
-            model.addColumn("Estado");
-            model.addColumn("");
-            model.addColumn("");
-            model.addColumn("");
-            model.addColumn("");
-            model.addColumn("");
+            
             
             int cont = 0;
             for (Object valor : obj){
@@ -163,26 +164,25 @@ public class ProyectoJpaController implements Serializable {
                 
                 cont = cont +1 ;
                 model.addRow(Datos);
-            }
-            
-            view.dgtProyectos.setModel(model);
+            }  
         }
+        view.dgtProyectos.setModel(model);
     }
     
     public void agregarATabla(ArrayList<Proyecto> obj){
+        DefaultTableModel model = new DefaultTableModel();
+        model.addColumn("ID");
+        model.addColumn("Proyecto");
+        model.addColumn("Fecha inicio");
+        model.addColumn("Estado");
+        model.addColumn("");
+        model.addColumn("");
+        model.addColumn("");
+        model.addColumn("");
+        model.addColumn("");
         if (obj.size() > 0) {
             SimpleDateFormat objSDF = new SimpleDateFormat("dd-MM-yyyy");
             Object Datos[] = new Object[9];
-            DefaultTableModel model = new DefaultTableModel();
-            model.addColumn("ID");
-            model.addColumn("Proyecto");
-            model.addColumn("Fecha inicio");
-            model.addColumn("Estado");
-            model.addColumn("");
-            model.addColumn("");
-            model.addColumn("");
-            model.addColumn("");
-            model.addColumn("");
             
             int cont = 0;
             for (Object valor : obj){
@@ -207,8 +207,9 @@ public class ProyectoJpaController implements Serializable {
                 model.addRow(Datos);
             }
             
-            view.dgtProyectos.setModel(model);
+            
         }
+        view.dgtProyectos.setModel(model);
     }
     
     public void llenarComboAnios(){
@@ -230,16 +231,16 @@ public class ProyectoJpaController implements Serializable {
             ctrlInEg.iniciarForm(id, nombre);
             detalles.setVisible(true);
             detalles.setLocationRelativeTo(null);
-            view.dispose();
         }
         else if (columna == 5) {
             _proyectos = new Proyecto();
             _proyectos = obtenerObjeto(fila);
-            editarPro.jTextField1.setText(String.valueOf(_proyectos.getProyId()));
+            editarPro.jTextField1.setText(_proyectos.getProyId().toString());
             editarPro.txtProyecto.setText(_proyectos.getProyNombre());
             editarPro.cmbEstado.setSelectedIndex(Integer.parseInt(_proyectos.getProyEstado().toString()));
             editarPro.spnFecha.setValue(_proyectos.getProyFecha());
             editarPro.jTextField1.setVisible(false);
+            editarPro.setTitle("Editar proyecto");
             editarPro.setVisible(true);
             editarPro.setLocationRelativeTo(null);
         }
@@ -265,7 +266,6 @@ public class ProyectoJpaController implements Serializable {
             int id = Integer.parseInt(view.dgtProyectos.getValueAt(fila, 0).toString());
             String nombre = view.dgtProyectos.getValueAt(fila, 1).toString();
             ctrl.iniciarFormPlanilla(id, nombre);
-            view.dispose();
             ///--------------------------------------------------------------------------------
             ///--------------------------------------------------------------------------------            
         }
@@ -572,12 +572,6 @@ public class ProyectoJpaController implements Serializable {
                 CEproyecto.setVisible(true);
                 CEproyecto.setLocationRelativeTo(null);
             }
-            else if (ae.getSource() == view.btnPrincipal) {
-                menu.setTitle("Menú Principal");
-                menu.setVisible(true);
-                menu.setLocationRelativeTo(null);
-                view.dispose();
-            }
             else if (ae.getSource() == CEproyecto.btnCrear) {
                 try {
                     formCrear();
@@ -645,32 +639,37 @@ public class ProyectoJpaController implements Serializable {
             JOptionPane.showMessageDialog(CEproyecto, "Seleccione un estado para el proyecto");
         }
         else{
-            String status;
-            if (CEproyecto.cmbEstado.getSelectedItem().equals("Activo")) {
-                status = "1";
-            }
-            else if (CEproyecto.cmbEstado.getSelectedItem().equals("Inactivo")) {
-                 status = "0";
+            if (BuscarNombre(CEproyecto.txtProyecto.getText().trim()).size() > 0) {
+                JOptionPane.showMessageDialog(CEproyecto, "El proyecto ya existe, ingrese un nombre diferente");
             }
             else{
-                status = "2";
-            }
-            
-            SimpleDateFormat formater = new SimpleDateFormat("dd/MM/yyyy");
-            String spinnerValue = formater.format(CEproyecto.spnFecha.getValue());
-            Date date = formater.parse(spinnerValue);
-            
-            _proyectos = new Proyecto();
-            _proyectos.setProyNombre(CEproyecto.txtProyecto.getText().trim().toString());
-            _proyectos.setProyEstado(new BigInteger(String.valueOf(status)));
-            _proyectos.setProyFecha(date);
-            
-            try {
-                create(_proyectos);
-                List<Proyecto> ls = findProyectoEntities();
-                agregarATabla(ls);
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(CEproyecto, "Asegúrese que los campos estén correctos");
+                String status;
+                if (CEproyecto.cmbEstado.getSelectedItem().equals("Activo")) {
+                    status = "1";
+                }
+                else if (CEproyecto.cmbEstado.getSelectedItem().equals("Inactivo")) {
+                     status = "0";
+                }
+                else{
+                    status = "2";
+                }
+
+                SimpleDateFormat formater = new SimpleDateFormat("dd/MM/yyyy");
+                String spinnerValue = formater.format(CEproyecto.spnFecha.getValue());
+                Date date = formater.parse(spinnerValue);
+
+                _proyectos = new Proyecto();
+                _proyectos.setProyNombre(CEproyecto.txtProyecto.getText().trim().toString());
+                _proyectos.setProyEstado(new BigInteger(String.valueOf(status)));
+                _proyectos.setProyFecha(date);
+
+                try {
+                    create(_proyectos);
+                    List<Proyecto> ls = findProyectoEntities();
+                    agregarATabla(ls);
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(CEproyecto, "Asegúrese que los campos estén correctos");
+                }
             }
         }
     }
@@ -683,34 +682,109 @@ public class ProyectoJpaController implements Serializable {
             JOptionPane.showMessageDialog(editarPro, "Seleccione un estado para el proyecto");
         }
         else{
-            String status;
-            if (editarPro.cmbEstado.getSelectedItem().equals("Activo")) {
-                status = "1";
+            BigDecimal d = BigDecimal.valueOf(Double.parseDouble(editarPro.jTextField1.getText().trim().toString()));
+            BigDecimal d2 = d.setScale(0, BigDecimal.ROUND_HALF_UP); // yields 34
+                      
+            int b = Integer.parseInt(d2.toString());
+                
+            if (BuscarNombre(editarPro.txtProyecto.getText().trim(), b).size() > 0) {
+                JOptionPane.showMessageDialog(editarPro, "El proyecto ya existe, ingrese un nombre diferente");
             }
-            else if (editarPro.cmbEstado.getSelectedItem().equals("Inactivo")) {
-                 status = "0";
-            }
-            else{
-                status = "2";
-            }
+            else {
+                String status;
+                if (editarPro.cmbEstado.getSelectedItem().equals("Activo")) {
+                    status = "1";
+                }
+                else if (editarPro.cmbEstado.getSelectedItem().equals("Inactivo")) {
+                     status = "0";
+                }
+                else{
+                    status = "2";
+                }
             
-            SimpleDateFormat formater = new SimpleDateFormat("dd/MM/yyyy");
-            String spinnerValue = formater.format(editarPro.spnFecha.getValue());
-            Date date = formater.parse(spinnerValue);
-            
-            _proyectos = new Proyecto();
-            _proyectos.setProyId(BigDecimal.valueOf(Double.parseDouble(editarPro.jTextField1.getText().trim().toString())));
-            _proyectos.setProyNombre(editarPro.txtProyecto.getText().trim().toString());
-            _proyectos.setProyEstado(new BigInteger(String.valueOf(status)));
-            _proyectos.setProyFecha(date);
-            
-            try {
-                edit(_proyectos);
-                List<Proyecto> ls = findProyectoEntities();
-                agregarATabla(ls);
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(editarPro, "Asegúrese que los campos estén correctos");
+                SimpleDateFormat formater = new SimpleDateFormat("dd/MM/yyyy");
+                String spinnerValue = formater.format(editarPro.spnFecha.getValue());
+                Date date = formater.parse(spinnerValue);
+
+                _proyectos = new Proyecto();
+                _proyectos.setProyId(BigDecimal.valueOf(Double.parseDouble(editarPro.jTextField1.getText().trim().toString())));
+                _proyectos.setProyNombre(editarPro.txtProyecto.getText().trim().toString());
+                _proyectos.setProyEstado(new BigInteger(String.valueOf(status)));
+                _proyectos.setProyFecha(date);
+
+                try {
+                    edit(_proyectos);
+                    List<Proyecto> ls = findProyectoEntities();
+                    agregarATabla(ls);
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(editarPro, "Asegúrese que los campos estén correctos");
+                }
             }
         }
+    }
+    
+    public ArrayList<Proyecto> BuscarNombre(String s) {
+
+        try {
+            claseConnect.AbrirConexionBD();
+            CallableStatement cs
+                    = claseConnect.con.prepareCall("{call buscarTexto(?,?)}");
+            cs.setString(1, s);
+            cs.registerOutParameter(2, OracleTypes.CURSOR);
+
+            cs.executeQuery();
+
+            ResultSet rset = ((OracleCallableStatement) cs).getCursor(2);
+            ArrayList<Proyecto> Datos = new ArrayList<Proyecto>();
+            
+            while (rset.next()){
+                _proyectos = new Proyecto();
+                _proyectos.setProyId(rset.getBigDecimal("PROY_ID"));
+                _proyectos.setProyNombre(rset.getString("PROY_NOMBRE"));
+                _proyectos.setProyFecha(rset.getDate("PROY_FECHA"));
+                _proyectos.setProyEstado(new BigInteger(Integer.valueOf(rset.getInt("PROY_ESTADO")).toString()));
+                
+                Datos.add(_proyectos);
+            }
+            claseConnect.CerrarConexionBD();
+            return Datos;
+            
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(view, "Error: " + e.getMessage());
+        }
+        return null;
+    }
+    
+    public ArrayList<Proyecto> BuscarNombre(String s, int id) {
+
+        try {
+            claseConnect.AbrirConexionBD();
+            CallableStatement cs
+                    = claseConnect.con.prepareCall("{call buscarTextoId(?,?,?)}");
+            cs.setString(1, s);
+            cs.setInt(2, id);
+            cs.registerOutParameter(3, OracleTypes.CURSOR);
+
+            cs.executeQuery();
+
+            ResultSet rset = ((OracleCallableStatement) cs).getCursor(3);
+            ArrayList<Proyecto> Datos = new ArrayList<Proyecto>();
+            
+            while (rset.next()){
+                _proyectos = new Proyecto();
+                _proyectos.setProyId(rset.getBigDecimal("PROY_ID"));
+                _proyectos.setProyNombre(rset.getString("PROY_NOMBRE"));
+                _proyectos.setProyFecha(rset.getDate("PROY_FECHA"));
+                _proyectos.setProyEstado(new BigInteger(Integer.valueOf(rset.getInt("PROY_ESTADO")).toString()));
+                
+                Datos.add(_proyectos);
+            }
+            claseConnect.CerrarConexionBD();
+            return Datos;
+            
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(view, "Error: " + e.getMessage());
+        }
+        return null;
     }
 }
