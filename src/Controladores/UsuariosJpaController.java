@@ -289,6 +289,9 @@ public class UsuariosJpaController implements Serializable {
             viewCrearEditar.txtContra.setText(_usuario.getUserContrasena());
             viewCrearEditar.cmbEstado.setSelectedIndex(_usuario.getUserEstado().intValue());
             
+            viewCrearEditar.txtClave.setEditable(false);
+            viewCrearEditar.txtClave.setEnabled(false);
+            
             viewCrearEditar.setLocationRelativeTo(null);
             viewCrearEditar.setVisible(true);
         }        
@@ -351,12 +354,16 @@ public class UsuariosJpaController implements Serializable {
             if (e.getSource()==viewUser.btnNuevo) {
                 _usuario=null;                
                 limpiarTXT();
+                viewCrearEditar.txtClave.setEditable(true);
+                viewCrearEditar.txtClave.setEnabled(true);
                 viewCrearEditar.setLocationRelativeTo(null);
                 viewCrearEditar.setVisible(true);
             }
             else if (e.getSource()==viewCrearEditar.btnCancelar) {
                 _usuario=null;
                 viewCrearEditar.dispose();
+                viewCrearEditar.txtClave.setEditable(true);
+                viewCrearEditar.txtClave.setEnabled(true);
             }
             else if (e.getSource()==viewCrearEditar.btnGuardar) {
                 if (!viewCrearEditar.txtNombUsr.getText().trim().isEmpty() || !viewCrearEditar.txtClave.getText().trim().isEmpty() ||
@@ -365,13 +372,12 @@ public class UsuariosJpaController implements Serializable {
                         ArrayList<Usuarios> list=null;
                         list= new ArrayList<Usuarios>();
                         list=BuscarPorClave(viewCrearEditar.txtClave.getText().trim());
-                        if (list==null) {
-                            ///-------problemas
-                            viewCrearEditar.txtClave.setEditable(false);
-                            viewCrearEditar.txtClave.setEnabled(false);
+                        if (list==null) {                            
+                            viewCrearEditar.txtClave.setEditable(true);
+                            viewCrearEditar.txtClave.setEnabled(true);
                             _usuario= new Usuarios();
                             _usuario.setUserNombres(viewCrearEditar.txtNombUsr.getText());
-                            _usuario.setUserClave(viewCrearEditar.txtClave.getText());
+                            _usuario.setUserClave(viewCrearEditar.txtClave.getText().toUpperCase());
                             _usuario.setUserCorreo(viewCrearEditar.txtCorreo.getText());
                             _usuario.setUserContrasena(viewCrearEditar.txtContra.getText());
                             if (viewCrearEditar.cmbEstado.getSelectedIndex()==1) {
@@ -392,12 +398,11 @@ public class UsuariosJpaController implements Serializable {
                         }else{
                             JOptionPane.showMessageDialog(viewCrearEditar, "Este alias ya existe, escoja otro por favor");                            
                         }
-                    }else{
-                        ///-------problemas
+                    }else{                        
                         viewCrearEditar.txtClave.setEditable(false);
                         viewCrearEditar.txtClave.setEnabled(false);
                         _usuario.setUserNombres(viewCrearEditar.txtNombUsr.getText());
-                        _usuario.setUserClave(viewCrearEditar.txtClave.getText());
+                        _usuario.setUserClave(viewCrearEditar.txtClave.getText().toUpperCase());
                         _usuario.setUserCorreo(viewCrearEditar.txtCorreo.getText());
                         _usuario.setUserContrasena(viewCrearEditar.txtContra.getText());                        
                         if (viewCrearEditar.cmbEstado.getSelectedIndex()==1) {
@@ -407,7 +412,7 @@ public class UsuariosJpaController implements Serializable {
                         {
                             _usuario.setUserEstado(new BigInteger(String.valueOf("0")));
                         }
-                        try {
+                        try {                            
                             edit(_usuario);
                             llenarTabla(findUsuariosEntities());
                             _usuario=null;
