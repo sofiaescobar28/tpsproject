@@ -106,7 +106,7 @@ public class EmpleadosJpaController implements Serializable {
         this.vNuevoE.btnCancelar.addActionListener(alP);
         this.vEditE.btnCancelar.addActionListener(alP);
         this.vEditE.btnGuardar.addActionListener(alP);
-
+                
         ///--------------------------------------------------------------------------------
         ///--------------------------------------------------------------------------------
         this.viewPago.btnCancelar.addActionListener(alP);
