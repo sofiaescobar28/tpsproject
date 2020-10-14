@@ -48,7 +48,7 @@ import oracle.jdbc.OracleTypes;
  * @author Manuel
  */
 public class CategoriasJpaController implements Serializable {
-    
+
     ViewCategorias viewCategorias = new ViewCategorias();
     ViewEditar_Categoria viewEditCate = new ViewEditar_Categoria();
     ViewNueva_Categoria viewNuevaCat = new ViewNueva_Categoria();
@@ -56,8 +56,8 @@ public class CategoriasJpaController implements Serializable {
     int fila = -1;
     int columna = -1;
     Conexion claseConnect = new Conexion();
-    
-    public CategoriasJpaController(EntityManagerFactory emf){
+
+    public CategoriasJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
 
@@ -71,39 +71,39 @@ public class CategoriasJpaController implements Serializable {
         viewNuevaCat.btnNuevacateg.addActionListener(al);
         viewCategorias.cmbTipodeCate.addActionListener(al);
         this.viewCategorias.dgvCategorias.addMouseListener(new MouseListener() {
-            
+
             public void mouseClicked(MouseEvent e) {
                 if (e.getSource() == view.dgvCategorias) {
                     leerTabla();
                 }
             }
-            
+
             public void mousePressed(MouseEvent e) {
-                
+
             }
-            
+
             public void mouseReleased(MouseEvent e) {
-                
+
             }
-            
+
             public void mouseEntered(MouseEvent e) {
-                
+
             }
-            
+
             public void mouseExited(MouseEvent e) {
-                
+
             }
         });
         this.viewCategorias.txtBuscar.addKeyListener(new KeyAdapter() {
-            
+
             public void keyTyped(KeyEvent e) {
-                
+
             }
-            
+
             public void keyPressed(KeyEvent e) {
-                
+
             }
-            
+
             public void keyReleased(KeyEvent e) {
                 if (e.getSource() == viewCategorias.txtBuscar) {
                     ArrayList<Categorias> list = new ArrayList<>();
@@ -111,87 +111,159 @@ public class CategoriasJpaController implements Serializable {
                     if (list != null) {
                         agregarATabla(list);
                     }
-                    
+
                 }
             }
         });
     }
-    
+
     public void iniciarForm() {
         viewCategorias.setTitle("Formulario Cargos");
         List<Categorias> ls = findCategoriasEntities();
         agregarATabla(ls);
-        
+
         viewCategorias.setLocationRelativeTo(null);
     }
 
     public ArrayList<Categorias> findSearch(String s) {
-        
+
         try {
             claseConnect.AbrirConexionBD();
             CallableStatement cs
                     = claseConnect.con.prepareCall("{call findCategoriasNombre(?,?)}");
             cs.setString(1, s);
             cs.registerOutParameter(2, OracleTypes.CURSOR);
-            
+
             cs.executeQuery();
-            
+
             ResultSet rset = ((OracleCallableStatement) cs).getCursor(2);
             ArrayList<Categorias> Datos = new ArrayList<Categorias>();
-            
+
             while (rset.next()) {
                 _categorias = new Categorias();
                 _categorias.setCatId(rset.getBigDecimal("CAT_ID"));
                 _categorias.setCatNombre(rset.getString("CAT_NOMBRE"));
                 _categorias.setCatTipo(BigInteger.valueOf(Integer.parseInt(rset.getString("CAT_TIPO"))));
-                
+
                 Datos.add(_categorias);
             }
-            
+
             claseConnect.CerrarConexionBD();
             return Datos;
-            
+
         } catch (SQLException ex) {
-            
+
             JOptionPane.showMessageDialog(viewCategorias, "Sucedió un problema al realizar la consulta.");
-            
+
         }
         return null;
-        
+
     }
-     public ArrayList<Categorias> findSearchCombo(int s) {
-        
+
+    public ArrayList<Categorias> findSearchValidar(String s) {
+
+        try {
+            claseConnect.AbrirConexionBD();
+            CallableStatement cs
+                    = claseConnect.con.prepareCall("{call findCategoriasNombreValidar(?,?)}");
+            cs.setString(1, s);
+            cs.registerOutParameter(2, OracleTypes.CURSOR);
+
+            cs.executeQuery();
+
+            ResultSet rset = ((OracleCallableStatement) cs).getCursor(2);
+            ArrayList<Categorias> Datos = new ArrayList<Categorias>();
+
+            while (rset.next()) {
+                _categorias = new Categorias();
+                _categorias.setCatId(rset.getBigDecimal("CAT_ID"));
+                _categorias.setCatNombre(rset.getString("CAT_NOMBRE"));
+                _categorias.setCatTipo(BigInteger.valueOf(Integer.parseInt(rset.getString("CAT_TIPO"))));
+
+                Datos.add(_categorias);
+            }
+
+            claseConnect.CerrarConexionBD();
+            return Datos;
+
+        } catch (SQLException ex) {
+
+            JOptionPane.showMessageDialog(viewCategorias, "Sucedió un problema al realizar la consulta.");
+
+        }
+        return null;
+
+    }
+
+    public ArrayList<Categorias> findSearchValidarEditar(String s, int id) {
+
+        try {
+            claseConnect.AbrirConexionBD();
+            CallableStatement cs
+                    = claseConnect.con.prepareCall("{call findCategoriasNValidarE(?,?,?)}");
+            cs.setString(1, s);
+            cs.setInt(2, id);
+            cs.registerOutParameter(3, OracleTypes.CURSOR);
+
+            cs.executeQuery();
+
+            ResultSet rset = ((OracleCallableStatement) cs).getCursor(3);
+            ArrayList<Categorias> Datos = new ArrayList<Categorias>();
+
+            while (rset.next()) {
+                _categorias = new Categorias();
+                _categorias.setCatId(rset.getBigDecimal("CAT_ID"));
+                _categorias.setCatNombre(rset.getString("CAT_NOMBRE"));
+                _categorias.setCatTipo(BigInteger.valueOf(Integer.parseInt(rset.getString("CAT_TIPO"))));
+
+                Datos.add(_categorias);
+            }
+
+            claseConnect.CerrarConexionBD();
+            return Datos;
+
+        } catch (SQLException ex) {
+
+            JOptionPane.showMessageDialog(viewCategorias, "Sucedió un problema al realizar la consulta.");
+
+        }
+        return null;
+
+    }
+
+    public ArrayList<Categorias> findSearchCombo(int s) {
+
         try {
             claseConnect.AbrirConexionBD();
             CallableStatement cs
                     = claseConnect.con.prepareCall("{call findCategoriasNombreIE(?,?)}");
             cs.setInt(1, s);
             cs.registerOutParameter(2, OracleTypes.CURSOR);
-            
+
             cs.executeQuery();
-            
+
             ResultSet rset = ((OracleCallableStatement) cs).getCursor(2);
             ArrayList<Categorias> Datos = new ArrayList<Categorias>();
-            
+
             while (rset.next()) {
                 _categorias = new Categorias();
                 _categorias.setCatId(rset.getBigDecimal("CAT_ID"));
                 _categorias.setCatNombre(rset.getString("CAT_NOMBRE"));
                 _categorias.setCatTipo(BigInteger.valueOf(Integer.parseInt(rset.getString("CAT_TIPO"))));
-                
+
                 Datos.add(_categorias);
             }
-            
+
             claseConnect.CerrarConexionBD();
             return Datos;
-            
+
         } catch (SQLException ex) {
-            
+
             JOptionPane.showMessageDialog(viewCategorias, "Sucedió un problema al buscar.");
-            
+
         }
         return null;
-        
+
     }
 
     public void agregarATabla(List<Categorias> obj) {
@@ -202,10 +274,10 @@ public class CategoriasJpaController implements Serializable {
             model.addColumn("CATEGORIAS");
             model.addColumn("TIPO");
             model.addColumn("");
-            
+
             int cont = 0;
             for (Object valor : obj) {
-                
+
                 Datos[0] = obj.get(cont).getCatId();
                 Datos[1] = obj.get(cont).getCatNombre();
                 if (obj.get(cont).getCatTipo() == BigInteger.valueOf(0)) {
@@ -214,16 +286,16 @@ public class CategoriasJpaController implements Serializable {
                     Datos[2] = "Egresos";
                 }
                 Datos[3] = "Modificar";
-                
+
                 cont = cont + 1;
                 model.addRow(Datos);
             }
-            
+
             viewCategorias.dgvCategorias.setModel(model);
         }
-        
+
     }
-    
+
     public void agregarATabla(ArrayList<Categorias> obj) {
         if (obj.size() > 0) {
             Object Datos[] = new Object[4];// 1-id, 2-nombre, 3-Cantidad
@@ -232,10 +304,10 @@ public class CategoriasJpaController implements Serializable {
             model.addColumn("CATEGORIAS");
             model.addColumn("TIPO");
             model.addColumn("");
-            
+
             int cont = 0;
             for (Object valor : obj) {
-                
+
                 Datos[0] = obj.get(cont).getCatId();
                 Datos[1] = obj.get(cont).getCatNombre();
                 if (obj.get(cont).getCatTipo() == BigInteger.valueOf(0)) {
@@ -243,16 +315,16 @@ public class CategoriasJpaController implements Serializable {
                 } else if (obj.get(cont).getCatTipo() == BigInteger.valueOf(1)) {
                     Datos[2] = "Egresos";
                 }
-                
+
                 Datos[3] = "Modificar";
-                
+
                 cont = cont + 1;
                 model.addRow(Datos);
             }
-            
+
             viewCategorias.dgvCategorias.setModel(model);
         }
-        
+
     }
     ActionListener al = new ActionListener() {
         @Override
@@ -260,7 +332,7 @@ public class CategoriasJpaController implements Serializable {
             if (e.getSource() == viewCategorias.btnNuevaCategoria) {
                 viewNuevaCat.setVisible(true);
                 viewNuevaCat.setLocationRelativeTo(null);
-                
+
             } else if (e.getSource() == viewNuevaCat.btnCancelar) {
                 viewNuevaCat.dispose();
             } else if (e.getSource() == viewNuevaCat.btnNuevacateg) {
@@ -269,49 +341,66 @@ public class CategoriasJpaController implements Serializable {
                     _categorias.setCatNombre(viewNuevaCat.txtNuevocategoria.getText());
                     _categorias.setCatTipo(BigInteger.valueOf(viewNuevaCat.cmbTipoCategoria.getSelectedIndex()));
                     try {
-                        create(_categorias);
-                        viewNuevaCat.txtNuevocategoria.setText("");
-                        agregarATabla(findCategoriasEntities());
+                        if (findSearchValidar(viewNuevaCat.txtNuevocategoria.getText()).size() > 0) {
+                            JOptionPane.showMessageDialog(viewNuevaCat, "La categoría que desea agregar ya existe.");
+
+                        } else {
+                            create(_categorias);
+                            viewNuevaCat.txtNuevocategoria.setText("");
+                            agregarATabla(findCategoriasEntities());
+                        }
                     } catch (Exception ex) {
                         JOptionPane.showMessageDialog(viewNuevaCat, "Sucedió un error al crear categoría.");
                     }
                 } else {
                     JOptionPane.showMessageDialog(viewNuevaCat, "Debe introducir un nombre para la nueva categoría.");
                 }
-                
+
             } else if (e.getSource() == viewEditCate.btnCancelar) {
                 viewEditCate.dispose();
             } else if (e.getSource() == viewEditCate.btnGuardarcambios) {
                 if (!viewEditCate.txtEditarcategoria.getText().trim().isEmpty()) {
+
                     _categorias.setCatNombre(viewEditCate.txtEditarcategoria.getText());
+                    _categorias.setCatTipo(BigInteger.valueOf(viewEditCate.cmbTipoCategoria.getSelectedIndex()));
                     try {
-                        edit(_categorias);
+                        BigDecimal d = _categorias.getCatId();
+                        BigDecimal d2 = d.setScale(0, BigDecimal.ROUND_HALF_UP); // yields 34
+
+                        int b = Integer.parseInt(d2.toString());
+
+                        if (findSearchValidarEditar(_categorias.getCatNombre(), b).size() > 0) {
+                            JOptionPane.showMessageDialog(viewEditCate, "El nombre de la categoría ya existe.");
+
+                        } else {
+                            edit(_categorias);
+                            agregarATabla(findCategoriasEntities());
+                        }
                     } catch (Exception ex) {
                         Logger.getLogger(CategoriasJpaController.class.getName()).log(Level.SEVERE, null, ex);
-                        
+
                     }
                 } else {
                     JOptionPane.showMessageDialog(viewEditCate, "Debe introducir un nombre a la categoría.");
                 }
-                
-            }else if(e.getSource()==viewCategorias.cmbTipodeCate)
-            {
-                if (viewCategorias.cmbTipodeCate.getSelectedIndex() ==0) {
+
+            } else if (e.getSource() == viewCategorias.cmbTipodeCate) {
+                if (viewCategorias.cmbTipodeCate.getSelectedIndex() == 0) {
                     agregarATabla(findCategoriasEntities());
-                }else if (viewCategorias.cmbTipodeCate.getSelectedIndex() ==1 ) {
-                     agregarATabla(findSearchCombo(0));
-                    
-                }else if (viewCategorias.cmbTipodeCate.getSelectedIndex() ==2 ) {
-                     agregarATabla(findSearchCombo(1));
-                    
+                } else if (viewCategorias.cmbTipodeCate.getSelectedIndex() == 1) {
+                    agregarATabla(findSearchCombo(0));
+
+                } else if (viewCategorias.cmbTipodeCate.getSelectedIndex() == 2) {
+                    agregarATabla(findSearchCombo(1));
+
                 }
-               
+
             }
-            
+
         }
-        
+
     };
-    
+
     public void leerTabla() {
         fila = viewCategorias.dgvCategorias.getSelectedRow();
         columna = viewCategorias.dgvCategorias.getSelectedColumn();
@@ -320,26 +409,26 @@ public class CategoriasJpaController implements Serializable {
             viewEditCate.txtEditarcategoria.setText(_categorias.getCatNombre());
 //            int val = _categorias.getCatId().intValue();
             viewEditCate.cmbTipoCategoria.setSelectedIndex(_categorias.getCatTipo().intValue());
-            
+
             viewEditCate.setLocationRelativeTo(null);
             viewEditCate.setVisible(true);
-            
+
         }
-        
+
     }
-    
+
     public void obtenerObjeto(int fila) {
 //        _categorias = new Categorias();
         _categorias.setCatId(BigDecimal.valueOf(Double.parseDouble(viewCategorias.dgvCategorias.getValueAt(fila, 0).toString())));
         _categorias.setCatNombre(viewCategorias.dgvCategorias.getValueAt(fila, 1).toString());
-        
+
         _categorias.setCatTipo(BigInteger.valueOf(valor(viewCategorias.dgvCategorias.getValueAt(fila, 2).toString())));
         //return _categorias;
 //        BigInteger val =BigInteger.valueOf(valor(viewCategorias.dgvCategorias.getValueAt(fila, 2).toString()));
     }
-    
+
     public int valor(String s) {
-        
+
         if (s.equals("Ingresos")) {
             return 0;
         } else if (s.equals("Egresos")) {
@@ -348,11 +437,11 @@ public class CategoriasJpaController implements Serializable {
         return -1;
     }
     private EntityManagerFactory emf = null;
-    
+
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
-    
+
     public void create(Categorias categorias) throws PreexistingEntityException, Exception {
         EntityManager em = null;
         try {
@@ -371,7 +460,7 @@ public class CategoriasJpaController implements Serializable {
             }
         }
     }
-    
+
     public void edit(Categorias categorias) throws NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
@@ -394,7 +483,7 @@ public class CategoriasJpaController implements Serializable {
             }
         }
     }
-    
+
     public void destroy(BigDecimal id) throws NonexistentEntityException {
         EntityManager em = null;
         try {
@@ -415,15 +504,15 @@ public class CategoriasJpaController implements Serializable {
             }
         }
     }
-    
+
     public List<Categorias> findCategoriasEntities() {
         return findCategoriasEntities(true, -1, -1);
     }
-    
+
     public List<Categorias> findCategoriasEntities(int maxResults, int firstResult) {
         return findCategoriasEntities(false, maxResults, firstResult);
     }
-    
+
     private List<Categorias> findCategoriasEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
@@ -439,7 +528,7 @@ public class CategoriasJpaController implements Serializable {
             em.close();
         }
     }
-    
+
     public Categorias findCategorias(BigDecimal id) {
         EntityManager em = getEntityManager();
         try {
@@ -448,7 +537,7 @@ public class CategoriasJpaController implements Serializable {
             em.close();
         }
     }
-    
+
     public int getCategoriasCount() {
         EntityManager em = getEntityManager();
         try {
@@ -461,5 +550,5 @@ public class CategoriasJpaController implements Serializable {
             em.close();
         }
     }
-    
+
 }

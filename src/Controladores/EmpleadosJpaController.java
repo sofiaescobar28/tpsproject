@@ -60,7 +60,7 @@ public class EmpleadosJpaController implements Serializable {
     viewEmpleados view = new viewEmpleados();
     viewNuevo_Empleado vNuevoE = new viewNuevo_Empleado();
     viewEditar_Empleado vEditE = new viewEditar_Empleado();
-    viewPagar viewPago  = new viewPagar();
+    viewPagar viewPago = new viewPagar();
     Empleados _emp = new Empleados();
     CargosJpaController ctrlCargos = new CargosJpaController(Entity_Main.getInstance());
     ViewCargos vcargos = new ViewCargos();
@@ -71,10 +71,9 @@ public class EmpleadosJpaController implements Serializable {
     int fila = -1;
     int columna = -1;
     int id_proy;
-    
-    
+
     //Constructor de planilla
-    public EmpleadosJpaController(EntityManagerFactory emf, ViewPlanilla view2){
+    public EmpleadosJpaController(EntityManagerFactory emf, ViewPlanilla view2) {
         this.emf = emf;
         this.viewPlanilla = view2;
         this.viewPlanilla.btnAdministrar.addActionListener(alP);
@@ -85,11 +84,11 @@ public class EmpleadosJpaController implements Serializable {
             public void mouseClicked(MouseEvent e) {
                 if (e.getSource() == viewPlanilla.dgvP) {
                     leerTablaP();
-                }                
+                }
             }
 
             public void mousePressed(MouseEvent e) {
-                
+
             }
 
             public void mouseReleased(MouseEvent e) {
@@ -108,7 +107,7 @@ public class EmpleadosJpaController implements Serializable {
         this.vNuevoE.btnCancelar.addActionListener(alP);
         this.vEditE.btnCancelar.addActionListener(alP);
         this.vEditE.btnGuardar.addActionListener(alP);
-        
+
         ///--------------------------------------------------------------------------------
         ///--------------------------------------------------------------------------------
         this.viewPago.btnCancelar.addActionListener(alP);
@@ -140,22 +139,21 @@ public class EmpleadosJpaController implements Serializable {
                         ArrayList<Empleados> list = new ArrayList<>();
                         if (!view.txtBuscar.getText().trim().isEmpty()) {
                             list = findSearchCargo(view.txtBuscar.getText());
-                            if (list.size()>0) {
-                            agregarATabla(list);
-                        }
-                        }else{
+                            if (list.size() > 0) {
+                                agregarATabla(list);
+                            }
+                        } else {
                             agregarATabla(findEmpleadosEntities());
                         }
-                        
-                        
+
                     } else if (view.radEmpleado.isSelected()) {
                         ArrayList<Empleados> list = new ArrayList<>();
                         if (!view.txtBuscar.getText().trim().isEmpty()) {
                             list = findSearchEmpleado(view.txtBuscar.getText());
-                            if (list.size()>0) {
-                            agregarATabla(list);
-                        }
-                        }else{
+                            if (list.size() > 0) {
+                                agregarATabla(list);
+                            }
+                        } else {
                             agregarATabla(findEmpleadosEntities());
                         }
                     }
@@ -198,10 +196,10 @@ public class EmpleadosJpaController implements Serializable {
         agregarATabla(ls);
         view.setLocationRelativeTo(null);
     }
-    
-    public void iniciarFormPlanilla(int id, String nombre){
-        
-        viewPlanilla.setTitle("Planilla");        
+
+    public void iniciarFormPlanilla(int id, String nombre) {
+
+        viewPlanilla.setTitle("Planilla");
         viewPlanilla.lblNombre.setText("Planilla-Proyecto: " + nombre);
         agregarATablaPlanilla(findEmpleadosEntities());
         id_proy = id;
@@ -231,8 +229,7 @@ public class EmpleadosJpaController implements Serializable {
         }
 
     }
-    
-    
+
     ///--------------------------------------------------------------------------------
     ///--------------------------------------------------------------------------------    
     public void leerTablaP() {
@@ -251,13 +248,12 @@ public class EmpleadosJpaController implements Serializable {
             vEditE.cmbcargo.setSelectedItem(_cargos.getCargos());
             vEditE.setLocationRelativeTo(null);
             vEditE.setVisible(true);
-        }
-        else if (columna == 7) {
+        } else if (columna == 7) {
             obtenerObjetoP(fila);
             viewPago.txtEmpleado.setText(_emp.getEmpNombre());
             viewPago.cmbcargo.removeAllItems();
             obtCargoACombo(viewPago.cmbcargo);
-            viewPago.cmbcargo.setSelectedItem(_cargos.getCargos());            
+            viewPago.cmbcargo.setSelectedItem(_cargos.getCargos());
             viewPago.txtPago.setText(_emp.getEmpSalario().toString());
             viewPago.setLocationRelativeTo(null);
             viewPago.setVisible(true);
@@ -265,14 +261,13 @@ public class EmpleadosJpaController implements Serializable {
     }
     ///--------------------------------------------------------------------------------
     ///--------------------------------------------------------------------------------
-    
-    
-    public ArrayList<Empleados> findSearchEmpleado(String s) {
+
+    public ArrayList<Empleados> findSearchEmpleadoValidacion(String s) {
 
         try {
             claseConnect.AbrirConexionBD();
             CallableStatement cs
-                    = claseConnect.con.prepareCall("{call findempleadosNombreP(?,?)}");
+                    = claseConnect.con.prepareCall("{call findempleadosNombreValidar(?,?)}");
             cs.setString(1, s);
             cs.registerOutParameter(2, OracleTypes.CURSOR);
 
@@ -281,7 +276,7 @@ public class EmpleadosJpaController implements Serializable {
             ResultSet rset = ((OracleCallableStatement) cs).getCursor(2);
             ArrayList<Empleados> Datos = new ArrayList<Empleados>();
 
-           while (rset.next()) {
+            while (rset.next()) {
                 _emp.setEmpId(rset.getBigDecimal("EMP_ID"));
                 _emp.setEmpNombre(rset.getString("EMP_NOMBRE"));
                 _cargos.setCargosId(rset.getBigDecimal("CAR_ID"));
@@ -304,7 +299,83 @@ public class EmpleadosJpaController implements Serializable {
         return null;
 
     }
-    
+     public ArrayList<Empleados> findSearchEmpleadoEditarValidar(String s, int id) {
+
+        try {
+            claseConnect.AbrirConexionBD();
+            CallableStatement cs
+                    = claseConnect.con.prepareCall("{call findempleadosNombreVEditar(?,?,?)}");
+            cs.setString(1, s);
+            cs.setInt(2,id);
+            cs.registerOutParameter(3, OracleTypes.CURSOR);
+
+            cs.executeQuery();
+
+            ResultSet rset = ((OracleCallableStatement) cs).getCursor(3);
+            ArrayList<Empleados> Datos = new ArrayList<Empleados>();
+
+            while (rset.next()) {
+                _emp.setEmpId(rset.getBigDecimal("EMP_ID"));
+                _emp.setEmpNombre(rset.getString("EMP_NOMBRE"));
+                _cargos.setCargosId(rset.getBigDecimal("CAR_ID"));
+                _cargos.setCargos(ctrlCargos.findCargos(rset.getBigDecimal("CAR_ID")).getCargos());
+                _emp.setCarId(_cargos);
+                _emp.setEmpSalario(Double.valueOf(rset.getDouble("EMP_SALARIO")));
+                _emp.setEmpEstado(BigInteger.valueOf(rset.getInt("EMP_ESTADO")));
+                _emp.setEmpTelefono(rset.getString("EMP_TELEFONO"));
+                Datos.add(_emp);
+            }
+
+            claseConnect.CerrarConexionBD();
+            return Datos;
+
+        } catch (SQLException ex) {
+
+            JOptionPane.showMessageDialog(view, "Sucedió un problema al buscar.");
+
+        }
+        return null;
+
+    }
+
+    public ArrayList<Empleados> findSearchEmpleado(String s) {
+
+        try {
+            claseConnect.AbrirConexionBD();
+            CallableStatement cs
+                    = claseConnect.con.prepareCall("{call findempleadosNombreP(?,?)}");
+            cs.setString(1, s);
+            cs.registerOutParameter(2, OracleTypes.CURSOR);
+
+            cs.executeQuery();
+
+            ResultSet rset = ((OracleCallableStatement) cs).getCursor(2);
+            ArrayList<Empleados> Datos = new ArrayList<Empleados>();
+
+            while (rset.next()) {
+                _emp.setEmpId(rset.getBigDecimal("EMP_ID"));
+                _emp.setEmpNombre(rset.getString("EMP_NOMBRE"));
+                _cargos.setCargosId(rset.getBigDecimal("CAR_ID"));
+                _cargos.setCargos(ctrlCargos.findCargos(rset.getBigDecimal("CAR_ID")).getCargos());
+                _emp.setCarId(_cargos);
+                _emp.setEmpSalario(Double.valueOf(rset.getDouble("EMP_SALARIO")));
+                _emp.setEmpEstado(BigInteger.valueOf(rset.getInt("EMP_ESTADO")));
+                _emp.setEmpTelefono(rset.getString("EMP_TELEFONO"));
+                Datos.add(_emp);
+            }
+
+            claseConnect.CerrarConexionBD();
+            return Datos;
+
+        } catch (SQLException ex) {
+
+            JOptionPane.showMessageDialog(view, "Sucedió un problema al buscar.");
+
+        }
+        return null;
+
+    }
+
     public ArrayList<Empleados> findSearchEmpleadoL(String s) {
 
         try {
@@ -319,7 +390,7 @@ public class EmpleadosJpaController implements Serializable {
             ResultSet rset = ((OracleCallableStatement) cs).getCursor(2);
             ArrayList<Empleados> Datos = new ArrayList<Empleados>();
 
-           while (rset.next()) {
+            while (rset.next()) {
                 _emp.setEmpId(rset.getBigDecimal("EMP_ID"));
                 _emp.setEmpNombre(rset.getString("EMP_NOMBRE"));
                 _cargos.setCargosId(rset.getBigDecimal("CAR_ID"));
@@ -391,15 +462,15 @@ public class EmpleadosJpaController implements Serializable {
         _emp.setEmpTelefono(view.jTableEmpleados.getValueAt(fila, 4).toString());
         _emp.setEmpEstado(valorEstado(view.jTableEmpleados.getValueAt(fila, 5).toString()));
     }
-    
-    
+
     ///--------------------------------------------------------------------------------
     ///--------------------------------------------------------------------------------
     int IdUsuario;
+
     public void obtenerObjetoP(int fila) {
         _emp = new Empleados();
         _emp.setEmpId(BigDecimal.valueOf(Double.parseDouble(viewPlanilla.dgvP.getValueAt(fila, 0).toString())));
-        IdUsuario= Integer.parseInt(viewPlanilla.dgvP.getValueAt(fila, 0).toString());
+        IdUsuario = Integer.parseInt(viewPlanilla.dgvP.getValueAt(fila, 0).toString());
         _emp.setEmpNombre(viewPlanilla.dgvP.getValueAt(fila, 1).toString());
         buscarCargoID(viewPlanilla.dgvP.getValueAt(fila, 2).toString());
         _emp.setCarId(_cargos);
@@ -409,8 +480,7 @@ public class EmpleadosJpaController implements Serializable {
     }
     ///--------------------------------------------------------------------------------
     ///--------------------------------------------------------------------------------
-    
-    
+
     public void obtCargoACombo(JComboBox c) {
         List<Cargos> lst = ctrlCargos.findCargosEntities();
         for (Cargos carg : lst) {
@@ -446,8 +516,14 @@ public class EmpleadosJpaController implements Serializable {
                     _emp.setEmpEstado(BigInteger.valueOf(vNuevoE.cmbestado.getSelectedIndex()));
 
                     try {
-                        create(_emp);
-                        agregarATabla(findEmpleadosEntities());
+                        if (findSearchEmpleadoValidacion(vNuevoE.txtEmpleado.getText()).size() > 0) {
+                            JOptionPane.showMessageDialog(vNuevoE, "El cargo que desea agregar ya existe.");
+
+                        } else {
+                            _emp.setEmpId(new BigDecimal( getEmpleadosCount()+1));//asignamos id
+                            create(_emp);
+                            agregarATabla(findEmpleadosEntities());
+                        }
                     } catch (Exception ex) {
                         JOptionPane.showMessageDialog(vNuevoE, "Ha sucedido un error al guardar.");
                         Logger.getLogger(EmpleadosJpaController.class.getName()).log(Level.SEVERE, null, ex);
@@ -471,8 +547,18 @@ public class EmpleadosJpaController implements Serializable {
                     _emp.setEmpEstado(BigInteger.valueOf(vEditE.cmbestado.getSelectedIndex()));
 
                     try {
-                        edit(_emp);
-                        agregarATabla(findEmpleadosEntities());
+                         BigDecimal d = _emp.getEmpId();
+                        BigDecimal d2 = d.setScale(0, BigDecimal.ROUND_HALF_UP); // yields 34
+
+                        int b = Integer.parseInt(d2.toString());
+                        if (findSearchEmpleadoEditarValidar(_emp.getEmpNombre(), b).size() > 0) {
+                            JOptionPane.showMessageDialog(vEditE, "El nombre de la categoría ya existe.");
+
+                        } else {
+                            edit(_emp);
+                            agregarATabla(findEmpleadosEntities());
+                        }
+                        
                     } catch (Exception ex) {
                         JOptionPane.showMessageDialog(vNuevoE, "Ha sucedido un error al modificar empleado..");
                         Logger.getLogger(EmpleadosJpaController.class.getName()).log(Level.SEVERE, null, ex);
@@ -537,7 +623,7 @@ public class EmpleadosJpaController implements Serializable {
         }
 
     }
-    
+
     public void agregarATablaPlanilla(List<Empleados> obj) {
         if (obj.size() > 0) {
             Object Datos[] = new Object[8];// 1-id, 2-nombre, 3-Cantidad
@@ -603,8 +689,8 @@ public class EmpleadosJpaController implements Serializable {
                 }
                 Datos[3] = obj.get(cont).getEmpSalario();
                 Datos[4] = obj.get(cont).getEmpTelefono();
-               
-                  if (obj.get(cont).getEmpEstado() == BigInteger.valueOf(0)) {
+
+                if (obj.get(cont).getEmpEstado() == BigInteger.valueOf(0)) {
                     Datos[5] = "Inactivo";
                 } else if (obj.get(cont).getEmpEstado() == BigInteger.valueOf(1)) {
                     Datos[5] = "Activo";
@@ -619,7 +705,7 @@ public class EmpleadosJpaController implements Serializable {
             view.jTableEmpleados.setModel(model);
         }
     }
-    
+
     public void agregarATablaPlanilla(ArrayList<Empleados> obj) {
         if (obj.size() > 0) {
             Object Datos[] = new Object[8];// 1-id, 2-nombre, 3-Cantidad
@@ -811,17 +897,13 @@ public class EmpleadosJpaController implements Serializable {
                 viewProyectos.setVisible(true);
                 viewProyectos.setLocationRelativeTo(null);
                 viewPlanilla.dispose();
-            }
-            else if (ae.getSource() == viewPlanilla.btnBuscar) {
+            } else if (ae.getSource() == viewPlanilla.btnBuscar) {
                 if (!viewPlanilla.txtBuscar.getText().trim().toString().isEmpty()) {
                     agregarATablaPlanilla(findSearchEmpleadoL(viewPlanilla.txtBuscar.getText()));
-                }
-                else{
+                } else {
                     agregarATablaPlanilla(findEmpleadosEntities());
                 }
-            }                                        
-            else if(ae.getSource()== viewPlanilla.btnNuevoE)
-            {
+            } else if (ae.getSource() == viewPlanilla.btnNuevoE) {
                 obtCargoACombo(vNuevoE.cmbcargo);
                 vNuevoE.setVisible(true);
                 vNuevoE.setLocationRelativeTo(null);
@@ -848,7 +930,7 @@ public class EmpleadosJpaController implements Serializable {
                 vNuevoE.cmbcargo.removeAllItems();
                 vNuevoE.dispose();
             } else if (ae.getSource() == vEditE.btnCancelar) {
-                vEditE.dispose();            
+                vEditE.dispose();
             } else if (ae.getSource() == vEditE.btnGuardar) {
                 if (!vEditE.txtEmpleado.getText().trim().isEmpty() && !vEditE.txtSalario.getText().trim().isEmpty()) {
                     _emp.setEmpNombre(vEditE.txtEmpleado.getText());
@@ -868,32 +950,28 @@ public class EmpleadosJpaController implements Serializable {
                 } else {
                     JOptionPane.showMessageDialog(vNuevoE, "Los campos no pueden quedar en blanco.");
                 }
-            }
-            ///--------------------------------------------------------------------------------
+            } ///--------------------------------------------------------------------------------
             ///--------------------------------------------------------------------------------
             else if (ae.getSource() == viewPago.btnCancelar) {
                 viewPago.dispose();
                 limpiarTxtPagos();
-            }
-            else if (ae.getSource() == viewPago.btnPagar) {
+            } else if (ae.getSource() == viewPago.btnPagar) {
                 if (!viewPago.txtEmpleado.getText().trim().isEmpty() || !viewPago.txtPago.getText().trim().isEmpty()
                         || !viewPago.txtComentario.getText().trim().isEmpty()) {
                     GastoPersonal gp = new GastoPersonal();
                     gp = llenarPago();
                     try {
                         ctrl.create(gp);
-                        JOptionPane.showMessageDialog(viewPago, "Pagado!!!");                    
+                        JOptionPane.showMessageDialog(viewPago, "Pagado!!!");
                     } catch (Exception ex) {
-                        JOptionPane.showMessageDialog(viewPago,",," +ex.getMessage()+",Cause ," +ex.getCause());
+                        JOptionPane.showMessageDialog(viewPago, ",," + ex.getMessage() + ",Cause ," + ex.getCause());
                     }
-                        
+
                     _cargos = new Cargos();
-                    _emp= new Empleados();
-                    IdUsuario=-1;
+                    _emp = new Empleados();
+                    IdUsuario = -1;
                     viewPago.dispose();
-                }
-                else
-                {
+                } else {
                     JOptionPane.showMessageDialog(viewPago, "Faltan campos por llenar");
                 }
             }
@@ -901,34 +979,33 @@ public class EmpleadosJpaController implements Serializable {
             ///--------------------------------------------------------------------------------
         }
     };
-    
+
     ///--------------------------------------------------------------------------------
     ///--------------------------------------------------------------------------------
-    public GastoPersonal llenarPago()
-    {
+    public GastoPersonal llenarPago() {
         Date Hoy = new Date();
         String strDateFormat = "dd-MMM-aaaa";
         SimpleDateFormat objSDF = new SimpleDateFormat(strDateFormat);
-        objSDF.format(Hoy); 
+        objSDF.format(Hoy);
         Proyecto pr = new Proyecto();
         ProyectoJpaController ctrlP = new ProyectoJpaController(emf);
         pr = ctrlP.findProyecto(new BigDecimal(id_proy));
         _emp = new Empleados();
-        _emp= findEmpleados(new BigDecimal(IdUsuario));
-        
+        _emp = findEmpleados(new BigDecimal(IdUsuario));
+
         buscarCargoID(viewPago.cmbcargo.getItemAt(viewPago.cmbcargo.getSelectedIndex()));
-        
+
         GastoPersonal gasp = new GastoPersonal();
         gasp.setEmpId(_emp);
         gasp.setProyId(pr);
         gasp.setGpCargo(Double.parseDouble(_cargos.getCargosId().toString()));
         gasp.setGpPago(Double.parseDouble(viewPago.txtPago.getText()));
-        gasp.setGpFecha(Hoy);        
-        gasp.setGpComentario(viewPago.txtComentario.getText());        
+        gasp.setGpFecha(Hoy);
+        gasp.setGpComentario(viewPago.txtComentario.getText());
         return gasp;
     }
-    public void limpiarTxtPagos()
-    {
+
+    public void limpiarTxtPagos() {
         viewPago.txtEmpleado.setText(null);
         viewPago.txtComentario.setText(null);
         viewPago.txtPago.setText(null);
