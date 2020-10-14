@@ -17,9 +17,11 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.sql.CallableStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -140,23 +142,40 @@ public class UnidadesDeMedidaJpaController implements Serializable {
             }
             else if (e.getSource()==viewCrear_Editar.btnGuardar) {
                 if (!viewCrear_Editar.txtUnidadMed.getText().trim().toString().isEmpty()) {
-                    if (_unidad==null) {                                    
-                        _unidad= new UnidadesDeMedida();                        
-                        _unidad.setUmNombre(viewCrear_Editar.txtUnidadMed.getText().trim());
+                    if (_unidad==null) {
+                        
+                        _unidad= new UnidadesDeMedida();                                                                            
+                        _unidad.setUmId(new BigDecimal(TraerID()));
+                        _unidad.setUmNombre(viewCrear_Editar.txtUnidadMed.getText().trim().toUpperCase());
                         try{
-                            create(_unidad);
-                            llenarTabla(findUnidadesDeMedidaEntities());                           
+                            if (findUnidadSearch(_unidad.getUmNombre()).size()>0) {
+                                JOptionPane.showMessageDialog(view,"Esa unidad ya existe");
+                                _unidad=null;
+                            }else{
+                                create(_unidad);
+                                llenarTabla(findUnidadesDeMedidaEntities());
+                                JOptionPane.showMessageDialog(view,"Guardada!");
+                                _unidad=null;
+                                viewCrear_Editar.txtUnidadMed.setText(null);
+                            }
                         }catch(Exception ex){
                             JOptionPane.showMessageDialog(view,"No se pudo agregar la unidad de medida");
+                            viewCrear_Editar.txtUnidadMed.setText(null); 
+                            _unidad=null;
                         }                            
                     }else{
                         _unidad= new UnidadesDeMedida();
                         _unidad.setUmId(BigDecimal.valueOf(Double.valueOf(idglobal)));                       
-                        _unidad.setUmNombre(viewCrear_Editar.txtUnidadMed.getText().trim()); 
-                        viewCrear_Editar.dispose();
+                        _unidad.setUmNombre(viewCrear_Editar.txtUnidadMed.getText().trim().toUpperCase());                         
                         try{
-                            edit(_unidad);
-                            llenarTabla(findUnidadesDeMedidaEntities());                            
+                            if (findUnidadSearch(_unidad.getUmNombre()).size()>0) {
+                                JOptionPane.showMessageDialog(view,"Esa unidad ya existe");                                
+                            }else{
+                                edit(_unidad);
+                                viewCrear_Editar.dispose();
+                                _unidad= null;
+                                llenarTabla(findUnidadesDeMedidaEntities());                            
+                            }
                         }catch(Exception ex){
                             JOptionPane.showMessageDialog(viewCrear_Editar, "Ha sucedido un error modificar.");
                         }                    
@@ -165,6 +184,7 @@ public class UnidadesDeMedidaJpaController implements Serializable {
             }
             else if (e.getSource()==viewCrear_Editar.btnCancelar) {
                 viewCrear_Editar.dispose();
+                _unidad=null;
             }
             else if (e.getSource()==view.btnBuscar)
             {
@@ -223,6 +243,31 @@ public class UnidadesDeMedidaJpaController implements Serializable {
         }
         return null;
 
+    }
+    
+    public int TraerID ()
+    {
+        int id = 1;
+        try {
+            if (getUnidadesDeMedidaCount()>0) {                            
+                claseConnect.AbrirConexionBD();
+                CallableStatement cs
+                        = claseConnect.con.prepareCall("{call TraerUltimoIdUm(?)}");            
+                cs.registerOutParameter(1, Types.INTEGER);
+
+                cs.executeQuery();
+
+                id= cs.getInt(1);
+                claseConnect.CerrarConexionBD();                
+            }
+            return id;
+            
+        } catch (SQLException ex) {
+
+            JOptionPane.showMessageDialog(view, "Sucedió un error: "+ex);
+            return -1;
+        }
+                
     }
     
     //------------------------ Métodos del acceso a datos --------------------//  

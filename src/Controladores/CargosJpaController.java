@@ -55,8 +55,11 @@ public class CargosJpaController implements Serializable {
     int idglobal;
     int fila = -1;
     int columna = -1;
- public CargosJpaController(EntityManagerFactory emf){
-  this.emf = emf;}
+
+    public CargosJpaController(EntityManagerFactory emf) {
+        this.emf = emf;
+    }
+
     public CargosJpaController(EntityManagerFactory emf, ViewCargos view) {
         this.emf = emf;
         this.view = view;
@@ -98,18 +101,17 @@ public class CargosJpaController implements Serializable {
             }
 
             public void keyPressed(KeyEvent e) {
-               
 
             }
 
             public void keyReleased(KeyEvent e) {
-                 if (e.getSource() == view.txtBuscar) {
+                if (e.getSource() == view.txtBuscar) {
                     ArrayList<Cargos> list = new ArrayList<>();
                     list = findSearch(view.txtBuscar.getText().toString());
-                    if (list!=null) {
+                    if (list != null) {
                         agregarATabla(list);
                     }
-                    
+
                 }
             }
         });
@@ -301,8 +303,18 @@ public class CargosJpaController implements Serializable {
                     viewEditarCargos.dispose();
 
                     try {
-                        edit(_cargos);
-                        agregarATabla(findCargosEntities());
+                        BigDecimal d = _cargos.getCargosId();
+                        BigDecimal d2 = d.setScale(0, BigDecimal.ROUND_HALF_UP); // yields 34
+
+                        int b = Integer.parseInt(d2.toString());
+                        if (findSearchValidacionEditar(_cargos.getCargos(), b).size() > 0) {
+                            JOptionPane.showMessageDialog(viewEditarCargos, "El nombre de la categoría ya existe.");
+
+                        } else {
+                            edit(_cargos);
+                            agregarATabla(findCargosEntities());
+                        }
+
                     } catch (Exception ex) {
                         JOptionPane.showMessageDialog(viewEditarCargos, "Ha sucedido un error modificar.");
                     }
@@ -316,16 +328,22 @@ public class CargosJpaController implements Serializable {
                 nuevocargo.dispose();
             } else if (e.getSource() == nuevocargo.btnNuevocargo) {
                 if (nuevocargo.txtNuevocargo.getText().trim().isEmpty()) {
-                    JOptionPane.showMessageDialog(view, "Debe agregarle un nombre al nuevo cargo.");
+                    JOptionPane.showMessageDialog(nuevocargo, "Debe agregarle un nombre al nuevo cargo.");
                 } else {
                     try {
-                        _cargos = new Cargos();
-                        _cargos.setCargos(nuevocargo.txtNuevocargo.getText());
+                        if (findSearchValidacion(nuevocargo.txtNuevocargo.getText()).size() > 0) {
+                            JOptionPane.showMessageDialog(nuevocargo, "El cargo que desea agregar ya existe.");
 
-                        create(_cargos);
-                        agregarATabla(findCargosEntities());
+                        } else {
+                            _cargos = new Cargos();
+                            _cargos.setCargos(nuevocargo.txtNuevocargo.getText());
+                            create(_cargos);
+                            nuevocargo.txtNuevocargo.setText("");
+                            agregarATabla(findCargosEntities());
+                        }
+
                     } catch (Exception ex) {
-                        JOptionPane.showMessageDialog(view, "No se pudo crear un nuevo cargo.");
+                        JOptionPane.showMessageDialog(nuevocargo, "No se pudo crear un nuevo cargo. Error:" + ex);
                     }
                 }
             }
@@ -383,20 +401,87 @@ public class CargosJpaController implements Serializable {
 
             ResultSet rset = ((OracleCallableStatement) cs).getCursor(2);
             ArrayList<Cargos> Datos = new ArrayList<Cargos>();
-            
-                while (rset.next()) {
-                    _cargos = new Cargos();
-                    _cargos.setCargosId(rset.getBigDecimal("CARGOS_ID"));
-                    _cargos.setCargos(rset.getString("CARGOS"));
 
-                    Datos.add(_cargos);
-                }
-               
-            
+            while (rset.next()) {
+                _cargos = new Cargos();
+                _cargos.setCargosId(rset.getBigDecimal("CARGOS_ID"));
+                _cargos.setCargos(rset.getString("CARGOS"));
+
+                Datos.add(_cargos);
+            }
 
             claseConnect.CerrarConexionBD();
-             return Datos;
-            
+            return Datos;
+
+        } catch (SQLException ex) {
+
+            JOptionPane.showMessageDialog(view, "El registro que intenta eliminar no existe.");
+
+        }
+        return null;
+
+    }
+
+    public ArrayList<Cargos> findSearchValidacion(String s) {
+
+        try {
+            claseConnect.AbrirConexionBD();
+            CallableStatement cs
+                    = claseConnect.con.prepareCall("{call findCargoNombreValidar(?,?)}");
+            cs.setString(1, s);
+            cs.registerOutParameter(2, OracleTypes.CURSOR);
+
+            cs.executeQuery();
+
+            ResultSet rset = ((OracleCallableStatement) cs).getCursor(2);
+            ArrayList<Cargos> Datos = new ArrayList<Cargos>();
+
+            while (rset.next()) {
+                _cargos = new Cargos();
+                _cargos.setCargosId(rset.getBigDecimal("CARGOS_ID"));
+                _cargos.setCargos(rset.getString("CARGOS"));
+
+                Datos.add(_cargos);
+            }
+
+            claseConnect.CerrarConexionBD();
+            return Datos;
+
+        } catch (SQLException ex) {
+
+            JOptionPane.showMessageDialog(view, "El registro que intenta eliminar no existe.");
+
+        }
+        return null;
+
+    }
+
+    public ArrayList<Cargos> findSearchValidacionEditar(String s, int id) {
+
+        try {
+            claseConnect.AbrirConexionBD();
+            CallableStatement cs
+                    = claseConnect.con.prepareCall("{call findCargoNombreValidarEditar(?,?,?)}");
+            cs.setString(1, s);
+            cs.setInt(2, id);
+            cs.registerOutParameter(3, OracleTypes.CURSOR);
+
+            cs.executeQuery();
+
+            ResultSet rset = ((OracleCallableStatement) cs).getCursor(3);
+            ArrayList<Cargos> Datos = new ArrayList<Cargos>();
+
+            while (rset.next()) {
+                _cargos = new Cargos();
+                _cargos.setCargosId(rset.getBigDecimal("CARGOS_ID"));
+                _cargos.setCargos(rset.getString("CARGOS"));
+
+                Datos.add(_cargos);
+            }
+
+            claseConnect.CerrarConexionBD();
+            return Datos;
+
         } catch (SQLException ex) {
 
             JOptionPane.showMessageDialog(view, "El registro que intenta eliminar no existe.");
