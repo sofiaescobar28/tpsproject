@@ -255,6 +255,25 @@ public class UsuariosJpaController implements Serializable {
         }
     }
     
+    public boolean validandoEstado(ArrayList<Usuarios> obj){
+        boolean estado = false;
+        if (obj.size() == 1) {
+            int cont = 0;
+            for (Object valor : obj){
+                if (obj.get(cont).getUserEstado().toString().equals("1")) {
+                   estado = true;
+                }
+                else{
+                    estado = false;
+                }
+            }
+        }
+        else {
+            estado = false;
+        }
+        return estado;
+    }
+    
     public void enviarConGMail(String destinatario, String asunto, String cuerpo) {
         // Esto es lo que va delante de @gmail.com en tu cuenta de correo. Es el remitente también.
         String remitente = "universo.desarrollo01";  //Para la dirección nomcuenta@gmail.com
@@ -297,20 +316,25 @@ public class UsuariosJpaController implements Serializable {
                     JOptionPane.showMessageDialog(view, "La contraseña está vacía.");
                 }
                 else {
-                    String met = verificarContra(view.txtUsuario.getText().trim().toString());
-                    if (met != null) {
-                        if (!view.txtContra.getText().trim().toString().equals(met)) {
-                            JOptionPane.showMessageDialog(view, "La contraseña es incorrecta");
+                    if (validandoEstado(correo(view.txtUsuario.getText().trim())) == true) {
+                        String met = verificarContra(view.txtUsuario.getText().trim().toString());
+                        if (met != null) {
+                            if (!view.txtContra.getText().trim().toString().equals(met)) {
+                                JOptionPane.showMessageDialog(view, "La contraseña es incorrecta");
+                            }
+                            else{
+                                menu.setTitle("Menú principal");
+                                menu.setVisible(true);
+                                menu.setLocationRelativeTo(null);
+                                view.dispose();
+                            }
                         }
                         else{
-                            menu.setTitle("Menú principal");
-                            menu.setVisible(true);
-                            menu.setLocationRelativeTo(null);
-                            view.dispose();
+                            JOptionPane.showMessageDialog(view, "El usuario no existe.");
                         }
                     }
                     else{
-                        JOptionPane.showMessageDialog(view, "El usuario no existe.");
+                        JOptionPane.showMessageDialog(view, "El usuario es inactivo");
                     }
                 }
             }
