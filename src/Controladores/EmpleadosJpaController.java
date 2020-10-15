@@ -76,7 +76,6 @@ public class EmpleadosJpaController implements Serializable {
     public EmpleadosJpaController(EntityManagerFactory emf, ViewPlanilla view2) {
         this.emf = emf;
         this.viewPlanilla = view2;
-        this.viewPlanilla.btnAdministrar.addActionListener(alP);
         this.viewPlanilla.btnBuscar.addActionListener(alP);
         this.viewPlanilla.btnNuevoE.addActionListener(alP);
         this.viewPlanilla.dgvP.addMouseListener(new MouseListener() {
@@ -891,13 +890,7 @@ public class EmpleadosJpaController implements Serializable {
     ActionListener alP = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent ae) {
-            if (ae.getSource() == viewPlanilla.btnAdministrar) {
-                ProyectoJpaController ctrlPtoyecto = new ProyectoJpaController(Entity_Main.getInstance(), viewProyectos);
-                ctrlPtoyecto.iniciarForm();
-                viewProyectos.setVisible(true);
-                viewProyectos.setLocationRelativeTo(null);
-                viewPlanilla.dispose();
-            } else if (ae.getSource() == viewPlanilla.btnBuscar) {
+            if (ae.getSource() == viewPlanilla.btnBuscar) {
                 if (!viewPlanilla.txtBuscar.getText().trim().toString().isEmpty()) {
                     agregarATablaPlanilla(findSearchEmpleadoL(viewPlanilla.txtBuscar.getText()));
                 } else {

@@ -25,8 +25,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
@@ -54,12 +61,13 @@ public class UsuariosJpaController implements Serializable {
         this.emf = emf;
         this.view = view;
         this.view.btnIngresar.addActionListener(al);
+        this.view.btnRecuperar.addActionListener(al);
     }
     
     public void iniciarForm(){
         view.setTitle("Login");
         view.setLocationRelativeTo(null);
-    }        
+    }  
     
     private EntityManagerFactory emf = null;
 
@@ -197,6 +205,106 @@ public class UsuariosJpaController implements Serializable {
         return contra;
     }
     
+    public ArrayList<Usuarios> correo (String clave){
+        try {
+            claseConnect.AbrirConexionBD();
+            CallableStatement cs = claseConnect.con.prepareCall("{call buscarUsuario(?,?)}");
+            cs.setString(1,clave);
+            cs.registerOutParameter(2, OracleTypes.CURSOR);
+            cs.executeQuery();
+            
+            ResultSet rset = ((OracleCallableStatement) cs).getCursor(2);
+            ArrayList<Usuarios> Datos = new ArrayList<Usuarios>();
+            
+            while (rset.next()){
+                _usuario = new Usuarios();
+                _usuario.setUserId(rset.getBigDecimal("USER_ID"));
+                _usuario.setUserNombres(rset.getString("USER_NOMBRES"));
+                _usuario.setUserClave(rset.getString("USER_CLAVE"));
+                _usuario.setUserCorreo(rset.getString("USER_CORREO"));
+                _usuario.setUserEstado(new BigInteger(Integer.valueOf(rset.getInt("USER_ESTADO")).toString()));
+                _usuario.setUserContrasena(rset.getString("USER_CONTRASENA"));
+                
+                Datos.add(_usuario);
+            }
+            claseConnect.CerrarConexionBD();
+            return Datos;
+            
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(view, "Error: " + e.getMessage());
+        }
+        return null;
+    }
+    
+    public void validandoUsuario(ArrayList<Usuarios> obj){
+        if (obj.size() == 1) {
+            int cont = 0;
+            for (Object valor : obj){
+                if (obj.get(cont).getUserEstado().toString().equals("1")) {
+                    String destinatario = "josselynescobar464@gmail.com";
+                    //String destinatario =  obj.get(cont).getUserCorreo(); //A quien le quieres escribir.
+                    String asunto = "Recuperar contraseña de Gestor de Proyectos";
+                    String cuerpo = "Ha seleccionado recuperar contraseña. Su usuario es: " + obj.get(cont).getUserClave() + " y su contraseña es: " + obj.get(cont).getUserContrasena();
+                    enviarConGMail(destinatario, asunto, cuerpo);
+                }
+                else{
+                    JOptionPane.showMessageDialog(view, "No puede realizar esta acción porque el usuario está inactivo");
+                }
+            }
+            
+        }
+    }
+    
+    public boolean validandoEstado(ArrayList<Usuarios> obj){
+        boolean estado = false;
+        if (obj.size() == 1) {
+            int cont = 0;
+            for (Object valor : obj){
+                if (obj.get(cont).getUserEstado().toString().equals("1")) {
+                   estado = true;
+                }
+                else{
+                    estado = false;
+                }
+            }
+        }
+        else {
+            estado = false;
+        }
+        return estado;
+    }
+    
+    public void enviarConGMail(String destinatario, String asunto, String cuerpo) {
+        // Esto es lo que va delante de @gmail.com en tu cuenta de correo. Es el remitente también.
+        String remitente = "universo.desarrollo01";  //Para la dirección nomcuenta@gmail.com
+        String clave = "universodesa";
+        Properties props = System.getProperties();
+        props.put("mail.smtp.host", "smtp.gmail.com");  //El servidor SMTP de Google
+        props.put("mail.smtp.user", remitente);
+        props.put("mail.smtp.clave", clave);    //La clave de la cuenta
+        props.put("mail.smtp.auth", "true");    //Usar autenticación mediante usuario y clave
+        props.put("mail.smtp.starttls.enable", "true"); //Para conectar de manera segura al servidor SMTP
+        props.put("mail.smtp.port", "587"); //El puerto SMTP seguro de Google
+
+        Session session = Session.getDefaultInstance(props);
+        MimeMessage message = new MimeMessage(session);
+
+        try {
+            message.setFrom(new InternetAddress(remitente));
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(destinatario));   //Se podrían añadir varios de la misma manera
+            message.setSubject(asunto);
+            message.setText(cuerpo);
+            Transport transport = session.getTransport("smtp");
+            transport.connect("smtp.gmail.com", remitente, clave);
+            transport.sendMessage(message, message.getAllRecipients());
+            transport.close();
+            JOptionPane.showMessageDialog(view, "Se ha enviado un correo a la direccion: "+ destinatario);
+        }
+        catch (MessagingException me) {
+            JOptionPane.showMessageDialog(view, me.getMessage());   //Si se produce un error
+        }
+    }
+    
     ActionListener al = new ActionListener(){
         @Override
         public void actionPerformed(ActionEvent ae) {
@@ -208,22 +316,41 @@ public class UsuariosJpaController implements Serializable {
                     JOptionPane.showMessageDialog(view, "La contraseña está vacía.");
                 }
                 else {
-                    String met = verificarContra(view.txtUsuario.getText().trim().toString());
-                    if (met != null) {
-                        if (!view.txtContra.getText().trim().toString().equals(met)) {
-                            JOptionPane.showMessageDialog(view, "La contraseña es incorrecta");
+                    if (validandoEstado(correo(view.txtUsuario.getText().trim())) == true) {
+                        String met = verificarContra(view.txtUsuario.getText().trim().toString());
+                        if (met != null) {
+                            if (!view.txtContra.getText().trim().toString().equals(met)) {
+                                JOptionPane.showMessageDialog(view, "La contraseña es incorrecta");
+                            }
+                            else{
+                                menu.setTitle("Menú principal");
+                                menu.setVisible(true);
+                                menu.setLocationRelativeTo(null);
+                                view.dispose();
+                            }
                         }
                         else{
-                            menu.setVisible(true);
-                            menu.setLocationRelativeTo(null);
-                            view.dispose();
+                            JOptionPane.showMessageDialog(view, "El usuario no existe.");
                         }
                     }
                     else{
-                        JOptionPane.showMessageDialog(view, "El usuario no existe.");
+                        JOptionPane.showMessageDialog(view, "El usuario es inactivo");
                     }
                 }
-            }  
+            }
+            else if (ae.getSource()== view.btnRecuperar) {
+                if (view.txtUsuario.getText().trim().toString().isEmpty()) {
+                    JOptionPane.showMessageDialog(view, "El usuario está vacío.");
+                }
+                else{
+                    if (correo(view.txtUsuario.getText().trim()).size() > 0) {
+                        validandoUsuario(correo(view.txtUsuario.getText().trim()));
+                    }
+                    else{
+                        JOptionPane.showMessageDialog(view, "Este usuario existe");
+                    }
+                }
+            }
         }
     };
     

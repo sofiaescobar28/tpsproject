@@ -121,7 +121,7 @@ public class CategoriasJpaController implements Serializable {
         viewCategorias.setTitle("Formulario Cargos");
         List<Categorias> ls = findCategoriasEntities();
         agregarATabla(ls);
-
+        viewCategorias.setVisible(true);
         viewCategorias.setLocationRelativeTo(null);
     }
 

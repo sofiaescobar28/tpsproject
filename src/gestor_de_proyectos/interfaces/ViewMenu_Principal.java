@@ -8,6 +8,7 @@ package gestor_de_proyectos.interfaces;
 import AccesoDatos.Entity_Main;
 import Controladores.ProyectoJpaController;
 import Controladores.UsuariosJpaController;
+import java.awt.event.WindowEvent;
 
 /**
  *
@@ -18,6 +19,7 @@ public class ViewMenu_Principal extends javax.swing.JFrame {
     /**
      * Creates new form Menu_Principal
      */
+    boolean salida = false;
     public ViewMenu_Principal() {
         initComponents();
     }
@@ -40,16 +42,21 @@ public class ViewMenu_Principal extends javax.swing.JFrame {
         lblNombre = new javax.swing.JLabel();
         btnCerrar = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+        });
 
-        btnUsuarios.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/usuarios1.png"))); // NOI18N
+        btnUsuarios.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/usuarios203.png"))); // NOI18N
         btnUsuarios.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnUsuariosMouseClicked(evt);
             }
         });
 
-        btnGeneral.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/cubos1.png"))); // NOI18N
+        btnGeneral.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/cubos203.png"))); // NOI18N
         btnGeneral.setToolTipText("");
         btnGeneral.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -57,7 +64,7 @@ public class ViewMenu_Principal extends javax.swing.JFrame {
             }
         });
 
-        btnProyectos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/proyecto1.png"))); // NOI18N
+        btnProyectos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/proyecto203.png"))); // NOI18N
         btnProyectos.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnProyectosMouseClicked(evt);
@@ -87,51 +94,53 @@ public class ViewMenu_Principal extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(btnProyectos))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnCerrar))
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel1)))
-                .addGap(39, 39, 39)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnUsuarios)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(64, 64, 64)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(btnProyectos, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(91, 91, 91)
+                                .addComponent(btnUsuarios, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(lblNombre))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 85, Short.MAX_VALUE)
                         .addComponent(btnGeneral)
-                        .addGap(28, 28, 28))
+                        .addGap(88, 88, 88))
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(116, 116, 116)
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel2)
-                        .addGap(18, 18, 18)
+                        .addGap(169, 169, 169)
                         .addComponent(jLabel3)
-                        .addContainerGap(20, Short.MAX_VALUE))))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(308, Short.MAX_VALUE)
-                .addComponent(btnCerrar)
+                        .addGap(141, 141, 141)))
                 .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addGap(116, 116, 116)
-                .addComponent(lblNombre)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(btnCerrar)
-                .addGap(10, 10, 10)
-                .addComponent(lblNombre)
-                .addGap(53, 53, 53)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnProyectos)
-                    .addComponent(btnUsuarios)
-                    .addComponent(btnGeneral))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel2)
-                        .addComponent(jLabel3))
-                    .addComponent(jLabel1))
-                .addContainerGap(87, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(31, 31, 31)
+                        .addComponent(lblNombre)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btnUsuarios, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnProyectos))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(116, 116, 116)
+                        .addComponent(btnGeneral)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel3)
+                        .addGap(0, 1, Short.MAX_VALUE)))
+                .addGap(106, 106, 106))
         );
 
         pack();
@@ -142,15 +151,17 @@ public class ViewMenu_Principal extends javax.swing.JFrame {
         ProyectoJpaController proyectojpa = new ProyectoJpaController(Entity_Main.getInstance(), admin);
         proyectojpa.iniciarForm();
         admin.setVisible(true);
+        salida = true;
         this.dispose();
     }//GEN-LAST:event_btnProyectosMouseClicked
 
     private void btnUsuariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnUsuariosMouseClicked
         ViewUsuarios users = new ViewUsuarios();
-//        UsuariosJpaController usersjpa = new UsuariosJpaController(Entity_Main.getInstance(), users);
-//        usersjpa.iniciarForm();
+        UsuariosJpaController usersjpa = new UsuariosJpaController(Entity_Main.getInstance(), users);
+        usersjpa.iniciarFormUs();
         users.setLocationRelativeTo(null);
         users.setVisible(true);
+        salida = true;
         this.dispose();
     }//GEN-LAST:event_btnUsuariosMouseClicked
 
@@ -158,16 +169,32 @@ public class ViewMenu_Principal extends javax.swing.JFrame {
         ViewGeneralidades general = new ViewGeneralidades();
         general.setVisible(true);
         general.setLocationRelativeTo(null);
+        salida = true;
         this.dispose();
     }//GEN-LAST:event_btnGeneralMouseClicked
 
     private void btnCerrarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarMouseClicked
-        ViewLogin view = new ViewLogin();
-        UsuariosJpaController userjpa = new UsuariosJpaController(Entity_Main.getInstance(), view);
-        userjpa.iniciarForm();
-        view.setVisible(true);
-        this.dispose();
+        if (salida == false) {
+            ViewLogin view = new ViewLogin();
+            UsuariosJpaController userjpa = new UsuariosJpaController(Entity_Main.getInstance(), view);
+            userjpa.iniciarForm();
+            view.setVisible(true);
+            salida = true;
+            this.dispose();
+        }
     }//GEN-LAST:event_btnCerrarMouseClicked
+
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        if (salida == false) {
+            ViewLogin view = new ViewLogin();
+            UsuariosJpaController userjpa = new UsuariosJpaController(Entity_Main.getInstance(), view);
+            userjpa.iniciarForm();
+            view.setVisible(true);
+            salida = true;
+            this.dispose();
+        }
+
+    }//GEN-LAST:event_formWindowClosed
 
     /**
      * @param args the command line arguments

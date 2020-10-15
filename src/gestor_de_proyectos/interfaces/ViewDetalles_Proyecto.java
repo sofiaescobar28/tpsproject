@@ -37,11 +37,8 @@ public class ViewDetalles_Proyecto extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         btnNuevo = new javax.swing.JButton();
-        btnPlanilla = new javax.swing.JButton();
-        btnPago = new javax.swing.JButton();
-        btnSalir = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         lblNombre.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         lblNombre.setText("Proyecto: ");
@@ -50,11 +47,11 @@ public class ViewDetalles_Proyecto extends javax.swing.JFrame {
 
         cmbFiltro.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Todos", "Egresos", "Ingresos", "Pérdida mercancía" }));
 
-        lblGasto.setText("Gasto:");
+        lblGasto.setText("Gasto: $");
 
-        lblIngreso.setText("Ingreso:");
+        lblIngreso.setText("Ingreso: $");
 
-        lblBalance.setText("Balance:");
+        lblBalance.setText("Balance: $");
 
         btnReporte.setText("Reporte");
 
@@ -81,12 +78,6 @@ public class ViewDetalles_Proyecto extends javax.swing.JFrame {
 
         btnNuevo.setText("Nuevo registro");
 
-        btnPlanilla.setText("Planilla");
-
-        btnPago.setText("Pago personal");
-
-        btnSalir.setText("Administrar Proyectos");
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -96,69 +87,43 @@ public class ViewDetalles_Proyecto extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(22, 22, 22)
-                                        .addComponent(jLabel1)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addComponent(btnNuevo)
-                                                .addGap(0, 0, Short.MAX_VALUE))
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addComponent(cmbFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                .addComponent(lblGasto))))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(217, 217, 217)
-                                        .addComponent(btnPlanilla)
-                                        .addGap(15, 15, 15)))
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(69, 69, 69)
-                                        .addComponent(lblIngreso))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(28, 28, 28)
-                                        .addComponent(btnPago)))
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(61, 61, 61)
-                                        .addComponent(lblBalance))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(49, 49, 49)
-                                        .addComponent(btnReporte))))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnSalir)
-                                .addGap(69, 69, 69)
-                                .addComponent(lblNombre)))
-                        .addGap(0, 73, Short.MAX_VALUE)))
+                        .addGap(434, 434, 434)
+                        .addComponent(lblNombre)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(24, 24, 24)
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(cmbFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(94, 94, 94)
+                        .addComponent(lblGasto)
+                        .addGap(69, 69, 69)
+                        .addComponent(lblIngreso)
+                        .addGap(80, 80, 80)
+                        .addComponent(lblBalance)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 189, Short.MAX_VALUE)
+                        .addComponent(btnNuevo)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnReporte)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(12, 12, 12)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblNombre)
-                    .addComponent(btnSalir))
-                .addGap(17, 17, 17)
+                .addComponent(lblNombre)
+                .addGap(36, 36, 36)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(cmbFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblGasto)
                     .addComponent(lblIngreso)
-                    .addComponent(lblBalance))
-                .addGap(27, 27, 27)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblBalance)
                     .addComponent(btnReporte)
-                    .addComponent(btnPago)
-                    .addComponent(btnPlanilla)
                     .addComponent(btnNuevo))
-                .addGap(23, 23, 23)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 378, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
@@ -202,10 +167,7 @@ public class ViewDetalles_Proyecto extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JButton btnNuevo;
-    public javax.swing.JButton btnPago;
-    public javax.swing.JButton btnPlanilla;
     public javax.swing.JButton btnReporte;
-    public javax.swing.JButton btnSalir;
     public javax.swing.JComboBox<String> cmbFiltro;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;

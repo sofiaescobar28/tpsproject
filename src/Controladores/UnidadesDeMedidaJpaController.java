@@ -105,6 +105,7 @@ public class UnidadesDeMedidaJpaController implements Serializable {
         view.setTitle("Formulario Unidades de medida");
         List<UnidadesDeMedida> lista = findUnidadesDeMedidaEntities();
         llenarTabla(lista);
+        view.setVisible(true);
         view.setLocationRelativeTo(null);
     }
     public void llenarTabla(List<UnidadesDeMedida> _ls){

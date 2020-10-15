@@ -19,10 +19,12 @@ import AccesoDatos.UnidadesDeMedida;
 import Controladores.exceptions.NonexistentEntityException;
 import Controladores.exceptions.PreexistingEntityException;
 import gestor_de_proyectos.interfaces.ViewAdministrar_Proyecto;
+import gestor_de_proyectos.interfaces.ViewCategorias;
 import gestor_de_proyectos.interfaces.ViewCrear_Registro;
 import gestor_de_proyectos.interfaces.ViewDetalles_Proyecto;
 import gestor_de_proyectos.interfaces.ViewEditar_Registro;
 import gestor_de_proyectos.interfaces.ViewPlanilla;
+import gestor_de_proyectos.interfaces.viewUnidades_de_medida;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -78,15 +80,17 @@ public class IngresoEgresoJpaController implements Serializable {
         this.emf = emf;
         this.view = view;
         this.view.cmbFiltro.addActionListener(al);
-        this.view.btnSalir.addActionListener(al);
         this.view.btnNuevo.addActionListener(al);
-        this.view.btnPlanilla.addActionListener(al);
+        this.viewEditRegistro.btnACategoria.addActionListener(al);
+        this.viewEditRegistro.btnAUnidad.addActionListener(al);
         this.viewEditRegistro.btnCancelar.addActionListener(al);
         this.viewEditRegistro.cmbTipo.addActionListener(al);
         this.viewEditRegistro.btnGuardar.addActionListener(al);
         this.viewCreatRegistro.btnCancelar.addActionListener(al);
         this.viewCreatRegistro.cmbTipo.addActionListener(al);
         this.viewCreatRegistro.btnGuardar.addActionListener(al);
+        this.viewCreatRegistro.btnACategoria.addActionListener(al);
+        this.viewCreatRegistro.btnAUnidad.addActionListener(al);
         this.view.jTable1.addMouseListener(new MouseListener(){
             @Override
             public void mouseClicked(MouseEvent me) {
@@ -122,9 +126,9 @@ public class IngresoEgresoJpaController implements Serializable {
         double gasto = gastos(id);
         double ingreso = ingresos(id);
         view.lblNombre.setText("Proyecto: " + nombre);
-        view.lblGasto.setText("Gastos: " + gasto);
-        view.lblIngreso.setText("Ingresos: " + ingreso);
-        view.lblBalance.setText("Balance: " + String.valueOf(ingreso-gasto));
+        view.lblGasto.setText("Gastos: $" + gasto);
+        view.lblIngreso.setText("Ingresos: $" + ingreso);
+        view.lblBalance.setText("Balance: $" + String.valueOf(ingreso-gasto));
         view.setLocationRelativeTo(null);
     }
     
@@ -327,19 +331,20 @@ public class IngresoEgresoJpaController implements Serializable {
     }
     
     public void agregarATabla(ArrayList<IngresoEgreso> obj){
+        DefaultTableModel model = new DefaultTableModel();
+        model.addColumn("ID");
+        model.addColumn("Descripcion");
+        model.addColumn("Tipo");
+        model.addColumn("Fecha");
+        model.addColumn("Categoría");
+        model.addColumn("Cantidad");
+        model.addColumn("Medida");
+        model.addColumn("Monto");
+        model.addColumn("");
         if (obj.size() > 0) {
             SimpleDateFormat objSDF = new SimpleDateFormat("dd-MM-yyyy");
             Object Datos[] = new Object[9];
-            DefaultTableModel model = new DefaultTableModel();
-            model.addColumn("ID");
-            model.addColumn("Descripcion");
-            model.addColumn("Tipo");
-            model.addColumn("Fecha");
-            model.addColumn("Categoría");
-            model.addColumn("Cantidad");
-            model.addColumn("Medida");
-            model.addColumn("Monto");
-            model.addColumn("");
+            
             
             int cont = 0;
             for (Object valor : obj){
@@ -361,12 +366,11 @@ public class IngresoEgresoJpaController implements Serializable {
                 cont = cont +1 ;
                 model.addRow(Datos);
             }
-            
-            view.jTable1.setModel(model);
         }
         else{
             JOptionPane.showMessageDialog(view, "No se encuentran registros de este filtro.");
         }
+        view.jTable1.setModel(model);
     }
     
     public void leerTabla(){
@@ -404,9 +408,9 @@ public class IngresoEgresoJpaController implements Serializable {
             obtUnidadesACombo(viewEditRegistro.cmbUnidad);
             viewEditRegistro.cmbUnidad.setSelectedItem(_ingresoEgreso.getUmId().getUmNombre());
             viewEditRegistro.jTextField1.setVisible(false);
+            viewEditRegistro.setTitle("Editar registro");
             viewEditRegistro.setVisible(true);
             viewEditRegistro.setLocationRelativeTo(null);
-            
         }
     }
     
@@ -730,13 +734,6 @@ public class IngresoEgresoJpaController implements Serializable {
                     agregarATabla(registrosPerdidas(id_proy));
                 }
             }
-            else if (ae.getSource() == view.btnSalir) {
-                ProyectoJpaController ctrlPtoyecto = new ProyectoJpaController(Entity_Main.getInstance(), viewProyecto);
-                ctrlPtoyecto.iniciarForm();
-                viewProyecto.setVisible(true);
-                viewProyecto.setLocationRelativeTo(null);
-                view.dispose();
-            }
             
             else if (ae.getSource() == view.btnNuevo) {
                 viewCreatRegistro.cmbUnidad.removeAllItems();
@@ -751,6 +748,7 @@ public class IngresoEgresoJpaController implements Serializable {
                 viewCreatRegistro.setTitle("Nuevo Registro");
                 viewCreatRegistro.setVisible(true);
                 viewCreatRegistro.setLocationRelativeTo(null);
+                
             }
             else if(ae.getSource() == viewEditRegistro.btnCancelar){
                 viewEditRegistro.dispose();
@@ -791,6 +789,26 @@ public class IngresoEgresoJpaController implements Serializable {
             }
             else if(ae.getSource() == viewCreatRegistro.btnCancelar){
                 viewCreatRegistro.dispose();
+            }
+            else if (ae.getSource() == viewEditRegistro.btnACategoria) {
+                ViewCategorias cate = new ViewCategorias();
+                CategoriasJpaController ctrlcate = new CategoriasJpaController(Entity_Main.getInstance(), cate);
+                ctrlCategorias.iniciarForm();
+            }
+            else if (ae.getSource() == viewEditRegistro.btnAUnidad) {
+                viewUnidades_de_medida uni = new viewUnidades_de_medida();
+                UnidadesDeMedidaJpaController ctrluni = new UnidadesDeMedidaJpaController(Entity_Main.getInstance(), uni);
+                ctrluni.iniciarForm();
+            }
+            else if (ae.getSource() == viewCreatRegistro.btnACategoria) {
+                ViewCategorias cate = new ViewCategorias();
+                CategoriasJpaController ctrlcate = new CategoriasJpaController(Entity_Main.getInstance(), cate);
+                ctrlCategorias.iniciarForm();
+            }
+            else if (ae.getSource() == viewCreatRegistro.btnAUnidad) {
+                viewUnidades_de_medida uni = new viewUnidades_de_medida();
+                UnidadesDeMedidaJpaController ctrluni = new UnidadesDeMedidaJpaController(Entity_Main.getInstance(), uni);
+                ctrluni.iniciarForm();
             }
         }
     };
