@@ -110,7 +110,7 @@ public class EmpleadosJpaController implements Serializable {
         ///--------------------------------------------------------------------------------
         ///--------------------------------------------------------------------------------
         this.viewPago.btnCancelar.addActionListener(alP);
-        this.viewPago.btnPagar.addActionListener(alP);
+        this.viewPago.btnPagar.addActionListener(alP);        
         ///--------------------------------------------------------------------------------
         ///--------------------------------------------------------------------------------
     }
