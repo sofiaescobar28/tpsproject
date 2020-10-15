@@ -38,6 +38,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -985,10 +987,27 @@ public class EmpleadosJpaController implements Serializable {
         pr = ctrlP.findProyecto(new BigDecimal(id_proy));
         _emp = new Empleados();
         _emp = findEmpleados(new BigDecimal(IdUsuario));
-
-        buscarCargoID(viewPago.cmbcargo.getItemAt(viewPago.cmbcargo.getSelectedIndex()));
-
+        
         GastoPersonal gasp = new GastoPersonal();
+        ////////////___________________________________________________
+        List<GastoPersonal> list = ctrl.findGastoPersonalEntities();
+        Collections.sort(list, new Comparator<GastoPersonal>() {                                                            
+            @Override
+            public int compare(GastoPersonal o1, GastoPersonal o2) {
+                return o1.getGpId().compareTo(o2.getGpId());
+            }
+        });
+        if(list.size()>0){
+            BigDecimal id =new BigDecimal(Integer.parseInt(list.get(list.size()-1).getGpId().toString())+1) ;                
+            gasp.setGpId(id);
+        }else{
+            gasp.setGpId(new BigDecimal("1"));
+        }
+        
+        ////////////___________________________________________________
+        buscarCargoID(viewPago.cmbcargo.getItemAt(viewPago.cmbcargo.getSelectedIndex()));
+        
+        
         gasp.setEmpId(_emp);
         gasp.setProyId(pr);
         gasp.setGpCargo(Double.parseDouble(_cargos.getCargosId().toString()));
