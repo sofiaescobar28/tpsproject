@@ -193,7 +193,7 @@ public class EmpleadosJpaController implements Serializable {
 
     public void iniciarForm() {
         view.setTitle("Formulario Cargos");
-        List<Empleados> ls = findEmpleadosEntities();
+        List<Empleados> ls = ordenarLista();
         agregarATabla(ls);
         view.setLocationRelativeTo(null);
     }
@@ -202,7 +202,7 @@ public class EmpleadosJpaController implements Serializable {
 
         viewPlanilla.setTitle("Planilla");
         viewPlanilla.lblNombre.setText("Planilla-Proyecto: " + nombre);
-        agregarATablaPlanilla(findEmpleadosEntities());
+        agregarATablaPlanilla(ordenarLista());
         id_proy = id;
         viewPlanilla.setVisible(true);
         viewPlanilla.setLocationRelativeTo(null);
@@ -899,12 +899,22 @@ public class EmpleadosJpaController implements Serializable {
                     agregarATablaPlanilla(findEmpleadosEntities());
                 }
             } else if (ae.getSource() == viewPlanilla.btnNuevoE) {
+                _emp = new Empleados();                
                 obtCargoACombo(vNuevoE.cmbcargo);
                 vNuevoE.setVisible(true);
                 vNuevoE.setLocationRelativeTo(null);
-            } else if (ae.getSource() == vNuevoE.btnGuardar) {
-                if (!vNuevoE.txtEmpleado.getText().trim().isEmpty() && !vNuevoE.txtSalario.getText().trim().isEmpty()) {
-                    _emp.setEmpNombre(vNuevoE.txtEmpleado.getText());
+            } else if (ae.getSource() == vNuevoE.btnGuardar) {                
+                if (!vNuevoE.txtEmpleado.getText().trim().isEmpty() && !vNuevoE.txtSalario.getText().trim().isEmpty()) {                    
+                    //__________________________________________________________________                    
+                    List<Empleados> list = ordenarLista();
+                    if(list.size()>0){
+                        BigDecimal id =new BigDecimal(Integer.parseInt(list.get(list.size()-1).getEmpId().toString())+1) ;                
+                        _emp.setEmpId(id);
+                    }else{
+                        _emp.setEmpId(new BigDecimal("1"));
+                    }
+                    //__________________________________________________________________
+                    _emp.setEmpNombre(vNuevoE.txtEmpleado.getText());                    
                     _emp.setEmpSalario(Double.valueOf(vNuevoE.txtSalario.getText()));
                     _emp.setEmpTelefono(vNuevoE.txtTelefono.getText());
                     buscarCargoID(vNuevoE.cmbcargo.getItemAt(vNuevoE.cmbcargo.getSelectedIndex()));
@@ -912,8 +922,9 @@ public class EmpleadosJpaController implements Serializable {
                     _emp.setEmpEstado(BigInteger.valueOf(vNuevoE.cmbestado.getSelectedIndex()));
 
                     try {
-                        create(_emp);
-                        agregarATablaPlanilla(findEmpleadosEntities());
+                        create(_emp);                        
+                        agregarATablaPlanilla(ordenarLista());
+                        _emp = null;
                     } catch (Exception ex) {
                         JOptionPane.showMessageDialog(vNuevoE, "Ha sucedido un error al guardar.");
                         Logger.getLogger(EmpleadosJpaController.class.getName()).log(Level.SEVERE, null, ex);
@@ -923,11 +934,13 @@ public class EmpleadosJpaController implements Serializable {
                 }
             } else if (ae.getSource() == vNuevoE.btnCancelar) {
                 vNuevoE.cmbcargo.removeAllItems();
+                _emp = null;
                 vNuevoE.dispose();
             } else if (ae.getSource() == vEditE.btnCancelar) {
                 vEditE.dispose();
+                _emp = null;
             } else if (ae.getSource() == vEditE.btnGuardar) {
-                if (!vEditE.txtEmpleado.getText().trim().isEmpty() && !vEditE.txtSalario.getText().trim().isEmpty()) {
+                if (!vEditE.txtEmpleado.getText().trim().isEmpty() && !vEditE.txtSalario.getText().trim().isEmpty()) {                                        
                     _emp.setEmpNombre(vEditE.txtEmpleado.getText());
                     _emp.setEmpSalario(Double.valueOf(vEditE.txtSalario.getText()));
                     _emp.setEmpTelefono(vEditE.txtTelefono.getText());
@@ -937,7 +950,7 @@ public class EmpleadosJpaController implements Serializable {
 
                     try {
                         edit(_emp);
-                        agregarATablaPlanilla(findEmpleadosEntities());
+                        agregarATablaPlanilla(ordenarLista());
                     } catch (Exception ex) {
                         JOptionPane.showMessageDialog(vNuevoE, "Ha sucedido un error al modificar empleado..");
                         Logger.getLogger(EmpleadosJpaController.class.getName()).log(Level.SEVERE, null, ex);
@@ -1015,6 +1028,17 @@ public class EmpleadosJpaController implements Serializable {
         gasp.setGpFecha(Hoy);
         gasp.setGpComentario(viewPago.txtComentario.getText());
         return gasp;
+    }
+    public List<Empleados> ordenarLista()
+    {
+        List<Empleados> list = findEmpleadosEntities();
+        Collections.sort(list, new Comparator<Empleados>() {                                                                                    
+            @Override
+            public int compare(Empleados o1, Empleados o2) {
+                return o1.getEmpId().compareTo(o2.getEmpId());
+            }
+        });
+        return list;
     }
 
     public void limpiarTxtPagos() {
