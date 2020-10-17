@@ -594,10 +594,10 @@ public class UsuariosJpaController implements Serializable {
                         return o1.getUserId().compareTo(o2.getUserId());                                    
                     }
                 });
-                if (list!=null) {
+                if (list.size()>0) {
                     llenarTabla(list);
                 }else {
-                    //JOptionPane.showMessageDialog(view,"No existen usuarios relacionados");
+                    JOptionPane.showMessageDialog(view,"No existen usuarios relacionados");
                 }
             }
         }        
@@ -650,24 +650,19 @@ public class UsuariosJpaController implements Serializable {
 
             ResultSet rset = ((OracleCallableStatement) cs).getCursor(2);
             ArrayList<Usuarios> Datos = new ArrayList<Usuarios>();
-            Usuarios usu;  
-            if (!rset.next()) {
-                return null;
-            }
-            else{
-                while (rset.next()) {
-                    usu = new Usuarios();
-                    usu.setUserId(new BigDecimal(rset.getString("USER_ID")));
-                    usu.setUserNombres(rset.getString("USER_NOMBRES"));
-                    usu.setUserClave(rset.getString("USER_CLAVE"));
-                    usu.setUserCorreo(rset.getString("USER_CORREO"));
-                    usu.setUserEstado(new BigInteger(rset.getString("USER_ESTADO")));
-                    usu.setUserContrasena(rset.getString("USER_CONTRASENA"));                
-                    Datos.add(usu);
-                }                           
-                claseConnect.CerrarConexionBD();
-                return Datos;            
-            }
+            Usuarios usu;              
+            while (rset.next()) {
+                usu = new Usuarios();
+                usu.setUserId(new BigDecimal(rset.getString("USER_ID")));
+                usu.setUserNombres(rset.getString("USER_NOMBRES"));
+                usu.setUserClave(rset.getString("USER_CLAVE"));
+                usu.setUserCorreo(rset.getString("USER_CORREO"));
+                usu.setUserEstado(new BigInteger(rset.getString("USER_ESTADO")));
+                usu.setUserContrasena(rset.getString("USER_CONTRASENA"));                
+                Datos.add(usu);
+            }                           
+            claseConnect.CerrarConexionBD();
+            return Datos;                        
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(view, "Error: "+ex.toString());
         }
