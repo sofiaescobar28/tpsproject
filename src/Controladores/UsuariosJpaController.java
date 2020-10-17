@@ -603,6 +603,7 @@ public class UsuariosJpaController implements Serializable {
         }        
     };
     //-----------------------llamar a procedimientos-----------------------------
+    
     public ArrayList<Usuarios> BuscarPorClave(String s)
     {
         try {
