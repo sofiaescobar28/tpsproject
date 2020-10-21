@@ -11,6 +11,7 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import AccesoDatos.Cargos;
+import AccesoDatos.Categorias;
 import AccesoDatos.Conexion;
 import AccesoDatos.Empleados;
 import AccesoDatos.Entity_Main;
@@ -278,6 +279,8 @@ public class EmpleadosJpaController implements Serializable {
             ArrayList<Empleados> Datos = new ArrayList<Empleados>();
 
             while (rset.next()) {
+                _emp = new Empleados();
+                _cargos = new Cargos();
                 _emp.setEmpId(rset.getBigDecimal("EMP_ID"));
                 _emp.setEmpNombre(rset.getString("EMP_NOMBRE"));
                 _cargos.setCargosId(rset.getBigDecimal("CAR_ID"));
@@ -316,6 +319,8 @@ public class EmpleadosJpaController implements Serializable {
             ArrayList<Empleados> Datos = new ArrayList<Empleados>();
 
             while (rset.next()) {
+                _emp=new Empleados();
+                _cargos = new Cargos();
                 _emp.setEmpId(rset.getBigDecimal("EMP_ID"));
                 _emp.setEmpNombre(rset.getString("EMP_NOMBRE"));
                 _cargos.setCargosId(rset.getBigDecimal("CAR_ID"));
@@ -354,6 +359,8 @@ public class EmpleadosJpaController implements Serializable {
             ArrayList<Empleados> Datos = new ArrayList<Empleados>();
 
             while (rset.next()) {
+                _emp = new Empleados();
+                _cargos = new Cargos();
                 _emp.setEmpId(rset.getBigDecimal("EMP_ID"));
                 _emp.setEmpNombre(rset.getString("EMP_NOMBRE"));
                 _cargos.setCargosId(rset.getBigDecimal("CAR_ID"));
@@ -430,6 +437,8 @@ public class EmpleadosJpaController implements Serializable {
             ArrayList<Empleados> Datos = new ArrayList<Empleados>();
 
             while (rset.next()) {
+                _emp = new Empleados();
+                _cargos = new Cargos();
                 _emp.setEmpId(rset.getBigDecimal("EMP_ID"));
                 _emp.setEmpNombre(rset.getString("EMP_NOMBRE"));
                 _cargos.setCargosId(rset.getBigDecimal("CAR_ID"));
@@ -509,7 +518,17 @@ public class EmpleadosJpaController implements Serializable {
 
             } else if (e.getSource() == vNuevoE.btnGuardar) {
                 if (!vNuevoE.txtEmpleado.getText().trim().isEmpty() && !vNuevoE.txtSalario.getText().trim().isEmpty()) {
-                    _emp.setEmpNombre(vNuevoE.txtEmpleado.getText());
+                   List<Empleados> list = findEmpleadosEntities();
+                            Collections.sort(list, new Comparator<Empleados>() {
+                                @Override
+                                public int compare(Empleados o1, Empleados o2) {
+                                    return o1.getEmpId().compareTo(o2.getEmpId());
+                                }
+
+                            });
+                            BigDecimal idemp =new BigDecimal(Integer.parseInt(list.get(list.size()-1).getEmpId().toString())+1) ;
+                       _emp.setEmpId(idemp);
+                    _emp.setEmpNombre(vNuevoE.txtEmpleado.getText().trim());
                     _emp.setEmpSalario(Double.valueOf(vNuevoE.txtSalario.getText()));
                     _emp.setEmpTelefono(vNuevoE.txtTelefono.getText());
                     buscarCargoID(vNuevoE.cmbcargo.getItemAt(vNuevoE.cmbcargo.getSelectedIndex()));
@@ -540,9 +559,9 @@ public class EmpleadosJpaController implements Serializable {
 
             } else if (e.getSource() == vEditE.btnGuardar) {
                 if (!vEditE.txtEmpleado.getText().trim().isEmpty() && !vEditE.txtSalario.getText().trim().isEmpty()) {
-                    _emp.setEmpNombre(vEditE.txtEmpleado.getText());
-                    _emp.setEmpSalario(Double.valueOf(vEditE.txtSalario.getText()));
-                    _emp.setEmpTelefono(vEditE.txtTelefono.getText());
+                    _emp.setEmpNombre(vEditE.txtEmpleado.getText().trim());
+                    _emp.setEmpSalario(Double.valueOf(vEditE.txtSalario.getText().trim()));
+                    _emp.setEmpTelefono(vEditE.txtTelefono.getText().trim());
                     buscarCargoID(vEditE.cmbcargo.getItemAt(vEditE.cmbcargo.getSelectedIndex()));
                     _emp.setCarId(_cargos);
                     _emp.setEmpEstado(BigInteger.valueOf(vEditE.cmbestado.getSelectedIndex()));
@@ -552,7 +571,7 @@ public class EmpleadosJpaController implements Serializable {
                         BigDecimal d2 = d.setScale(0, BigDecimal.ROUND_HALF_UP); // yields 34
 
                         int b = Integer.parseInt(d2.toString());
-                        if (findSearchEmpleadoEditarValidar(_emp.getEmpNombre(), b).size() > 0) {
+                        if (findSearchEmpleadoEditarValidar(_emp.getEmpNombre().trim(), b).size() > 0) {
                             JOptionPane.showMessageDialog(vEditE, "El nombre de la categoría ya existe.");
 
                         } else {
@@ -587,6 +606,13 @@ public class EmpleadosJpaController implements Serializable {
 
     public void agregarATabla(List<Empleados> obj) {
         if (obj.size() > 0) {
+            Collections.sort(obj, new Comparator<Empleados>() {
+                @Override
+                public int compare(Empleados o1, Empleados o2) {
+                    return o1.getEmpId().compareTo(o2.getEmpId());
+                }
+
+            });
             Object Datos[] = new Object[7];// 1-id, 2-nombre, 3-Cantidad
             DefaultTableModel model = new DefaultTableModel();
             model.addColumn("ID");
@@ -627,6 +653,13 @@ public class EmpleadosJpaController implements Serializable {
 
     public void agregarATablaPlanilla(List<Empleados> obj) {
         if (obj.size() > 0) {
+              Collections.sort(obj, new Comparator<Empleados>() {
+                @Override
+                public int compare(Empleados o1, Empleados o2) {
+                    return o1.getEmpId().compareTo(o2.getEmpId());
+                }
+
+            });
             Object Datos[] = new Object[8];// 1-id, 2-nombre, 3-Cantidad
             DefaultTableModel model = new DefaultTableModel();
             model.addColumn("ID");
@@ -668,6 +701,13 @@ public class EmpleadosJpaController implements Serializable {
 
     public void agregarATabla(ArrayList<Empleados> obj) {
         if (obj.size() > 0) {
+              Collections.sort(obj, new Comparator<Empleados>() {
+                                @Override
+                                public int compare(Empleados o1, Empleados o2) {
+                                    return o1.getEmpId().compareTo(o2.getEmpId());
+                                }
+
+                            });
             Object Datos[] = new Object[7];// 1-id, 2-nombre, 3-Cantidad
             DefaultTableModel model = new DefaultTableModel();
             model.addColumn("ID");
@@ -709,6 +749,13 @@ public class EmpleadosJpaController implements Serializable {
 
     public void agregarATablaPlanilla(ArrayList<Empleados> obj) {
         if (obj.size() > 0) {
+              Collections.sort(obj, new Comparator<Empleados>() {
+                @Override
+                public int compare(Empleados o1, Empleados o2) {
+                    return o1.getEmpId().compareTo(o2.getEmpId());
+                }
+
+            });
             Object Datos[] = new Object[8];// 1-id, 2-nombre, 3-Cantidad
             DefaultTableModel model = new DefaultTableModel();
             model.addColumn("ID");
@@ -940,10 +987,10 @@ public class EmpleadosJpaController implements Serializable {
                 vEditE.dispose();
                 _emp = null;
             } else if (ae.getSource() == vEditE.btnGuardar) {
-                if (!vEditE.txtEmpleado.getText().trim().isEmpty() && !vEditE.txtSalario.getText().trim().isEmpty()) {                                        
-                    _emp.setEmpNombre(vEditE.txtEmpleado.getText());
-                    _emp.setEmpSalario(Double.valueOf(vEditE.txtSalario.getText()));
-                    _emp.setEmpTelefono(vEditE.txtTelefono.getText());
+                if (!vEditE.txtEmpleado.getText().trim().isEmpty() && !vEditE.txtSalario.getText().trim().isEmpty()) {
+                    _emp.setEmpNombre(vEditE.txtEmpleado.getText().trim());
+                    _emp.setEmpSalario(Double.valueOf(vEditE.txtSalario.getText().trim()));
+                    _emp.setEmpTelefono(vEditE.txtTelefono.getText().trim());
                     buscarCargoID(vEditE.cmbcargo.getItemAt(vEditE.cmbcargo.getSelectedIndex()));
                     _emp.setCarId(_cargos);
                     _emp.setEmpEstado(BigInteger.valueOf(vEditE.cmbestado.getSelectedIndex()));

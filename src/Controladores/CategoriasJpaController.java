@@ -29,6 +29,8 @@ import java.sql.CallableStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -267,7 +269,15 @@ public class CategoriasJpaController implements Serializable {
     }
 
     public void agregarATabla(List<Categorias> obj) {
+
         if (obj.size() > 0) {
+            Collections.sort(obj, new Comparator<Categorias>() {
+                @Override
+                public int compare(Categorias o1, Categorias o2) {
+                    return o1.getCatId().compareTo(o2.getCatId());
+                }
+
+            });
             Object Datos[] = new Object[4];// 1-id, 2-nombre, 3-Cantidad
             DefaultTableModel model = new DefaultTableModel();
             model.addColumn("ID");
@@ -298,6 +308,13 @@ public class CategoriasJpaController implements Serializable {
 
     public void agregarATabla(ArrayList<Categorias> obj) {
         if (obj.size() > 0) {
+            Collections.sort(obj, new Comparator<Categorias>() {
+                @Override
+                public int compare(Categorias o1, Categorias o2) {
+                    return o1.getCatId().compareTo(o2.getCatId());
+                }
+
+            });
             Object Datos[] = new Object[4];// 1-id, 2-nombre, 3-Cantidad
             DefaultTableModel model = new DefaultTableModel();
             model.addColumn("ID");
@@ -337,7 +354,17 @@ public class CategoriasJpaController implements Serializable {
                 viewNuevaCat.dispose();
             } else if (e.getSource() == viewNuevaCat.btnNuevacateg) {
                 if (!viewNuevaCat.txtNuevocategoria.getText().trim().isEmpty()) {
-                    _categorias.setCatId(null);
+                    List<Categorias> list = findCategoriasEntities();
+                    Collections.sort(list, new Comparator<Categorias>() {
+                        @Override
+                        public int compare(Categorias o1, Categorias o2) {
+                            return o1.getCatId().compareTo(o2.getCatId());
+                        }
+
+                    });
+                    BigDecimal idcat = new BigDecimal(Integer.parseInt(list.get(list.size() - 1).getCatId().toString()) + 1);
+
+                    _categorias.setCatId(idcat);
                     _categorias.setCatNombre(viewNuevaCat.txtNuevocategoria.getText());
                     _categorias.setCatTipo(BigInteger.valueOf(viewNuevaCat.cmbTipoCategoria.getSelectedIndex()));
                     try {
