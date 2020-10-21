@@ -350,7 +350,7 @@ public class CargosJpaController implements Serializable {
                     JOptionPane.showMessageDialog(nuevocargo, "Debe agregarle un nombre al nuevo cargo.");
                 } else {
                     try {
-                        if (findSearchValidacion(nuevocargo.txtNuevocargo.getText()).size() > 0) {
+                        if (findSearchValidacion(nuevocargo.txtNuevocargo.getText().trim()).size() > 0) {
                             JOptionPane.showMessageDialog(nuevocargo, "El cargo que desea agregar ya existe.");
 
                         } else {
@@ -366,7 +366,7 @@ public class CargosJpaController implements Serializable {
                             BigDecimal idcar = new BigDecimal(Integer.parseInt(list.get(list.size() - 1).getCargosId().toString()) + 1);
                             _cargos = new Cargos();
                             _cargos.setCargosId(idcar);
-                            _cargos.setCargos(nuevocargo.txtNuevocargo.getText());
+                            _cargos.setCargos(nuevocargo.txtNuevocargo.getText().trim());
                             create(_cargos);
                             nuevocargo.txtNuevocargo.setText("");
                             agregarATabla(findCargosEntities());

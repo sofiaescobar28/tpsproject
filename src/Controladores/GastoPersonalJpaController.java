@@ -57,7 +57,7 @@ public class GastoPersonalJpaController implements Serializable {
             em = getEntityManager();
             em.getTransaction().begin();
             Empleados empId = gastoPersonal.getEmpId();            
-            gastoPersonal.setGpId(new BigDecimal(getGastoPersonalCount()+1));
+            //gastoPersonal.setGpId(new BigDecimal(getGastoPersonalCount()+1));
             if (empId != null) {
                 empId = em.getReference(empId.getClass(), empId.getEmpId());
                 gastoPersonal.setEmpId(empId);

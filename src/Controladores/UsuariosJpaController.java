@@ -24,6 +24,8 @@ import java.sql.CallableStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
@@ -427,6 +429,12 @@ public class UsuariosJpaController implements Serializable {
     public void iniciarFormUs(){
         viewUser.setTitle("Usuarios");
         List<Usuarios> lista = findUsuariosEntities();
+        Collections.sort(lista, new Comparator<Usuarios>() {
+            @Override
+            public int compare(Usuarios o1, Usuarios o2) {
+                return o1.getUserId().compareTo(o2.getUserId());                                    
+            }
+        });
         llenarTabla(lista);
         viewUser.setLocationRelativeTo(null);   
         viewUser.cmbEstado.addItem("Inactivo");
@@ -435,8 +443,16 @@ public class UsuariosJpaController implements Serializable {
     
     
     public void llenarTabla (List<Usuarios> _ls)
-    {
-        if (_ls.size()>0) {            
+    {                
+        if (_ls.size()>0) {
+            //________________________________________________
+            Collections.sort(_ls, new Comparator<Usuarios>() {
+                @Override
+                public int compare(Usuarios o1, Usuarios o2) {
+                    return o1.getUserId().compareTo(o2.getUserId());                                    
+                }
+            });
+            //________________________________________________
             Object Datos[] = new Object[7];
             DefaultTableModel modelo = new DefaultTableModel();
             modelo.addColumn("ID");
@@ -496,13 +512,28 @@ public class UsuariosJpaController implements Serializable {
                 if (!viewCrearEditar.txtNombUsr.getText().trim().isEmpty() || !viewCrearEditar.txtClave.getText().trim().isEmpty() ||
                         viewCrearEditar.txtCorreo.getText().trim().isEmpty() ||viewCrearEditar.txtContra.getText().trim().isEmpty()) {                    
                     if (_usuario==null) {                        
-                        ArrayList<Usuarios> list=null;
+                        ArrayList<Usuarios> list;
                         list= new ArrayList<Usuarios>();
                         list=BuscarPorClave(viewCrearEditar.txtClave.getText().trim());
-                        if (list==null) {                            
+                        if (list==null) {
                             viewCrearEditar.txtClave.setEditable(true);
-                            viewCrearEditar.txtClave.setEnabled(true);
+                            viewCrearEditar.txtClave.setEnabled(true);                            
                             _usuario= new Usuarios();
+                            //_____________________________________________________________
+                            List<Usuarios> lista = findUsuariosEntities();
+                            Collections.sort(lista, new Comparator<Usuarios>() {
+                                @Override
+                                public int compare(Usuarios o1, Usuarios o2) {
+                                    return o1.getUserId().compareTo(o2.getUserId());                                    
+                                }
+                            });
+                            if (lista.size()>0) {
+                                BigDecimal id = new BigDecimal (Integer.parseInt(lista.get(lista.size()-1).getUserId().toString())+1);                                
+                                _usuario.setUserId(id);
+                            }else{
+                                _usuario.setUserId(new BigDecimal("1"));
+                            }
+                            //_____________________________________________________________
                             _usuario.setUserNombres(viewCrearEditar.txtNombUsr.getText());
                             _usuario.setUserClave(viewCrearEditar.txtClave.getText().toUpperCase());
                             _usuario.setUserCorreo(viewCrearEditar.txtCorreo.getText());
@@ -512,7 +543,7 @@ public class UsuariosJpaController implements Serializable {
                             }
                             else
                             {
-                                _usuario.setUserEstado(new BigInteger(String.valueOf("1")));
+                                _usuario.setUserEstado(new BigInteger(String.valueOf("0")));
                             }
                             try {
                                 create(_usuario);
@@ -550,14 +581,20 @@ public class UsuariosJpaController implements Serializable {
                     }                    
                 }
             }
-            else if (e.getSource()==viewUser.btnTodos) {
-                llenarTabla(findUsuariosEntities());                
+            else if (e.getSource()==viewUser.btnTodos) {                
+                llenarTabla(findUsuariosEntities());
             }
             else if (e.getSource()==viewUser.btnBuscar) {
                 int _index = viewUser.cmbEstado.getSelectedIndex();
-                ArrayList<Usuarios> list;
-                list = BuscarPorEstado(_index);
-                if (list!=null) {
+                ArrayList<Usuarios> list;                
+                list = BuscarPorEstado(_index);                
+                Collections.sort(list, new Comparator<Usuarios>() {
+                    @Override
+                    public int compare(Usuarios o1, Usuarios o2) {
+                        return o1.getUserId().compareTo(o2.getUserId());                                    
+                    }
+                });
+                if (list.size()>0) {
                     llenarTabla(list);
                 }else {
                     JOptionPane.showMessageDialog(view,"No existen usuarios relacionados");
@@ -566,6 +603,7 @@ public class UsuariosJpaController implements Serializable {
         }        
     };
     //-----------------------llamar a procedimientos-----------------------------
+    
     public ArrayList<Usuarios> BuscarPorClave(String s)
     {
         try {
@@ -613,24 +651,19 @@ public class UsuariosJpaController implements Serializable {
 
             ResultSet rset = ((OracleCallableStatement) cs).getCursor(2);
             ArrayList<Usuarios> Datos = new ArrayList<Usuarios>();
-            Usuarios usu;  
-            if (!rset.next()) {
-                return null;
-            }
-            else{
-                while (rset.next()) {
-                    usu = new Usuarios();
-                    usu.setUserId(new BigDecimal(rset.getString("USER_ID")));
-                    usu.setUserNombres(rset.getString("USER_NOMBRES"));
-                    usu.setUserClave(rset.getString("USER_CLAVE"));
-                    usu.setUserCorreo(rset.getString("USER_CORREO"));
-                    usu.setUserEstado(new BigInteger(rset.getString("USER_ESTADO")));
-                    usu.setUserContrasena(rset.getString("USER_CONTRASENA"));                
-                    Datos.add(usu);
-                }                           
-                claseConnect.CerrarConexionBD();
-                return Datos;            
-            }
+            Usuarios usu;              
+            while (rset.next()) {
+                usu = new Usuarios();
+                usu.setUserId(new BigDecimal(rset.getString("USER_ID")));
+                usu.setUserNombres(rset.getString("USER_NOMBRES"));
+                usu.setUserClave(rset.getString("USER_CLAVE"));
+                usu.setUserCorreo(rset.getString("USER_CORREO"));
+                usu.setUserEstado(new BigInteger(rset.getString("USER_ESTADO")));
+                usu.setUserContrasena(rset.getString("USER_CONTRASENA"));                
+                Datos.add(usu);
+            }                           
+            claseConnect.CerrarConexionBD();
+            return Datos;                        
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(view, "Error: "+ex.toString());
         }
