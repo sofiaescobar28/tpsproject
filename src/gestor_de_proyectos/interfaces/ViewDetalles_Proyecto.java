@@ -5,6 +5,21 @@
  */
 package gestor_de_proyectos.interfaces;
 
+import AccesoDatos.Categorias;
+import AccesoDatos.Entity_Main;
+import AccesoDatos.IngresoEgreso;
+import AccesoDatos.UnidadesDeMedida;
+import Controladores.CategoriasJpaController;
+import Controladores.IngresoEgresoJpaController;
+import Controladores.UnidadesDeMedidaJpaController;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author josse
@@ -74,9 +89,19 @@ public class ViewDetalles_Proyecto extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTable1);
 
         btnNuevo.setText("Nuevo registro");
+        btnNuevo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNuevoActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -129,6 +154,75 @@ public class ViewDetalles_Proyecto extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
+        IngresoEgresoJpaController ctrlIngreso = new IngresoEgresoJpaController(Entity_Main.getInstance(), this);
+        ctrlIngreso.CrearRegistro();
+    }//GEN-LAST:event_btnNuevoActionPerformed
+
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+        IngresoEgresoJpaController ctrlIngreso = new IngresoEgresoJpaController(Entity_Main.getInstance(), this);
+        Categorias _categorias = new Categorias();
+        UnidadesDeMedida _unidades = new UnidadesDeMedida();
+        int fila = jTable1.getSelectedRow();
+        int columna = jTable1.getSelectedColumn();
+        if (columna == 8) {
+            SimpleDateFormat objSDF = new SimpleDateFormat("dd-MM-yyyy");
+            Date fecha = null;
+            String status;
+            IngresoEgreso _ingresoEgreso = new IngresoEgreso();
+            _ingresoEgreso.setIeId(BigDecimal.valueOf(Double.parseDouble(jTable1.getValueAt(fila, 0).toString())));
+            _ingresoEgreso.setIeDescripcion(jTable1.getValueAt(fila, 1).toString());
+            if (jTable1.getValueAt(fila, 2).toString().equals("Ingreso")) {
+                status = "0";
+                _ingresoEgreso.setIeTipo(new BigInteger(String.valueOf(status)));
+            }
+            else{
+                status = "1";
+                _ingresoEgreso.setIeTipo(new BigInteger(String.valueOf(status)));
+            }
+            try {
+                fecha = objSDF.parse(jTable1.getValueAt(fila, 3).toString());
+                _ingresoEgreso.setIeFecha(fecha);
+            } catch (ParseException e) {
+                JOptionPane.showMessageDialog(this, e.getMessage());
+            }
+            
+            _ingresoEgreso.setCatId(buscarCategoriaID(jTable1.getValueAt(fila, 4).toString()));
+            _ingresoEgreso.setIeCantidad(Double.parseDouble(jTable1.getValueAt(fila, 5).toString()));
+            _ingresoEgreso.setUmId(buscarMedidaID(jTable1.getValueAt(fila, 6).toString()));
+            _ingresoEgreso.setIeMonto(Double.parseDouble(jTable1.getValueAt(fila, 7).toString()));
+            _ingresoEgreso.setIeCalidad(BigInteger.valueOf(Long.parseLong(ctrlIngreso.buscarCalidadID(Integer.parseInt(jTable1.getValueAt(fila, 0).toString())))));
+            ctrlIngreso.leerTabla(_ingresoEgreso);
+        }
+    }//GEN-LAST:event_jTable1MouseClicked
+
+    Categorias _categorias = new Categorias();
+    
+    public Categorias buscarCategoriaID(String categoria) {
+        CategoriasJpaController ctrlCategorias= new CategoriasJpaController(Entity_Main.getInstance());
+        ArrayList<Categorias> lst = new ArrayList<Categorias>();
+        lst = ctrlCategorias.findSearch(categoria);
+        if (lst.size() > 0) {
+            _categorias.setCatId(lst.get(0).getCatId());
+            _categorias.setCatNombre(lst.get(0).getCatNombre());
+            _categorias.setCatTipo(lst.get(0).getCatTipo());
+        }
+        return _categorias;
+    }
+    
+    UnidadesDeMedida _unidades = new UnidadesDeMedida();
+    
+    public UnidadesDeMedida buscarMedidaID(String medida) {
+        UnidadesDeMedidaJpaController ctrlUnidades = new UnidadesDeMedidaJpaController(Entity_Main.getInstance());
+        ArrayList<UnidadesDeMedida> lst = new ArrayList<UnidadesDeMedida>();
+        lst = ctrlUnidades.findUnidadSearch(medida);
+        if (lst.size() > 0) {
+            _unidades.setUmId(lst.get(0).getUmId());
+            _unidades.setUmNombre(lst.get(0).getUmNombre());
+        }
+        return _unidades;
+    }
+    
     /**
      * @param args the command line arguments
      */

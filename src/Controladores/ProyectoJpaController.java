@@ -62,6 +62,7 @@ public class ProyectoJpaController implements Serializable {
     ViewDetalles_Proyecto detalles = new ViewDetalles_Proyecto();
     ViewEditar_Proyecto editarPro = new ViewEditar_Proyecto();
     
+    
     int fila = -1;
     int columna = -1;
     Proyecto _proyectos; 
@@ -222,10 +223,10 @@ public class ProyectoJpaController implements Serializable {
     }
     
     public void leerTabla(){
+        IngresoEgresoJpaController ctrlInEg = new IngresoEgresoJpaController(Entity_Main.getInstance(), detalles);
         fila = view.dgtProyectos.getSelectedRow();
         columna = view.dgtProyectos.getSelectedColumn();
         if (columna == 4) {
-            IngresoEgresoJpaController ctrlInEg = new IngresoEgresoJpaController(Entity_Main.getInstance(), detalles);
             int id = Integer.parseInt(view.dgtProyectos.getValueAt(fila, 0).toString());
             String nombre = view.dgtProyectos.getValueAt(fila, 1).toString();
             ctrlInEg.iniciarForm(id, nombre);
