@@ -25,6 +25,8 @@ import java.sql.CallableStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -127,7 +129,17 @@ public class CargosJpaController implements Serializable {
     }
 
     public void agregarATabla(List<Cargos> obj) {
+
         if (obj.size() > 0) {
+
+            Collections.sort(obj, new Comparator<Cargos>() {
+                @Override
+                public int compare(Cargos o1, Cargos o2) {
+                    return o1.getCargosId().compareTo(o2.getCargosId());
+                }
+
+            });
+
             Object Datos[] = new Object[4];// 1-id, 2-nombre, 3-Cantidad
             DefaultTableModel model = new DefaultTableModel();
             model.addColumn("ID");
@@ -155,6 +167,13 @@ public class CargosJpaController implements Serializable {
     public void agregarATabla(ArrayList<Cargos> obj) {
         if (obj.size() > 0) {
 
+            Collections.sort(obj, new Comparator<Cargos>() {
+                @Override
+                public int compare(Cargos o1, Cargos o2) {
+                    return o1.getCargosId().compareTo(o2.getCargosId());
+                }
+
+            });
             Object Datos[] = new Object[4];// 1-id, 2-nombre, 3-Cantidad
             DefaultTableModel model = new DefaultTableModel();
             model.addColumn("ID");
@@ -300,7 +319,7 @@ public class CargosJpaController implements Serializable {
             } else if (e.getSource() == viewEditarCargos.btnGuardarCambios) {
                 if (!viewEditarCargos.txteditarcargo.getText().toString().isEmpty()) {
                     _cargos.setCargos(viewEditarCargos.txteditarcargo.getText().toString().trim());
-                    viewEditarCargos.dispose();
+                  
 
                     try {
                         BigDecimal d = _cargos.getCargosId();
@@ -335,7 +354,18 @@ public class CargosJpaController implements Serializable {
                             JOptionPane.showMessageDialog(nuevocargo, "El cargo que desea agregar ya existe.");
 
                         } else {
+                            List<Cargos> list = findCargosEntities();
+                            Collections.sort(list, new Comparator<Cargos>() {
+                                @Override
+                                public int compare(Cargos o1, Cargos o2) {
+                                    return o1.getCargosId().compareTo(o2.getCargosId());
+                                }
+
+                            });
+
+                            BigDecimal idcar = new BigDecimal(Integer.parseInt(list.get(list.size() - 1).getCargosId().toString()) + 1);
                             _cargos = new Cargos();
+                            _cargos.setCargosId(idcar);
                             _cargos.setCargos(nuevocargo.txtNuevocargo.getText());
                             create(_cargos);
                             nuevocargo.txtNuevocargo.setText("");
@@ -365,13 +395,13 @@ public class CargosJpaController implements Serializable {
             if (resp == 0) {
                 try {
                     destroy(obtenerObjeto(fila).getCargosId());
-                    JOptionPane.showMessageDialog(view, "Registro eliminado correctamente.");
+//                    JOptionPane.showMessageDialog(view, "Registro eliminado correctamente.");
                     if (getCargosCount() > 0) {
                         agregarATabla(findCargosEntities());
                     }
 
                 } catch (NonexistentEntityException ex) {
-                    JOptionPane.showMessageDialog(view, "El registro que intenta eliminar no existe.");
+                    JOptionPane.showMessageDialog(view, "Sucedió un error al eliminar.");
                 }
 
             }
