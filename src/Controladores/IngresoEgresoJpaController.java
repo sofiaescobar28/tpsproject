@@ -38,6 +38,8 @@ import java.sql.Types;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -60,6 +62,7 @@ public class IngresoEgresoJpaController implements Serializable {
     Conexion claseConnect = new Conexion();
     IngresoEgreso _ingresoEgreso;
     int id_proy;
+    int id_segundo;
     String nombre_proy;
     int fila = -1;
     int columna = -1;
@@ -101,11 +104,12 @@ public class IngresoEgresoJpaController implements Serializable {
     public void iniciarForm(Integer id, String nombre){
         view.setTitle("Detalles de Proyecto");
         id_proy = id;
+        id_segundo = id;
         nombre_proy = nombre;
         agregarATabla(registrosProyecto(id));
         double gasto = gastos(id);
         double ingreso = ingresos(id);
-        view.lblNombre.setText("Proyecto: " + nombre);
+        view.lblNombre.setText(nombre);
         view.lblGasto.setText("Gastos: $" + gasto);
         view.lblIngreso.setText("Ingresos: $" + ingreso);
         view.lblBalance.setText("Balance: $" + String.valueOf(ingreso-gasto));
@@ -322,6 +326,15 @@ public class IngresoEgresoJpaController implements Serializable {
         model.addColumn("Monto");
         model.addColumn("");
         if (obj.size() > 0) {
+            
+            Collections.sort(obj, new Comparator<IngresoEgreso>() {
+                @Override
+                public int compare(IngresoEgreso o1, IngresoEgreso o2) {
+                    return o1.getIeId().compareTo(o2.getIeId());
+                }
+
+            });
+            
             SimpleDateFormat objSDF = new SimpleDateFormat("dd-MM-yyyy");
             Object Datos[] = new Object[9];
             
@@ -396,6 +409,17 @@ public class IngresoEgresoJpaController implements Serializable {
             _categorias.setCatId(lst.get(0).getCatId());
             _categorias.setCatNombre(lst.get(0).getCatNombre());
             _categorias.setCatTipo(lst.get(0).getCatTipo());
+        }
+    }
+    
+    public void buscarProyectoID(String nombre) {
+        ArrayList<Proyecto> lst = new ArrayList<Proyecto>();
+        lst = ctrlPtoyecto.findSearch(nombre);
+        if (lst.size() > 0) {
+            _proyecto.setProyId(lst.get(0).getProyId());
+            _proyecto.setProyNombre(lst.get(0).getProyNombre());
+            _proyecto.setProyFecha(lst.get(0).getProyFecha());
+            _proyecto.setProyEstado(lst.get(0).getProyEstado());
         }
     }
     
@@ -786,8 +810,9 @@ public class IngresoEgresoJpaController implements Serializable {
             Date date = formater.parse(spinnerValue);
             
             _ingresoEgreso = new IngresoEgreso();
+            buscarProyectoID(view.lblNombre.getText());
+            _ingresoEgreso.setProyId(_proyecto);
             _ingresoEgreso.setIeId(BigDecimal.valueOf(Double.parseDouble(viewEditRegistro.jTextField1.getText().trim().toString())));
-            _ingresoEgreso.setProyId(ctrlPtoyecto.findProyecto(BigDecimal.valueOf(id_proy)));
             _ingresoEgreso.setIeDescripcion(viewEditRegistro.txtDescripcion.getText().trim().toString());
             _ingresoEgreso.setIeTipo(new BigInteger(String.valueOf(viewEditRegistro.cmbTipo.getSelectedIndex())));
             buscarCategoriaID(String.valueOf(viewEditRegistro.cmbCategoria.getSelectedItem()));
@@ -802,12 +827,12 @@ public class IngresoEgresoJpaController implements Serializable {
             
             try {
                 edit(_ingresoEgreso);
-                agregarATabla(registrosProyecto(id_proy));
-                double gasto = gastos(id_proy);
-                double ingreso = ingresos(id_proy);
-                view.lblGasto.setText("Gastos: " + gasto);
-                view.lblIngreso.setText("Ingresos: " + ingreso);
-                view.lblBalance.setText("Balance: " + String.valueOf(ingreso-gasto));
+                agregarATabla(registrosProyecto(Integer.parseInt(_proyecto.getProyId().toString())));
+                double gasto = gastos(Integer.parseInt(_proyecto.getProyId().toString()));
+                double ingreso = ingresos(Integer.parseInt(_proyecto.getProyId().toString()));
+                view.lblGasto.setText("Gastos: $" + gasto);
+                view.lblIngreso.setText("Ingresos: $" + ingreso);
+                view.lblBalance.setText("Balance: $" + String.valueOf(ingreso-gasto));
                 viewEditRegistro.dispose();
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(viewEditRegistro, "Asegúrese que los campos estén correctos. " + ex.getMessage());
@@ -845,8 +870,20 @@ public class IngresoEgresoJpaController implements Serializable {
             String spinnerValue = formater.format(viewCreatRegistro.spnFecha.getValue());
             Date date = formater.parse(spinnerValue);
             
+            
+            List<IngresoEgreso> listp = findIngresoEgresoEntities();
+            Collections.sort(listp, new Comparator<IngresoEgreso>() {
+                @Override
+                public int compare(IngresoEgreso o1, IngresoEgreso o2) {
+                    return o1.getIeId().compareTo(o2.getIeId());
+                }
+
+            });
+            BigDecimal idcar = new BigDecimal(Integer.parseInt(listp.get(listp.size() - 1).getIeId().toString()) + 1);
             _ingresoEgreso = new IngresoEgreso();
-            _ingresoEgreso.setProyId(ctrlPtoyecto.findProyecto(BigDecimal.valueOf(id_proy)));
+            buscarProyectoID(view.lblNombre.getText());
+            _ingresoEgreso.setProyId(_proyecto);
+            _ingresoEgreso.setIeId(idcar);
             _ingresoEgreso.setIeDescripcion(viewCreatRegistro.txtDescripcion.getText().trim().toString());
             _ingresoEgreso.setIeTipo(new BigInteger(String.valueOf(viewCreatRegistro.cmbTipo.getSelectedIndex())));
             buscarCategoriaID(String.valueOf(viewCreatRegistro.cmbCategoria.getSelectedItem()));
@@ -861,12 +898,12 @@ public class IngresoEgresoJpaController implements Serializable {
             
             try {
                 create(_ingresoEgreso);
-                agregarATabla(registrosProyecto(id_proy));
-                double gasto = gastos(id_proy);
-                double ingreso = ingresos(id_proy);
-                view.lblGasto.setText("Gastos: " + gasto);
-                view.lblIngreso.setText("Ingresos: " + ingreso);
-                view.lblBalance.setText("Balance: " + String.valueOf(ingreso-gasto));
+                agregarATabla(registrosProyecto(Integer.parseInt(_proyecto.getProyId().toString())));
+                double gasto = gastos(Integer.parseInt(_proyecto.getProyId().toString()));
+                double ingreso = ingresos(Integer.parseInt(_proyecto.getProyId().toString()));
+                view.lblGasto.setText("Gastos: $" + gasto);
+                view.lblIngreso.setText("Ingresos: $" + ingreso);
+                view.lblBalance.setText("Balance: $" + String.valueOf(ingreso-gasto));
                 viewCreatRegistro.dispose();
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(viewCreatRegistro, "Asegúrese que los campos estén correctos. " + ex.getMessage());
