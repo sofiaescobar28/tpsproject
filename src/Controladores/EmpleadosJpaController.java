@@ -26,6 +26,7 @@ import gestor_de_proyectos.interfaces.viewEditar_Empleado;
 import gestor_de_proyectos.interfaces.viewEmpleados;
 import gestor_de_proyectos.interfaces.viewNuevo_Empleado;
 import gestor_de_proyectos.interfaces.viewPagar;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -45,6 +46,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javafx.scene.control.Spinner;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -71,7 +74,7 @@ public class EmpleadosJpaController implements Serializable {
     ViewAdministrar_Proyecto viewProyectos = new ViewAdministrar_Proyecto();
     Cargos _cargos = new Cargos();
     Conexion claseConnect = new Conexion();
-    int fila = -1;
+    int fila = -1, Nombre = -1, Salario = -1, Telefono = -1;
     int columna = -1;
     int id_proy;
 
@@ -109,11 +112,11 @@ public class EmpleadosJpaController implements Serializable {
         this.vNuevoE.btnCancelar.addActionListener(alP);
         this.vEditE.btnCancelar.addActionListener(alP);
         this.vEditE.btnGuardar.addActionListener(alP);
-                
+
         ///--------------------------------------------------------------------------------
         ///--------------------------------------------------------------------------------
         this.viewPago.btnCancelar.addActionListener(alP);
-        this.viewPago.btnPagar.addActionListener(alP);        
+        this.viewPago.btnPagar.addActionListener(alP);
         ///--------------------------------------------------------------------------------
         ///--------------------------------------------------------------------------------
     }
@@ -187,7 +190,138 @@ public class EmpleadosJpaController implements Serializable {
 
             }
         });
+        this.vNuevoE.txtEmpleado.addKeyListener(new KeyAdapter() {
 
+            public void KeyTyped(KeyEvent e) {
+
+            }
+
+            public void keyPressed(KeyEvent ex) {
+
+            }
+
+            public void keyReleased(KeyEvent ex) {
+                if (ex.getSource() == vNuevoE.txtEmpleado) {
+                    Pattern patron = Pattern.compile("([A-Za-z]{3,}[\\s][A-Za-z]{3,})");
+                    Matcher encaja = patron.matcher(vNuevoE.txtEmpleado.getText());
+                    vNuevoE.txtvalidacion.setText("El nombre no es válido.");
+                    Nombre = -1;
+                    if (encaja.find()) {
+
+                        Nombre = 1;
+                        vNuevoE.txtvalidacion.setText("");
+                    }
+                }
+            }
+        });
+        this.vNuevoE.txtSalario.addKeyListener(new KeyAdapter() {
+            public void keyReleased(KeyEvent ex) {
+                if (vNuevoE.txtSalario.getText().contains(".")) {
+                    Pattern patron = Pattern.compile("[.][0-9]{2}");
+                    Matcher encaja = patron.matcher(vNuevoE.txtSalario.getText());
+                    vNuevoE.txtvalidacion.setText("El salario no es válido.");
+                    Salario = -1;
+                    if (encaja.find()) {
+
+                        Salario = 1;
+                        vNuevoE.txtvalidacion.setText("");
+                    }
+                } else {
+                    Pattern patron = Pattern.compile("[0-9]{1,}");
+                    Matcher encaja = patron.matcher(vNuevoE.txtSalario.getText());
+                    vNuevoE.txtvalidacion.setText("El salario no es válido.");
+                    Salario = -1;
+                    if (encaja.find()) {
+
+                        Salario = 1;
+                        vNuevoE.txtvalidacion.setText("");
+                    }
+                }
+
+            }
+        });
+        this.vNuevoE.txtTelefono.addKeyListener(new KeyAdapter() {
+            public void keyReleased(KeyEvent ex) {
+                if (ex.getSource() == vNuevoE.txtTelefono) {
+                    Pattern patron = Pattern.compile("[762][0-9]{3}-[0-9]{4}");
+                    Matcher encaja = patron.matcher(vNuevoE.txtTelefono.getText());
+                    vNuevoE.txtvalidacion.setText("El teléfono no es válido."
+                            + "Debe cumplir el formato (7XXX-XXXX).");
+                    Telefono = -1;
+                    if (encaja.find()) {
+
+                        Telefono = 1;
+                        vNuevoE.txtvalidacion.setText("");
+                    }
+                }
+            }
+        });
+        this.vEditE.txtEmpleado.addKeyListener(new KeyAdapter() {
+
+            public void KeyTyped(KeyEvent e) {
+
+            }
+
+            public void keyPressed(KeyEvent ex) {
+
+            }
+
+            public void keyReleased(KeyEvent ex) {
+                if (ex.getSource() == vEditE.txtEmpleado) {
+                    Pattern patron = Pattern.compile("([A-Za-z]{3,}[\\s][A-Za-z]{3,})");
+                    Matcher encaja = patron.matcher(vEditE.txtEmpleado.getText());
+                    vEditE.txtvalidacion.setText("El nombre no es válido.");
+                    Nombre = -1;
+                    if (encaja.find()) {
+
+                        Nombre = 1;
+                        vEditE.txtvalidacion.setText("");
+                    }
+                }
+            }
+        });
+        this.vEditE.txtSalario.addKeyListener(new KeyAdapter() {
+            public void keyReleased(KeyEvent ex) {
+                if (vEditE.txtSalario.getText().contains(".")) {
+                    Pattern patron = Pattern.compile("[.][0-9]{2}");
+                    Matcher encaja = patron.matcher(vEditE.txtSalario.getText());
+                    vEditE.txtvalidacion.setText("El salario no es válido.");
+                    Salario = -1;
+                    if (encaja.find()) {
+
+                        Salario = 1;
+                        vEditE.txtvalidacion.setText("");
+                    }
+                } else {
+                    Pattern patron = Pattern.compile("[0-9]{1,}");
+                    Matcher encaja = patron.matcher(vEditE.txtSalario.getText());
+                    vEditE.txtvalidacion.setText("El salario no es válido.");
+                    Salario = -1;
+                    if (encaja.find()) {
+
+                        Salario = 1;
+                        vEditE.txtvalidacion.setText("");
+                    }
+                }
+
+            }
+        });
+        this.vEditE.txtTelefono.addKeyListener(new KeyAdapter() {
+            public void keyReleased(KeyEvent ex) {
+                if (ex.getSource() == vEditE.txtTelefono) {
+                    Pattern patron = Pattern.compile("[762][0-9]{3}-[0-9]{4}");
+                    Matcher encaja = patron.matcher(vEditE.txtTelefono.getText());
+                    vEditE.txtvalidacion.setText("El teléfono no es válido."
+                            + "Debe cumplir el formato (7XXX-XXXX).");
+                    Telefono = -1;
+                    if (encaja.find()) {
+
+                        Telefono = 1;
+                        vEditE.txtvalidacion.setText("");
+                    }
+                }
+            }
+        });
         this.emf = emf;
     }
     private EntityManagerFactory emf = null;
@@ -227,7 +361,9 @@ public class EmpleadosJpaController implements Serializable {
 
             vEditE.setLocationRelativeTo(null);
             vEditE.setVisible(true);
-
+            Nombre = 1;
+            Salario = 1;
+            Telefono = 1;
         }
 
     }
@@ -303,14 +439,15 @@ public class EmpleadosJpaController implements Serializable {
         return null;
 
     }
-     public ArrayList<Empleados> findSearchEmpleadoEditarValidar(String s, int id) {
+
+    public ArrayList<Empleados> findSearchEmpleadoEditarValidar(String s, int id) {
 
         try {
             claseConnect.AbrirConexionBD();
             CallableStatement cs
                     = claseConnect.con.prepareCall("{call findempleadosNombreVEditar(?,?,?)}");
             cs.setString(1, s);
-            cs.setInt(2,id);
+            cs.setInt(2, id);
             cs.registerOutParameter(3, OracleTypes.CURSOR);
 
             cs.executeQuery();
@@ -319,7 +456,7 @@ public class EmpleadosJpaController implements Serializable {
             ArrayList<Empleados> Datos = new ArrayList<Empleados>();
 
             while (rset.next()) {
-                _emp=new Empleados();
+                _emp = new Empleados();
                 _cargos = new Cargos();
                 _emp.setEmpId(rset.getBigDecimal("EMP_ID"));
                 _emp.setEmpNombre(rset.getString("EMP_NOMBRE"));
@@ -518,36 +655,43 @@ public class EmpleadosJpaController implements Serializable {
 
             } else if (e.getSource() == vNuevoE.btnGuardar) {
                 if (!vNuevoE.txtEmpleado.getText().trim().isEmpty() && !vNuevoE.txtSalario.getText().trim().isEmpty()) {
-                   List<Empleados> list = findEmpleadosEntities();
-                            Collections.sort(list, new Comparator<Empleados>() {
-                                @Override
-                                public int compare(Empleados o1, Empleados o2) {
-                                    return o1.getEmpId().compareTo(o2.getEmpId());
-                                }
+                    if (Nombre == 1 && Telefono == 1 && Salario == 1) {
+                        Nombre =-1; Telefono=-1; Salario=-1;
+                        List<Empleados> list = findEmpleadosEntities();
+                        Collections.sort(list, new Comparator<Empleados>() {
+                            @Override
+                            public int compare(Empleados o1, Empleados o2) {
+                                return o1.getEmpId().compareTo(o2.getEmpId());
+                            }
 
-                            });
-                            BigDecimal idemp =new BigDecimal(Integer.parseInt(list.get(list.size()-1).getEmpId().toString())+1) ;
-                       _emp.setEmpId(idemp);
-                    _emp.setEmpNombre(vNuevoE.txtEmpleado.getText().trim());
-                    _emp.setEmpSalario(Double.valueOf(vNuevoE.txtSalario.getText()));
-                    _emp.setEmpTelefono(vNuevoE.txtTelefono.getText());
-                    buscarCargoID(vNuevoE.cmbcargo.getItemAt(vNuevoE.cmbcargo.getSelectedIndex()));
-                    _emp.setCarId(_cargos);
-                    _emp.setEmpEstado(BigInteger.valueOf(vNuevoE.cmbestado.getSelectedIndex()));
+                        });
+                        BigDecimal idemp = new BigDecimal(Integer.parseInt(list.get(list.size() - 1).getEmpId().toString()) + 1);
+                        _emp.setEmpId(idemp);
+                        _emp.setEmpNombre(vNuevoE.txtEmpleado.getText().trim());
+                        _emp.setEmpSalario(Double.valueOf(vNuevoE.txtSalario.getText()));
+                        _emp.setEmpTelefono(vNuevoE.txtTelefono.getText());
+                        buscarCargoID(vNuevoE.cmbcargo.getItemAt(vNuevoE.cmbcargo.getSelectedIndex()));
+                        _emp.setCarId(_cargos);
+                        _emp.setEmpEstado(BigInteger.valueOf(vNuevoE.cmbestado.getSelectedIndex()));
 
-                    try {
-                        if (findSearchEmpleadoValidacion(vNuevoE.txtEmpleado.getText()).size() > 0) {
-                            JOptionPane.showMessageDialog(vNuevoE, "El cargo que desea agregar ya existe.");
+                        try {
+                            if (findSearchEmpleadoValidacion(vNuevoE.txtEmpleado.getText()).size() > 0) {
+                                JOptionPane.showMessageDialog(vNuevoE, "El cargo que desea agregar ya existe.");
 
-                        } else {
-                            _emp.setEmpId(new BigDecimal( getEmpleadosCount()+1));//asignamos id
-                            create(_emp);
-                            agregarATabla(findEmpleadosEntities());
+                            } else {
+                                _emp.setEmpId(new BigDecimal(getEmpleadosCount() + 1));//asignamos id
+                                create(_emp);
+                                agregarATabla(findEmpleadosEntities());
+                            }
+                        } catch (Exception ex) {
+                            JOptionPane.showMessageDialog(vNuevoE, "Ha sucedido un error al guardar.");
+                            Logger.getLogger(EmpleadosJpaController.class.getName()).log(Level.SEVERE, null, ex);
                         }
-                    } catch (Exception ex) {
-                        JOptionPane.showMessageDialog(vNuevoE, "Ha sucedido un error al guardar.");
-                        Logger.getLogger(EmpleadosJpaController.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                    }else {
+                    vNuevoE.txtvalidacion.setText("Debe escribir los campos correctamente.");
+                }
+
+
                 } else {
                     JOptionPane.showMessageDialog(vNuevoE, "Los campos no pueden quedar en blanco.");
                 }
@@ -559,32 +703,39 @@ public class EmpleadosJpaController implements Serializable {
 
             } else if (e.getSource() == vEditE.btnGuardar) {
                 if (!vEditE.txtEmpleado.getText().trim().isEmpty() && !vEditE.txtSalario.getText().trim().isEmpty()) {
-                    _emp.setEmpNombre(vEditE.txtEmpleado.getText().trim());
-                    _emp.setEmpSalario(Double.valueOf(vEditE.txtSalario.getText().trim()));
-                    _emp.setEmpTelefono(vEditE.txtTelefono.getText().trim());
-                    buscarCargoID(vEditE.cmbcargo.getItemAt(vEditE.cmbcargo.getSelectedIndex()));
-                    _emp.setCarId(_cargos);
-                    _emp.setEmpEstado(BigInteger.valueOf(vEditE.cmbestado.getSelectedIndex()));
+                    if (Nombre == 1 && Telefono == 1 && Salario == 1) {
+                         Nombre =-1; Telefono=-1; Salario=-1;
+                        _emp.setEmpNombre(vEditE.txtEmpleado.getText().trim());
+                        _emp.setEmpSalario(Double.valueOf(vEditE.txtSalario.getText().trim()));
+                        _emp.setEmpTelefono(vEditE.txtTelefono.getText().trim());
+                        buscarCargoID(vEditE.cmbcargo.getItemAt(vEditE.cmbcargo.getSelectedIndex()));
+                        _emp.setCarId(_cargos);
+                        _emp.setEmpEstado(BigInteger.valueOf(vEditE.cmbestado.getSelectedIndex()));
 
-                    try {
-                         BigDecimal d = _emp.getEmpId();
-                        BigDecimal d2 = d.setScale(0, BigDecimal.ROUND_HALF_UP); // yields 34
+                        try {
+                            BigDecimal d = _emp.getEmpId();
+                            BigDecimal d2 = d.setScale(0, BigDecimal.ROUND_HALF_UP); // yields 34
 
-                        int b = Integer.parseInt(d2.toString());
-                        if (findSearchEmpleadoEditarValidar(_emp.getEmpNombre().trim(), b).size() > 0) {
-                            JOptionPane.showMessageDialog(vEditE, "El nombre de la categoría ya existe.");
+                            int b = Integer.parseInt(d2.toString());
+                            if (findSearchEmpleadoEditarValidar(_emp.getEmpNombre().trim(), b).size() > 0) {
+                                JOptionPane.showMessageDialog(vEditE, "El nombre de la categoría ya existe.");
 
-                        } else {
-                            edit(_emp);
-                            agregarATabla(findEmpleadosEntities());
+                            } else {
+                                edit(_emp);
+                                agregarATabla(findEmpleadosEntities());
+                            }
+
+                        } catch (Exception ex) {
+                            JOptionPane.showMessageDialog(vEditE, "Ha sucedido un error al modificar empleado..");
+                            Logger.getLogger(EmpleadosJpaController.class.getName()).log(Level.SEVERE, null, ex);
                         }
-                        
-                    } catch (Exception ex) {
-                        JOptionPane.showMessageDialog(vNuevoE, "Ha sucedido un error al modificar empleado..");
-                        Logger.getLogger(EmpleadosJpaController.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                            vEditE.txtvalidacion.setText("");
+                            vEditE.dispose();
+                    }else{ vEditE.txtvalidacion.setText("Debe escribir los campos correctamente.");}
+                  
+
                 } else {
-                    JOptionPane.showMessageDialog(vNuevoE, "Los campos no pueden quedar en blanco.");
+                    JOptionPane.showMessageDialog(vEditE, "Los campos no pueden quedar en blanco.");
                 }
 
             }
@@ -653,7 +804,7 @@ public class EmpleadosJpaController implements Serializable {
 
     public void agregarATablaPlanilla(List<Empleados> obj) {
         if (obj.size() > 0) {
-              Collections.sort(obj, new Comparator<Empleados>() {
+            Collections.sort(obj, new Comparator<Empleados>() {
                 @Override
                 public int compare(Empleados o1, Empleados o2) {
                     return o1.getEmpId().compareTo(o2.getEmpId());
@@ -701,13 +852,13 @@ public class EmpleadosJpaController implements Serializable {
 
     public void agregarATabla(ArrayList<Empleados> obj) {
         if (obj.size() > 0) {
-              Collections.sort(obj, new Comparator<Empleados>() {
-                                @Override
-                                public int compare(Empleados o1, Empleados o2) {
-                                    return o1.getEmpId().compareTo(o2.getEmpId());
-                                }
+            Collections.sort(obj, new Comparator<Empleados>() {
+                @Override
+                public int compare(Empleados o1, Empleados o2) {
+                    return o1.getEmpId().compareTo(o2.getEmpId());
+                }
 
-                            });
+            });
             Object Datos[] = new Object[7];// 1-id, 2-nombre, 3-Cantidad
             DefaultTableModel model = new DefaultTableModel();
             model.addColumn("ID");
@@ -749,7 +900,7 @@ public class EmpleadosJpaController implements Serializable {
 
     public void agregarATablaPlanilla(ArrayList<Empleados> obj) {
         if (obj.size() > 0) {
-              Collections.sort(obj, new Comparator<Empleados>() {
+            Collections.sort(obj, new Comparator<Empleados>() {
                 @Override
                 public int compare(Empleados o1, Empleados o2) {
                     return o1.getEmpId().compareTo(o2.getEmpId());
@@ -946,22 +1097,22 @@ public class EmpleadosJpaController implements Serializable {
                     agregarATablaPlanilla(findEmpleadosEntities());
                 }
             } else if (ae.getSource() == viewPlanilla.btnNuevoE) {
-                _emp = new Empleados();                
+                _emp = new Empleados();
                 obtCargoACombo(vNuevoE.cmbcargo);
                 vNuevoE.setVisible(true);
                 vNuevoE.setLocationRelativeTo(null);
-            } else if (ae.getSource() == vNuevoE.btnGuardar) {                
-                if (!vNuevoE.txtEmpleado.getText().trim().isEmpty() && !vNuevoE.txtSalario.getText().trim().isEmpty()) {                    
+            } else if (ae.getSource() == vNuevoE.btnGuardar) {
+                if (!vNuevoE.txtEmpleado.getText().trim().isEmpty() && !vNuevoE.txtSalario.getText().trim().isEmpty()) {
                     //__________________________________________________________________                    
                     List<Empleados> list = ordenarLista();
-                    if(list.size()>0){
-                        BigDecimal id =new BigDecimal(Integer.parseInt(list.get(list.size()-1).getEmpId().toString())+1) ;                
+                    if (list.size() > 0) {
+                        BigDecimal id = new BigDecimal(Integer.parseInt(list.get(list.size() - 1).getEmpId().toString()) + 1);
                         _emp.setEmpId(id);
-                    }else{
+                    } else {
                         _emp.setEmpId(new BigDecimal("1"));
                     }
                     //__________________________________________________________________
-                    _emp.setEmpNombre(vNuevoE.txtEmpleado.getText());                    
+                    _emp.setEmpNombre(vNuevoE.txtEmpleado.getText());
                     _emp.setEmpSalario(Double.valueOf(vNuevoE.txtSalario.getText()));
                     _emp.setEmpTelefono(vNuevoE.txtTelefono.getText());
                     buscarCargoID(vNuevoE.cmbcargo.getItemAt(vNuevoE.cmbcargo.getSelectedIndex()));
@@ -969,7 +1120,7 @@ public class EmpleadosJpaController implements Serializable {
                     _emp.setEmpEstado(BigInteger.valueOf(vNuevoE.cmbestado.getSelectedIndex()));
 
                     try {
-                        create(_emp);                        
+                        create(_emp);
                         agregarATablaPlanilla(ordenarLista());
                         _emp = null;
                     } catch (Exception ex) {
@@ -1047,27 +1198,26 @@ public class EmpleadosJpaController implements Serializable {
         pr = ctrlP.findProyecto(new BigDecimal(id_proy));
         _emp = new Empleados();
         _emp = findEmpleados(new BigDecimal(IdUsuario));
-        
+
         GastoPersonal gasp = new GastoPersonal();
         ////////////___________________________________________________
         List<GastoPersonal> list = ctrl.findGastoPersonalEntities();
-        Collections.sort(list, new Comparator<GastoPersonal>() {                                                            
+        Collections.sort(list, new Comparator<GastoPersonal>() {
             @Override
             public int compare(GastoPersonal o1, GastoPersonal o2) {
                 return o1.getGpId().compareTo(o2.getGpId());
             }
         });
-        if(list.size()>0){
-            BigDecimal id =new BigDecimal(Integer.parseInt(list.get(list.size()-1).getGpId().toString())+1) ;                
+        if (list.size() > 0) {
+            BigDecimal id = new BigDecimal(Integer.parseInt(list.get(list.size() - 1).getGpId().toString()) + 1);
             gasp.setGpId(id);
-        }else{
+        } else {
             gasp.setGpId(new BigDecimal("1"));
         }
-        
+
         ////////////___________________________________________________
         buscarCargoID(viewPago.cmbcargo.getItemAt(viewPago.cmbcargo.getSelectedIndex()));
-        
-        
+
         gasp.setEmpId(_emp);
         gasp.setProyId(pr);
         gasp.setGpCargo(Double.parseDouble(_cargos.getCargosId().toString()));
@@ -1076,10 +1226,10 @@ public class EmpleadosJpaController implements Serializable {
         gasp.setGpComentario(viewPago.txtComentario.getText());
         return gasp;
     }
-    public List<Empleados> ordenarLista()
-    {
+
+    public List<Empleados> ordenarLista() {
         List<Empleados> list = findEmpleadosEntities();
-        Collections.sort(list, new Comparator<Empleados>() {                                                                                    
+        Collections.sort(list, new Comparator<Empleados>() {
             @Override
             public int compare(Empleados o1, Empleados o2) {
                 return o1.getEmpId().compareTo(o2.getEmpId());
