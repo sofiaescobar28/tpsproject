@@ -5,6 +5,9 @@
  */
 package gestor_de_proyectos.interfaces;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  *
  * @author Usuario
@@ -40,6 +43,8 @@ public class ViewNuevo_Editar_Usr extends javax.swing.JFrame {
         btnCancelar = new javax.swing.JButton();
         btnGuardar = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
+        lblError = new javax.swing.JLabel();
+        lblError2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -48,6 +53,12 @@ public class ViewNuevo_Editar_Usr extends javax.swing.JFrame {
         jLabel2.setText("Alias (clave):");
 
         jLabel3.setText("Correo:");
+
+        txtCorreo.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtCorreoKeyReleased(evt);
+            }
+        });
 
         jLabel4.setText("Estado:");
 
@@ -61,6 +72,17 @@ public class ViewNuevo_Editar_Usr extends javax.swing.JFrame {
 
         jLabel6.setFont(new java.awt.Font("Impact", 0, 24)); // NOI18N
         jLabel6.setText("Usuario");
+
+        lblError.setBackground(new java.awt.Color(204, 0, 0));
+        lblError.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                lblErrorKeyTyped(evt);
+            }
+        });
+
+        lblError2.setBackground(new java.awt.Color(0, 0, 0));
+        lblError2.setForeground(new java.awt.Color(204, 0, 0));
+        lblError2.setText("jLabel7");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -94,10 +116,18 @@ public class ViewNuevo_Editar_Usr extends javax.swing.JFrame {
                                         .addComponent(cmbEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(txtContra, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                         .addGroup(layout.createSequentialGroup()
-                            .addGap(83, 83, 83)
-                            .addComponent(btnCancelar)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGap(83, 83, 83)
+                                    .addComponent(btnCancelar)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                    .addContainerGap()
+                                    .addComponent(lblError2)
+                                    .addGap(41, 41, 41)))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(lblError, javax.swing.GroupLayout.PREFERRED_SIZE, 0, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(160, 160, 160)
                         .addComponent(jLabel6)))
@@ -128,7 +158,11 @@ public class ViewNuevo_Editar_Usr extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cmbEstado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblError, javax.swing.GroupLayout.PREFERRED_SIZE, 0, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblError2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCancelar)
                     .addComponent(btnGuardar))
@@ -139,6 +173,20 @@ public class ViewNuevo_Editar_Usr extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+    
+    private void lblErrorKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_lblErrorKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_lblErrorKeyTyped
+
+    private void txtCorreoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCorreoKeyReleased
+ 
+        Pattern patron = Pattern.compile("^[_a-z0-9-\\+]+(\\.[_a-z0-9-]+)*@[a-z0-9-]+(\\.[a-z0-9]+)*(\\.[a-z0-9-]{2,})$");
+        Matcher comparar = patron.matcher(txtCorreo.getText());
+        if (!comparar.find()) 
+            lblError2.setText("Error en el correo");       
+        else        
+            lblError2.setText("");        
+    }//GEN-LAST:event_txtCorreoKeyReleased
 
     /**
      * @param args the command line arguments
@@ -168,16 +216,16 @@ public class ViewNuevo_Editar_Usr extends javax.swing.JFrame {
         //</editor-fold>
         //</editor-fold>
         
-
+        
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new ViewNuevo_Editar_Usr().setVisible(true);
-                  
+                
             }
         });
     }
-
+        
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JButton btnCancelar;
     public javax.swing.JButton btnGuardar;
@@ -188,6 +236,8 @@ public class ViewNuevo_Editar_Usr extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel lblError;
+    public javax.swing.JLabel lblError2;
     public javax.swing.JTextField txtClave;
     public javax.swing.JTextField txtContra;
     public javax.swing.JTextField txtCorreo;
