@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+  <persistence-unit name="Gestor_de_proyectosPU" transaction-type="RESOURCE_LOCAL">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <class>AccesoDatos.Cargos</class>
+    <class>AccesoDatos.Empleados</class>
+    <class>AccesoDatos.Categorias</class>
+    <class>AccesoDatos.UnidadesDeMedida</class>
+    <class>AccesoDatos.Usuarios</class>
+    <class>AccesoDatos.Empleados</class>
+    <class>AccesoDatos.Proyecto</class>
+    <class>AccesoDatos.IngresoEgreso</class>
+    <class>AccesoDatos.GastoPersonal</class>
+    <properties>
+      <property name="javax.persistence.jdbc.url" value="jdbc:oracle:thin:@localhost:1521:XE"/>
+      <property name="javax.persistence.jdbc.user" value="usuario_tps"/>
+      <property name="javax.persistence.jdbc.driver" value="oracle.jdbc.OracleDriver"/>
+      <property name="javax.persistence.jdbc.password" value="prodigy700"/>
+      <property name="javax.persistence.schema-generation.database.action" value="create"/>
+    </properties>
+  </persistence-unit>
+</persistence>
