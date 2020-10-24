@@ -38,6 +38,8 @@ import java.sql.Types;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -60,6 +62,7 @@ public class IngresoEgresoJpaController implements Serializable {
     Conexion claseConnect = new Conexion();
     IngresoEgreso _ingresoEgreso;
     int id_proy;
+    int id_segundo;
     String nombre_proy;
     int fila = -1;
     int columna = -1;
@@ -74,6 +77,10 @@ public class IngresoEgresoJpaController implements Serializable {
     EmpleadosJpaController ctrlEmpleados = new EmpleadosJpaController(Entity_Main.getInstance(), viewPlanilla);
     ViewEditar_Registro viewEditRegistro = new ViewEditar_Registro();
     ViewCrear_Registro viewCreatRegistro = new ViewCrear_Registro();
+    
+    public IngresoEgresoJpaController(EntityManagerFactory emf){
+        this.emf = emf;
+    }
 
     //Constructor de detalle
     public IngresoEgresoJpaController(EntityManagerFactory emf, ViewDetalles_Proyecto view) {
@@ -91,41 +98,18 @@ public class IngresoEgresoJpaController implements Serializable {
         this.viewCreatRegistro.btnGuardar.addActionListener(al);
         this.viewCreatRegistro.btnACategoria.addActionListener(al);
         this.viewCreatRegistro.btnAUnidad.addActionListener(al);
-        this.view.jTable1.addMouseListener(new MouseListener(){
-            @Override
-            public void mouseClicked(MouseEvent me) {
-                if (me.getSource() == view.jTable1) {
-                    leerTabla();
-                }
-            }
-
-            @Override
-            public void mousePressed(MouseEvent me) {
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent me) {
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent me) {
-            }
-
-            @Override
-            public void mouseExited(MouseEvent me) {
-            }
         
-        });
     }
     
     public void iniciarForm(Integer id, String nombre){
         view.setTitle("Detalles de Proyecto");
         id_proy = id;
+        id_segundo = id;
         nombre_proy = nombre;
         agregarATabla(registrosProyecto(id));
         double gasto = gastos(id);
         double ingreso = ingresos(id);
-        view.lblNombre.setText("Proyecto: " + nombre);
+        view.lblNombre.setText(nombre);
         view.lblGasto.setText("Gastos: $" + gasto);
         view.lblIngreso.setText("Ingresos: $" + ingreso);
         view.lblBalance.setText("Balance: $" + String.valueOf(ingreso-gasto));
@@ -342,6 +326,15 @@ public class IngresoEgresoJpaController implements Serializable {
         model.addColumn("Monto");
         model.addColumn("");
         if (obj.size() > 0) {
+            
+            Collections.sort(obj, new Comparator<IngresoEgreso>() {
+                @Override
+                public int compare(IngresoEgreso o1, IngresoEgreso o2) {
+                    return o1.getIeId().compareTo(o2.getIeId());
+                }
+
+            });
+            
             SimpleDateFormat objSDF = new SimpleDateFormat("dd-MM-yyyy");
             Object Datos[] = new Object[9];
             
@@ -373,45 +366,40 @@ public class IngresoEgresoJpaController implements Serializable {
         view.jTable1.setModel(model);
     }
     
-    public void leerTabla(){
-        fila = view.jTable1.getSelectedRow();
-        columna = view.jTable1.getSelectedColumn();
-        if (columna == 8) {
-            obtenerObjeto(fila);
-            viewEditRegistro.jTextField1.setText(_ingresoEgreso.getIeId().toString());
-            viewEditRegistro.txtDescripcion.setText(_ingresoEgreso.getIeDescripcion());
-            if (_ingresoEgreso.getIeTipo().toString().equals("0")) {
-                viewEditRegistro.cmbTipo.setSelectedIndex(0);
-            }
-            else{
-                viewEditRegistro.cmbTipo.setSelectedIndex(1);
-            }
-            if (_ingresoEgreso.getIeCalidad().toString().equals("0")) {
-                viewEditRegistro.cmbCalidad.setSelectedIndex(0);
-            }
-            else if(_ingresoEgreso.getIeCalidad().toString().equals("1")){
-                viewEditRegistro.cmbCalidad.setSelectedIndex(1);
-            }
-            else if(_ingresoEgreso.getIeCalidad().toString().equals("2")){
-                viewEditRegistro.cmbCalidad.setSelectedIndex(2);
-            }
-            else{
-                viewEditRegistro.cmbCalidad.setSelectedIndex(3);
-            }
-            viewEditRegistro.txtCantidad.setText(_ingresoEgreso.getIeCantidad().toString());
-            viewEditRegistro.spnFecha.setValue(_ingresoEgreso.getIeFecha());
-            viewEditRegistro.txtMonto.setText(_ingresoEgreso.getIeMonto().toString());
-            viewEditRegistro.cmbCategoria.removeAllItems();
-            obtCategoriasACombo(viewEditRegistro.cmbCategoria, Integer.parseInt(_ingresoEgreso.getIeTipo().toString()));
-            viewEditRegistro.cmbCategoria.setSelectedItem(_ingresoEgreso.getCatId().getCatNombre());
-            viewEditRegistro.cmbUnidad.removeAllItems();
-            obtUnidadesACombo(viewEditRegistro.cmbUnidad);
-            viewEditRegistro.cmbUnidad.setSelectedItem(_ingresoEgreso.getUmId().getUmNombre());
-            viewEditRegistro.jTextField1.setVisible(false);
-            viewEditRegistro.setTitle("Editar registro");
-            viewEditRegistro.setVisible(true);
-            viewEditRegistro.setLocationRelativeTo(null);
+    public void leerTabla(IngresoEgreso _ie){
+        viewEditRegistro.jTextField1.setText(_ie.getIeId().toString());
+        viewEditRegistro.txtDescripcion.setText(_ie.getIeDescripcion());
+        if (_ie.getIeTipo().toString().equals("0")) {
+            viewEditRegistro.cmbTipo.setSelectedIndex(0);
         }
+        else{
+            viewEditRegistro.cmbTipo.setSelectedIndex(1);
+        }
+        if (_ie.getIeCalidad().toString().equals("0")) {
+            viewEditRegistro.cmbCalidad.setSelectedIndex(0);
+        }
+        else if(_ie.getIeCalidad().toString().equals("1")){
+            viewEditRegistro.cmbCalidad.setSelectedIndex(1);
+        }
+        else if(_ie.getIeCalidad().toString().equals("2")){
+            viewEditRegistro.cmbCalidad.setSelectedIndex(2);
+        }
+        else{
+            viewEditRegistro.cmbCalidad.setSelectedIndex(3);
+        }
+        viewEditRegistro.txtCantidad.setText(_ie.getIeCantidad().toString());
+        viewEditRegistro.spnFecha.setValue(_ie.getIeFecha());
+        viewEditRegistro.txtMonto.setText(_ie.getIeMonto().toString());
+        viewEditRegistro.cmbCategoria.removeAllItems();
+        obtCategoriasACombo(viewEditRegistro.cmbCategoria, Integer.parseInt(_ie.getIeTipo().toString()));
+        viewEditRegistro.cmbCategoria.setSelectedItem(_ie.getCatId().getCatNombre());
+        viewEditRegistro.cmbUnidad.removeAllItems();
+        obtUnidadesACombo(viewEditRegistro.cmbUnidad);
+        viewEditRegistro.cmbUnidad.setSelectedItem(_ie.getUmId().getUmNombre());
+        viewEditRegistro.jTextField1.setVisible(false);
+        viewEditRegistro.setTitle("Editar registro");
+        viewEditRegistro.setVisible(true);
+        viewEditRegistro.setLocationRelativeTo(null);
     }
     
     public void buscarCategoriaID(String categoria) {
@@ -421,6 +409,17 @@ public class IngresoEgresoJpaController implements Serializable {
             _categorias.setCatId(lst.get(0).getCatId());
             _categorias.setCatNombre(lst.get(0).getCatNombre());
             _categorias.setCatTipo(lst.get(0).getCatTipo());
+        }
+    }
+    
+    public void buscarProyectoID(String nombre) {
+        ArrayList<Proyecto> lst = new ArrayList<Proyecto>();
+        lst = ctrlPtoyecto.findSearch(nombre);
+        if (lst.size() > 0) {
+            _proyecto.setProyId(lst.get(0).getProyId());
+            _proyecto.setProyNombre(lst.get(0).getProyNombre());
+            _proyecto.setProyFecha(lst.get(0).getProyFecha());
+            _proyecto.setProyEstado(lst.get(0).getProyEstado());
         }
     }
     
@@ -450,36 +449,6 @@ public class IngresoEgresoJpaController implements Serializable {
             JOptionPane.showMessageDialog(view, "Sucedió un problema al cargar los datos. " + e);
         }
         return null;
-    }
-    
-    public void obtenerObjeto(int fila){
-        SimpleDateFormat objSDF = new SimpleDateFormat("dd-MM-yyyy");
-        Date fecha = null;
-        String status;
-        _ingresoEgreso = new IngresoEgreso();
-        _ingresoEgreso.setIeId(BigDecimal.valueOf(Double.parseDouble(view.jTable1.getValueAt(fila, 0).toString())));
-        _ingresoEgreso.setIeDescripcion(view.jTable1.getValueAt(fila, 1).toString());
-        if (view.jTable1.getValueAt(fila, 2).toString().equals("Ingreso")) {
-            status = "0";
-            _ingresoEgreso.setIeTipo(new BigInteger(String.valueOf(status)));
-        }
-        else{
-            status = "1";
-            _ingresoEgreso.setIeTipo(new BigInteger(String.valueOf(status)));
-        }
-        try {
-            fecha = objSDF.parse(view.jTable1.getValueAt(fila, 3).toString());
-            _ingresoEgreso.setIeFecha(fecha);
-        } catch (ParseException e) {
-            JOptionPane.showMessageDialog(view, e.getMessage());
-        }
-        buscarCategoriaID(view.jTable1.getValueAt(fila, 4).toString());
-        _ingresoEgreso.setCatId(_categorias);
-        _ingresoEgreso.setIeCantidad(Double.parseDouble(view.jTable1.getValueAt(fila, 5).toString()));
-        buscarMedidaID(view.jTable1.getValueAt(fila, 6).toString());
-        _ingresoEgreso.setUmId(_unidades);
-        _ingresoEgreso.setIeMonto(Double.parseDouble(view.jTable1.getValueAt(fila, 7).toString()));
-        _ingresoEgreso.setIeCalidad(BigInteger.valueOf(Long.parseLong(buscarCalidadID(Integer.parseInt(view.jTable1.getValueAt(fila, 0).toString())))));
     }
     
     public ArrayList<Categorias> obtenerCategorias(int tipo){
@@ -717,6 +686,21 @@ public class IngresoEgresoJpaController implements Serializable {
         }
     }
     
+    public void CrearRegistro(){
+        viewCreatRegistro.cmbUnidad.removeAllItems();
+        obtUnidadesACombo(viewCreatRegistro.cmbUnidad);
+//                viewCreatRegistro.txtDescripcion.setText("");
+        viewCreatRegistro.cmbTipo.setSelectedIndex(0);
+        viewCreatRegistro.cmbCategoria.removeAllItems();
+//                viewCreatRegistro.cmbCalidad.setSelectedIndex(0);
+//                viewCreatRegistro.txtCantidad.setText("");
+//                viewCreatRegistro.cmbUnidad.setSelectedIndex(0);
+//                viewCreatRegistro.txtMonto.setText("");
+        viewCreatRegistro.setTitle("Nuevo Registro");
+        viewCreatRegistro.setVisible(true);
+        viewCreatRegistro.setLocationRelativeTo(null);
+    }
+    
     ActionListener al = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent ae) {
@@ -733,22 +717,6 @@ public class IngresoEgresoJpaController implements Serializable {
                 else if (view.cmbFiltro.getSelectedIndex() == 3) {
                     agregarATabla(registrosPerdidas(id_proy));
                 }
-            }
-            
-            else if (ae.getSource() == view.btnNuevo) {
-                viewCreatRegistro.cmbUnidad.removeAllItems();
-                obtUnidadesACombo(viewCreatRegistro.cmbUnidad);
-                viewCreatRegistro.txtDescripcion.setText("");
-                viewCreatRegistro.cmbTipo.setSelectedIndex(0);
-                viewCreatRegistro.cmbCategoria.removeAllItems();
-                viewCreatRegistro.cmbCalidad.setSelectedIndex(0);
-                viewCreatRegistro.txtCantidad.setText("");
-                viewCreatRegistro.cmbUnidad.setSelectedIndex(0);
-                viewCreatRegistro.txtMonto.setText("");
-                viewCreatRegistro.setTitle("Nuevo Registro");
-                viewCreatRegistro.setVisible(true);
-                viewCreatRegistro.setLocationRelativeTo(null);
-                
             }
             else if(ae.getSource() == viewEditRegistro.btnCancelar){
                 viewEditRegistro.dispose();
@@ -842,8 +810,9 @@ public class IngresoEgresoJpaController implements Serializable {
             Date date = formater.parse(spinnerValue);
             
             _ingresoEgreso = new IngresoEgreso();
+            buscarProyectoID(view.lblNombre.getText());
+            _ingresoEgreso.setProyId(_proyecto);
             _ingresoEgreso.setIeId(BigDecimal.valueOf(Double.parseDouble(viewEditRegistro.jTextField1.getText().trim().toString())));
-            _ingresoEgreso.setProyId(ctrlPtoyecto.findProyecto(BigDecimal.valueOf(id_proy)));
             _ingresoEgreso.setIeDescripcion(viewEditRegistro.txtDescripcion.getText().trim().toString());
             _ingresoEgreso.setIeTipo(new BigInteger(String.valueOf(viewEditRegistro.cmbTipo.getSelectedIndex())));
             buscarCategoriaID(String.valueOf(viewEditRegistro.cmbCategoria.getSelectedItem()));
@@ -858,12 +827,12 @@ public class IngresoEgresoJpaController implements Serializable {
             
             try {
                 edit(_ingresoEgreso);
-                agregarATabla(registrosProyecto(id_proy));
-                double gasto = gastos(id_proy);
-                double ingreso = ingresos(id_proy);
-                view.lblGasto.setText("Gastos: " + gasto);
-                view.lblIngreso.setText("Ingresos: " + ingreso);
-                view.lblBalance.setText("Balance: " + String.valueOf(ingreso-gasto));
+                agregarATabla(registrosProyecto(Integer.parseInt(_proyecto.getProyId().toString())));
+                double gasto = gastos(Integer.parseInt(_proyecto.getProyId().toString()));
+                double ingreso = ingresos(Integer.parseInt(_proyecto.getProyId().toString()));
+                view.lblGasto.setText("Gastos: $" + gasto);
+                view.lblIngreso.setText("Ingresos: $" + ingreso);
+                view.lblBalance.setText("Balance: $" + String.valueOf(ingreso-gasto));
                 viewEditRegistro.dispose();
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(viewEditRegistro, "Asegúrese que los campos estén correctos. " + ex.getMessage());
@@ -901,8 +870,20 @@ public class IngresoEgresoJpaController implements Serializable {
             String spinnerValue = formater.format(viewCreatRegistro.spnFecha.getValue());
             Date date = formater.parse(spinnerValue);
             
+            
+            List<IngresoEgreso> listp = findIngresoEgresoEntities();
+            Collections.sort(listp, new Comparator<IngresoEgreso>() {
+                @Override
+                public int compare(IngresoEgreso o1, IngresoEgreso o2) {
+                    return o1.getIeId().compareTo(o2.getIeId());
+                }
+
+            });
+            BigDecimal idcar = new BigDecimal(Integer.parseInt(listp.get(listp.size() - 1).getIeId().toString()) + 1);
             _ingresoEgreso = new IngresoEgreso();
-            _ingresoEgreso.setProyId(ctrlPtoyecto.findProyecto(BigDecimal.valueOf(id_proy)));
+            buscarProyectoID(view.lblNombre.getText());
+            _ingresoEgreso.setProyId(_proyecto);
+            _ingresoEgreso.setIeId(idcar);
             _ingresoEgreso.setIeDescripcion(viewCreatRegistro.txtDescripcion.getText().trim().toString());
             _ingresoEgreso.setIeTipo(new BigInteger(String.valueOf(viewCreatRegistro.cmbTipo.getSelectedIndex())));
             buscarCategoriaID(String.valueOf(viewCreatRegistro.cmbCategoria.getSelectedItem()));
@@ -917,12 +898,12 @@ public class IngresoEgresoJpaController implements Serializable {
             
             try {
                 create(_ingresoEgreso);
-                agregarATabla(registrosProyecto(id_proy));
-                double gasto = gastos(id_proy);
-                double ingreso = ingresos(id_proy);
-                view.lblGasto.setText("Gastos: " + gasto);
-                view.lblIngreso.setText("Ingresos: " + ingreso);
-                view.lblBalance.setText("Balance: " + String.valueOf(ingreso-gasto));
+                agregarATabla(registrosProyecto(Integer.parseInt(_proyecto.getProyId().toString())));
+                double gasto = gastos(Integer.parseInt(_proyecto.getProyId().toString()));
+                double ingreso = ingresos(Integer.parseInt(_proyecto.getProyId().toString()));
+                view.lblGasto.setText("Gastos: $" + gasto);
+                view.lblIngreso.setText("Ingresos: $" + ingreso);
+                view.lblBalance.setText("Balance: $" + String.valueOf(ingreso-gasto));
                 viewCreatRegistro.dispose();
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(viewCreatRegistro, "Asegúrese que los campos estén correctos. " + ex.getMessage());

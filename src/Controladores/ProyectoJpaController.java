@@ -32,6 +32,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -61,6 +63,7 @@ public class ProyectoJpaController implements Serializable {
     ViewMenu_Principal menu = new ViewMenu_Principal();
     ViewDetalles_Proyecto detalles = new ViewDetalles_Proyecto();
     ViewEditar_Proyecto editarPro = new ViewEditar_Proyecto();
+    
     
     int fila = -1;
     int columna = -1;
@@ -139,6 +142,14 @@ public class ProyectoJpaController implements Serializable {
         model.addColumn("");
         
         if (obj.size() > 0) {
+            
+            Collections.sort(obj, new Comparator<Proyecto>() {
+                @Override
+                public int compare(Proyecto o1, Proyecto o2) {
+                    return o1.getProyId().compareTo(o2.getProyId());
+                }
+            });
+            
             SimpleDateFormat objSDF = new SimpleDateFormat("dd-MM-yyyy");
             Object Datos[] = new Object[9];
             
@@ -181,6 +192,14 @@ public class ProyectoJpaController implements Serializable {
         model.addColumn("");
         model.addColumn("");
         if (obj.size() > 0) {
+            
+            Collections.sort(obj, new Comparator<Proyecto>() {
+                @Override
+                public int compare(Proyecto o1, Proyecto o2) {
+                    return o1.getProyId().compareTo(o2.getProyId());
+                }
+            });
+            
             SimpleDateFormat objSDF = new SimpleDateFormat("dd-MM-yyyy");
             Object Datos[] = new Object[9];
             
@@ -222,10 +241,10 @@ public class ProyectoJpaController implements Serializable {
     }
     
     public void leerTabla(){
+        IngresoEgresoJpaController ctrlInEg = new IngresoEgresoJpaController(Entity_Main.getInstance(), detalles);
         fila = view.dgtProyectos.getSelectedRow();
         columna = view.dgtProyectos.getSelectedColumn();
         if (columna == 4) {
-            IngresoEgresoJpaController ctrlInEg = new IngresoEgresoJpaController(Entity_Main.getInstance(), detalles);
             int id = Integer.parseInt(view.dgtProyectos.getValueAt(fila, 0).toString());
             String nombre = view.dgtProyectos.getValueAt(fila, 1).toString();
             ctrlInEg.iniciarForm(id, nombre);
@@ -568,6 +587,8 @@ public class ProyectoJpaController implements Serializable {
                 busqueda();
             }
             else if(ae.getSource() == view.btnNuevo){
+                CEproyecto.txtProyecto.setText("");
+                CEproyecto.cmbEstado.setSelectedIndex(0);
                 CEproyecto.setTitle("Crear Proyecto");
                 CEproyecto.setVisible(true);
                 CEproyecto.setLocationRelativeTo(null);
@@ -575,6 +596,7 @@ public class ProyectoJpaController implements Serializable {
             else if (ae.getSource() == CEproyecto.btnCrear) {
                 try {
                     formCrear();
+                    CEproyecto.dispose();
                 } catch (ParseException ex) {
                     Logger.getLogger(ProyectoJpaController.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -657,6 +679,16 @@ public class ProyectoJpaController implements Serializable {
                 SimpleDateFormat formater = new SimpleDateFormat("dd/MM/yyyy");
                 String spinnerValue = formater.format(CEproyecto.spnFecha.getValue());
                 Date date = formater.parse(spinnerValue);
+                
+                List<Proyecto> listp = findProyectoEntities();
+                Collections.sort(listp, new Comparator<Proyecto>() {
+                @Override
+                public int compare(Proyecto o1, Proyecto o2) {
+                    return o1.getProyId().compareTo(o2.getProyId());
+                }
+
+            });
+            BigDecimal idcar = new BigDecimal(Integer.parseInt(listp.get(listp.size() - 1).getProyId().toString()) + 1);
 
                 _proyectos = new Proyecto();
                 _proyectos.setProyNombre(CEproyecto.txtProyecto.getText().trim().toString());
@@ -786,5 +818,42 @@ public class ProyectoJpaController implements Serializable {
             JOptionPane.showMessageDialog(view, "Error: " + e.getMessage());
         }
         return null;
+    }
+    
+    
+    public ArrayList<Proyecto> findSearch(String pro) {
+
+        try {
+            claseConnect.AbrirConexionBD();
+            CallableStatement cs
+                    = claseConnect.con.prepareCall("{call findProyectoId(?,?)}");
+            cs.setString(1, pro);
+            cs.registerOutParameter(2, OracleTypes.CURSOR);
+
+            cs.executeQuery();
+
+            ResultSet rset = ((OracleCallableStatement) cs).getCursor(2);
+            ArrayList<Proyecto> Datos = new ArrayList<Proyecto>();
+
+            while (rset.next()) {
+                _proyectos = new Proyecto();
+                _proyectos.setProyId(rset.getBigDecimal("PROY_ID"));
+                _proyectos.setProyNombre(rset.getString("PROY_NOMBRE"));
+                _proyectos.setProyFecha(rset.getDate("PROY_FECHA"));
+                _proyectos.setProyEstado(new BigInteger(Integer.valueOf(rset.getInt("PROY_ESTADO")).toString()));
+
+                Datos.add(_proyectos);
+            }
+
+            claseConnect.CerrarConexionBD();
+            return Datos;
+
+        } catch (SQLException ex) {
+
+            JOptionPane.showMessageDialog(detalles, "Sucedió un problema al realizar la consulta.");
+
+        }
+        return null;
+
     }
 }
