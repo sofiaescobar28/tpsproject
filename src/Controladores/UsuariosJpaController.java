@@ -418,6 +418,7 @@ public class UsuariosJpaController implements Serializable {
             viewCrearEditar.txtContra.setText(_usuario.getUserContrasena());
             viewCrearEditar.cmbEstado.setSelectedIndex(_usuario.getUserEstado().intValue());
             
+            viewCrearEditar.lblError2.setText("");
             viewCrearEditar.txtClave.setEditable(false);
             viewCrearEditar.txtClave.setEnabled(false);
             
@@ -512,8 +513,26 @@ public class UsuariosJpaController implements Serializable {
             else if (e.getSource()==viewCrearEditar.btnGuardar) {
                 if (!viewCrearEditar.txtNombUsr.getText().trim().isEmpty() || !viewCrearEditar.txtClave.getText().trim().isEmpty() ||
                         viewCrearEditar.txtCorreo.getText().trim().isEmpty() ||viewCrearEditar.txtContra.getText().trim().isEmpty()) {
+                    
+                    int Mayusculas=0, Minusculas=0, Cantidad=0;
+                    String contra = viewCrearEditar.txtContra.getText().trim();
+                    for (int k = 0; k < contra.length(); k++) {                            
+                        if (Character.isUpperCase(contra.charAt(k))) Mayusculas++;
+                        if (Character.isLowerCase(contra.charAt(k))) Minusculas++;
+                        Cantidad++;
+                     }
+                    
                     if (!viewCrearEditar.lblError2.getText().trim().isEmpty()) {
                         JOptionPane.showMessageDialog(viewCrearEditar,"El correo es invalido, favor intente de nuevo");
+                    }
+                    else if (Cantidad<4 || Cantidad>16) {                            
+                        JOptionPane.showMessageDialog(viewCrearEditar,"La contraseña tiene que tener de 4 a 16 caracteres");
+                    }
+                    else if (Mayusculas==0) {
+                        JOptionPane.showMessageDialog(viewCrearEditar,"La contraseña tiene que tener 1 o más mayusculas");
+                    }
+                    else if (Minusculas==0) {
+                        JOptionPane.showMessageDialog(viewCrearEditar,"La contraseña tiene que tener 1 o más minusculas");
                     }
                     else
                     {
