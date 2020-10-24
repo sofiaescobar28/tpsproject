@@ -20,6 +20,8 @@ import Controladores.exceptions.NonexistentEntityException;
 import Controladores.exceptions.PreexistingEntityException;
 import gestor_de_proyectos.interfaces.ViewPago_de_personal_Historico;
 import gestor_de_proyectos.interfaces.viewPagar;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.math.BigDecimal;
@@ -28,6 +30,8 @@ import java.sql.CallableStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -219,14 +223,23 @@ public class GastoPersonalJpaController implements Serializable {
     }
     
     ViewPago_de_personal_Historico vPagoh = new ViewPago_de_personal_Historico();
-    int pro;
+    //int pro;
     Conexion claseConnect = new Conexion();
     Empleados emp = new Empleados();
     
-    
+    ActionListener al = new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (e.getSource()== vPagoh.btnTodo) {
+                llenarTabla(findGastoPersonalEntities(),Integer.parseInt(vPagoh.lblProID.getText()));
+            }            
+        }
+    };
+        
     public GastoPersonalJpaController(EntityManagerFactory emf,ViewPago_de_personal_Historico ph) {
         this.emf = emf;
         this.vPagoh = ph;
+        this.vPagoh.btnTodo.addActionListener(al);
         this.vPagoh.txtBuscar.addKeyListener(new KeyAdapter() {
             public void keyTyped(KeyEvent e) {
 
@@ -241,27 +254,27 @@ public class GastoPersonalJpaController implements Serializable {
                     if (e.getSource() == vPagoh.txtBuscar) {
                         if (vPagoh.radEmp.isSelected()) {
                             ArrayList<GastoPersonal> list = new ArrayList<GastoPersonal>();                                                    
-                            list = buscarPorEmp(vPagoh.txtBuscar.getText(),pro);
+                            list = buscarPorEmp(vPagoh.txtBuscar.getText(),Integer.parseInt(vPagoh.lblProID.getText()));
                             if (list.size()>0) {
-                                llenarTabla(list,pro);
+                                llenarTabla(list,Integer.parseInt(vPagoh.lblProID.getText()));
                             }
                         } else if (vPagoh.radCom.isSelected()) {
                             ArrayList<GastoPersonal> list = new ArrayList<GastoPersonal>(); 
-                            list = buscarPorComentario(vPagoh.txtBuscar.getText(),pro);
+                            list = buscarPorComentario(vPagoh.txtBuscar.getText(),Integer.parseInt(vPagoh.lblProID.getText()));
                             if (list.size()>0) {
-                                llenarTabla(list,pro);
+                                llenarTabla(list,Integer.parseInt(vPagoh.lblProID.getText()));
                             }
                         }
                         else if (vPagoh.radCarTemp.isSelected()) {
                             ArrayList<GastoPersonal> list = new ArrayList<GastoPersonal>(); 
-                            list = buscarPorCargoT(vPagoh.txtBuscar.getText(),pro);
+                            list = buscarPorCargoT(vPagoh.txtBuscar.getText(),Integer.parseInt(vPagoh.lblProID.getText()));
                             if (list.size()>0) {
-                                llenarTabla(list,pro);
+                                llenarTabla(list,Integer.parseInt(vPagoh.lblProID.getText()));
                             }
                         }
                     }
                     else{
-                        llenarTabla(findGastoPersonalEntities(),pro);
+                        llenarTabla(findGastoPersonalEntities(),Integer.parseInt(vPagoh.lblProID.getText()));
                     }
                 }
             }
@@ -274,22 +287,30 @@ public class GastoPersonalJpaController implements Serializable {
         vPagoh.lblNomProy.setText("Proyecto: "+nombrePr);        
         vPagoh.setLocationRelativeTo(null);
         vPagoh.setVisible(true);
-        pro=prId;
-        llenarTabla(findGastoPersonalEntities(),pro);
+        vPagoh.lblProID.setText(String.valueOf(prId));
+        vPagoh.lblProID.setVisible(false);
+        llenarTabla(findGastoPersonalEntities(),Integer.parseInt(vPagoh.lblProID.getText()));
     }
     private void llenarTabla(List<GastoPersonal> _listado,int proy)
     {
+        DefaultTableModel model = new DefaultTableModel();
+        model.addColumn("#");
+        model.addColumn("EMPLEADO");
+        model.addColumn("CARGO(original)");
+        model.addColumn("CARGO(Temporal)");
+        model.addColumn("FECHA");            
+        model.addColumn("PAGO");
+        model.addColumn("COMENTARIO");
+        
+        Collections.sort(_listado, new Comparator<GastoPersonal>() {
+            @Override
+            public int compare(GastoPersonal o1, GastoPersonal o2) {
+                return o1.getGpId().compareTo(o2.getGpId());
+            }
+        });
         if (_listado.size()>0) {
-            Object Datos[] = new Object[7];            
-            DefaultTableModel model = new DefaultTableModel();
-            model.addColumn("#");
-            model.addColumn("EMPLEADO");
-            model.addColumn("CARGO(original)");
-            model.addColumn("CARGO(Temporal)");
-            model.addColumn("FECHA");            
-            model.addColumn("PAGO");
-            model.addColumn("COMENTARIO");
-            
+            Object Datos[] = new Object[7];                        
+            int pro;
             for (int i = 0; i < _listado.size(); i++) {
                 pro = _listado.get(i).getProyId().getProyId().intValueExact();
                 if (pro == proy ) {                                    
@@ -307,9 +328,9 @@ public class GastoPersonalJpaController implements Serializable {
                     Datos[6]=_listado.get(i).getGpComentario();
                     model.addRow(Datos);
                 }
-            }
-            vPagoh.dgvpagos.setModel(model);
+            }            
         }
+        vPagoh.dgvpagos.setModel(model);
     }
     public ArrayList<GastoPersonal> buscarPorEmp (String nombre,int proy){
         try {
