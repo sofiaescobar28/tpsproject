@@ -10,6 +10,8 @@ import AccesoDatos.Categorias;
 import AccesoDatos.Conexion;
 import Controladores.exceptions.NonexistentEntityException;
 import Controladores.exceptions.PreexistingEntityException;
+import Reportes.entidades.CatogoriasDS;
+import Reportes.entidades.ECategoria;
 import gestor_de_proyectos.interfaces.ViewCategorias;
 import gestor_de_proyectos.interfaces.ViewEditar_Categoria;
 import gestor_de_proyectos.interfaces.ViewNueva_Categoria;
@@ -41,7 +43,13 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import javax.swing.JOptionPane;
+import javax.swing.WindowConstants;
 import javax.swing.table.DefaultTableModel;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.view.JasperViewer;
 import oracle.jdbc.OracleCallableStatement;
 import oracle.jdbc.OracleTypes;
 
@@ -72,6 +80,7 @@ public class CategoriasJpaController implements Serializable {
         viewNuevaCat.btnCancelar.addActionListener(al);
         viewNuevaCat.btnNuevacateg.addActionListener(al);
         viewCategorias.cmbTipodeCate.addActionListener(al);
+        viewCategorias.btnReporte.addActionListener(al);
         this.viewCategorias.dgvCategorias.addMouseListener(new MouseListener() {
 
             public void mouseClicked(MouseEvent e) {
@@ -290,9 +299,10 @@ public class CategoriasJpaController implements Serializable {
 
                 Datos[0] = obj.get(cont).getCatId();
                 Datos[1] = obj.get(cont).getCatNombre();
-                if (obj.get(cont).getCatTipo() == BigInteger.valueOf(0)) {
+                int tipo =Integer.parseInt(obj.get(cont).getCatTipo().toString());
+                if (tipo == 0) {
                     Datos[2] = "Ingresos";
-                } else if (obj.get(cont).getCatTipo() == BigInteger.valueOf(1)) {
+                } else if (tipo == 1) {
                     Datos[2] = "Egresos";
                 }
                 Datos[3] = "Modificar";
@@ -422,8 +432,21 @@ public class CategoriasJpaController implements Serializable {
 
                 }
 
+            }            
+            else if(e.getSource()==viewCategorias.btnReporte){
+                ObtenerDatos();
+                try{                    
+                    
+                    JasperReport rep = (JasperReport) JRLoader.loadObject(getClass().getResource("/Reportes/Rep_Categoria.jasper"));                 
+                    JasperPrint jasperPrint = JasperFillManager.fillReport(rep, null,datasource);
+                    
+                    JasperViewer Jview = new JasperViewer(jasperPrint,false);
+                    Jview.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+                    Jview.setVisible(true);
+                }catch(Exception ex){
+                    JOptionPane.showMessageDialog(viewCategorias, "error:"+ex);
+                }
             }
-
         }
 
     };
@@ -577,5 +600,14 @@ public class CategoriasJpaController implements Serializable {
             em.close();
         }
     }
-
+    
+    CatogoriasDS datasource = new CatogoriasDS();
+    public void ObtenerDatos(){
+        for (int f = 0; f < viewCategorias.dgvCategorias.getRowCount(); f++) {
+            ECategoria ca = new ECategoria();
+            ca.setCategoria(viewCategorias.dgvCategorias.getValueAt(f, 1).toString());
+            ca.setTipo(viewCategorias.dgvCategorias.getValueAt(f, 2).toString());
+            datasource.addCate(ca);
+        }
+    }
 }

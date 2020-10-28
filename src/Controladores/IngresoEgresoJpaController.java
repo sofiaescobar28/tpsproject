@@ -18,6 +18,8 @@ import AccesoDatos.Proyecto;
 import AccesoDatos.UnidadesDeMedida;
 import Controladores.exceptions.NonexistentEntityException;
 import Controladores.exceptions.PreexistingEntityException;
+import Reportes.entidades.EEgresoIngreso;
+import Reportes.entidades.IngresoEgresoDS;
 import gestor_de_proyectos.interfaces.ViewAdministrar_Proyecto;
 import gestor_de_proyectos.interfaces.ViewCategorias;
 import gestor_de_proyectos.interfaces.ViewCrear_Registro;
@@ -41,14 +43,22 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
+import javax.swing.WindowConstants;
 import javax.swing.table.DefaultTableModel;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.view.JasperViewer;
 import oracle.jdbc.OracleCallableStatement;
 import oracle.jdbc.OracleTypes;
 
@@ -88,6 +98,9 @@ public class IngresoEgresoJpaController implements Serializable {
         this.view = view;
         this.view.cmbFiltro.addActionListener(al);
         this.view.btnNuevo.addActionListener(al);
+        
+        this.view.btnReporte.addActionListener(al);
+                
         this.viewEditRegistro.btnACategoria.addActionListener(al);
         this.viewEditRegistro.btnAUnidad.addActionListener(al);
         this.viewEditRegistro.btnCancelar.addActionListener(al);
@@ -778,6 +791,29 @@ public class IngresoEgresoJpaController implements Serializable {
                 UnidadesDeMedidaJpaController ctrluni = new UnidadesDeMedidaJpaController(Entity_Main.getInstance(), uni);
                 ctrluni.iniciarForm();
             }
+            else if (ae.getSource()== view.btnReporte) {
+                ObtenerDatos();
+                try{
+                    String nompro = view.lblNombre.getText().toString();
+                    String gasto = view.lblGasto.getText().toString();
+                    String ingreso = view.lblIngreso.getText().toString();
+                    String balance = view.lblBalance.getText().toString();
+                    Map parametros = new HashMap();
+                    parametros.put("Nombre",nompro);
+                    parametros.put("Gasto",gasto);
+                    parametros.put("Ingreso",ingreso);
+                    parametros.put("Balance",balance);
+                    
+                    JasperReport rep = (JasperReport) JRLoader.loadObject(getClass().getResource("/Reportes/Rep_IE_Normal.jasper"));                 
+                    JasperPrint jasperPrint = JasperFillManager.fillReport(rep, parametros,datasource);
+                    
+                    JasperViewer Jview = new JasperViewer(jasperPrint,false);
+                    Jview.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+                    Jview.setVisible(true);
+                }catch(Exception ex){
+                    JOptionPane.showMessageDialog(view, "error:"+ex);
+                }
+            }
         }
     };
     
@@ -908,6 +944,21 @@ public class IngresoEgresoJpaController implements Serializable {
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(viewCreatRegistro, "Asegúrese que los campos estén correctos. " + ex.getMessage());
             }
+        }
+    }
+    
+    IngresoEgresoDS datasource = new IngresoEgresoDS();
+    public void ObtenerDatos(){
+        for (int f = 0; f < view.jTable1.getRowCount(); f++) {
+            EEgresoIngreso elemento = new EEgresoIngreso();
+            elemento.setDescripcion(view.jTable1.getValueAt(f, 1).toString());
+            elemento.setTipo(view.jTable1.getValueAt(f, 2).toString());
+            elemento.setFecha(view.jTable1.getValueAt(f, 3).toString());
+            elemento.setCategoria(view.jTable1.getValueAt(f, 4).toString());
+            elemento.setCantidad(view.jTable1.getValueAt(f, 5).toString());
+            elemento.setMedida(view.jTable1.getValueAt(f, 6).toString());
+            elemento.setMonto(Double.parseDouble(view.jTable1.getValueAt(f, 7).toString()));
+            datasource.addIE(elemento);
         }
     }
 }

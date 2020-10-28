@@ -182,7 +182,7 @@ public class ViewCategorias extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JButton btnNuevaCategoria;
-    private javax.swing.JButton btnReporte;
+    public javax.swing.JButton btnReporte;
     private javax.swing.ButtonGroup btngrupo2;
     public javax.swing.JComboBox<String> cmbTipodeCate;
     public javax.swing.JTable dgvCategorias;

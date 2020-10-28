@@ -18,6 +18,9 @@ import AccesoDatos.GastoPersonal;
 import AccesoDatos.Proyecto;
 import Controladores.exceptions.NonexistentEntityException;
 import Controladores.exceptions.PreexistingEntityException;
+import Reportes.entidades.EGasto;
+import Reportes.entidades.EPlanilla;
+import Reportes.entidades.HistorialDePagoDS;
 import gestor_de_proyectos.interfaces.ViewPago_de_personal_Historico;
 import gestor_de_proyectos.interfaces.viewPagar;
 import java.awt.event.ActionEvent;
@@ -26,17 +29,27 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.security.Policy;
 import java.sql.CallableStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.swing.JOptionPane;
+import javax.swing.WindowConstants;
 import javax.swing.table.DefaultTableModel;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.view.JasperViewer;
 import oracle.jdbc.OracleCallableStatement;
 import oracle.jdbc.OracleTypes;
 
@@ -233,6 +246,23 @@ public class GastoPersonalJpaController implements Serializable {
             if (e.getSource()== vPagoh.btnTodo) {
                 llenarTabla(findGastoPersonalEntities(),Integer.parseInt(vPagoh.lblProID.getText()));
             }            
+            else if (e.getSource() == vPagoh.btnReporte) {
+                ObtenerDatos();
+                try{
+                    String nompro = vPagoh.lblNomProy.getText().toString();
+                    Map parametros = new HashMap();
+                    parametros.put("NPro",nompro);
+                    
+                    JasperReport rep = (JasperReport) JRLoader.loadObject(getClass().getResource("/Reportes/Rep_HistorialDePagos.jasper"));                 
+                    JasperPrint jasperPrint = JasperFillManager.fillReport(rep, parametros,datasource);
+                    
+                    JasperViewer Jview = new JasperViewer(jasperPrint,false);
+                    Jview.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+                    Jview.setVisible(true);
+                }catch(Exception ex){
+                    JOptionPane.showMessageDialog(vPagoh, "error:"+ex);
+                }
+            }
         }
     };
         
@@ -240,6 +270,7 @@ public class GastoPersonalJpaController implements Serializable {
         this.emf = emf;
         this.vPagoh = ph;
         this.vPagoh.btnTodo.addActionListener(al);
+        this.vPagoh.btnReporte.addActionListener(al);
         this.vPagoh.txtBuscar.addKeyListener(new KeyAdapter() {
             public void keyTyped(KeyEvent e) {
 
@@ -426,5 +457,20 @@ public class GastoPersonalJpaController implements Serializable {
 
         }
         return null;
-    }
+    }    
+    ////////////////////obtener objetos para el reporte
+    HistorialDePagoDS datasource = new HistorialDePagoDS();    
+    public void ObtenerDatos(){
+        //List ListadoGastos = new ArrayList<>();
+        for (int f = 0; f < vPagoh.dgvpagos.getRowCount(); f++) {
+            EGasto elemento = new EGasto();
+            elemento.setNombre(vPagoh.dgvpagos.getValueAt(f,1).toString());
+            elemento.setCargoO(vPagoh.dgvpagos.getValueAt(f,2).toString());
+            elemento.setCargoT(vPagoh.dgvpagos.getValueAt(f,3).toString());
+            elemento.setFecha(vPagoh.dgvpagos.getValueAt(f,4).toString());
+            elemento.setPago(Double.parseDouble(vPagoh.dgvpagos.getValueAt(f,5).toString()));
+            elemento.setComentario(vPagoh.dgvpagos.getValueAt(f,6).toString());            
+            datasource.addGasto(elemento);
+        }        
+    }    
 }

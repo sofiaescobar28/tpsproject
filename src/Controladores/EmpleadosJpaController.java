@@ -19,6 +19,8 @@ import AccesoDatos.GastoPersonal;
 import AccesoDatos.Proyecto;
 import Controladores.exceptions.NonexistentEntityException;
 import Controladores.exceptions.PreexistingEntityException;
+import Reportes.entidades.EPlanilla;
+import Reportes.entidades.PlanillaDS;
 import gestor_de_proyectos.interfaces.ViewAdministrar_Proyecto;
 import gestor_de_proyectos.interfaces.ViewCargos;
 import gestor_de_proyectos.interfaces.ViewPlanilla;
@@ -43,7 +45,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -53,7 +57,13 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
+import javax.swing.WindowConstants;
 import javax.swing.table.DefaultTableModel;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.view.JasperViewer;
 import oracle.jdbc.OracleCallableStatement;
 import oracle.jdbc.OracleTypes;
 
@@ -84,6 +94,7 @@ public class EmpleadosJpaController implements Serializable {
         this.viewPlanilla = view2;
         this.viewPlanilla.btnBuscar.addActionListener(alP);
         this.viewPlanilla.btnNuevoE.addActionListener(alP);
+        this.viewPlanilla.btnReporte.addActionListener(alP);
         this.viewPlanilla.dgvP.addMouseListener(new MouseListener() {
 
             public void mouseClicked(MouseEvent e) {
@@ -1180,19 +1191,32 @@ public class EmpleadosJpaController implements Serializable {
                 } else {
                     JOptionPane.showMessageDialog(viewPago, "Faltan campos por llenar");
                 }
+            }            
+            ///--------------------------------------------------------------------------------
+            ///--------------------------------------------------------------------------------            
+            else if (ae.getSource() == viewPlanilla.btnReporte) {
+                 ObtenerDatos();
+                try{                    
+                    
+                    JasperReport rep = (JasperReport) JRLoader.loadObject(getClass().getResource("/Reportes/Rep_Planilla.jasper"));                 
+                    JasperPrint jasperPrint = JasperFillManager.fillReport(rep, null,datasource);
+                    
+                    JasperViewer Jview = new JasperViewer(jasperPrint,false);
+                    Jview.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+                    Jview.setVisible(true);
+                }catch(Exception ex){
+                    JOptionPane.showMessageDialog(viewPlanilla, "error:"+ex);
+                }
             }
-            ///--------------------------------------------------------------------------------
-            ///--------------------------------------------------------------------------------
         }
     };
 
     ///--------------------------------------------------------------------------------
     ///--------------------------------------------------------------------------------
-    public GastoPersonal llenarPago() {
-        Date Hoy = new Date();
-        String strDateFormat = "dd-MMM-aaaa";
-        SimpleDateFormat objSDF = new SimpleDateFormat(strDateFormat);
-        objSDF.format(Hoy);
+    public GastoPersonal llenarPago() {                                
+        Date Hoy = new Date();        
+        SimpleDateFormat formater = new SimpleDateFormat("dd/MM/yyyy");        
+        formater.format(Hoy);
         Proyecto pr = new Proyecto();
         ProyectoJpaController ctrlP = new ProyectoJpaController(emf);
         pr = ctrlP.findProyecto(new BigDecimal(id_proy));
@@ -1246,4 +1270,16 @@ public class EmpleadosJpaController implements Serializable {
     }
     ///--------------------------------------------------------------------------------
     ///--------------------------------------------------------------------------------
+    PlanillaDS datasource = new PlanillaDS();
+    public void ObtenerDatos(){
+        for (int f = 0; f < viewPlanilla.dgvP.getRowCount(); f++) {            
+            EPlanilla elemento = new EPlanilla();
+            elemento.setNombre(viewPlanilla.dgvP.getValueAt(f,1).toString());
+            elemento.setCargo(viewPlanilla.dgvP.getValueAt(f,2).toString());
+            elemento.setSalario(Double.parseDouble(viewPlanilla.dgvP.getValueAt(f,3).toString()));
+            elemento.setEstado(viewPlanilla.dgvP.getValueAt(f,4).toString());
+            elemento.setTelefono(viewPlanilla.dgvP.getValueAt(f,5).toString());
+            datasource.addPlanilla(elemento);
+        }
+    }
 }
