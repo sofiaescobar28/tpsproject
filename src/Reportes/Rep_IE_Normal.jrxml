@@ -31,14 +31,14 @@
 				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="72" y="36" width="100" height="20" uuid="bb2e8b0d-e8a3-4200-b34c-f2e368c5ded4"/>
+				<reportElement x="94" y="26" width="100" height="20" uuid="bb2e8b0d-e8a3-4200-b34c-f2e368c5ded4"/>
 				<textElement>
 					<font size="14" isItalic="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{Nombre}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="11" y="36" width="61" height="20" uuid="37773edf-6ea9-445e-af3f-27d06a24961f"/>
+				<reportElement x="33" y="26" width="61" height="20" uuid="37773edf-6ea9-445e-af3f-27d06a24961f"/>
 				<textElement>
 					<font size="14" isItalic="true"/>
 				</textElement>
@@ -52,7 +52,7 @@
 	<columnHeader>
 		<band height="30" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="2" width="172" height="20" uuid="5ff22e12-ee4b-42c2-b2fc-f1ac0e646f09"/>
+				<reportElement x="26" y="2" width="146" height="20" uuid="5ff22e12-ee4b-42c2-b2fc-f1ac0e646f09"/>
 				<textElement>
 					<font size="14"/>
 				</textElement>
@@ -105,7 +105,7 @@
 	<detail>
 		<band height="23" splitType="Stretch">
 			<textField>
-				<reportElement stretchType="RelativeToBandHeight" x="0" y="3" width="172" height="20" uuid="524a8806-ed17-4073-86ca-4ad85e593543"/>
+				<reportElement stretchType="RelativeToBandHeight" x="26" y="3" width="146" height="20" uuid="524a8806-ed17-4073-86ca-4ad85e593543"/>
 				<textFieldExpression><![CDATA[$F{Descripcion}]]></textFieldExpression>
 			</textField>
 			<textField>
