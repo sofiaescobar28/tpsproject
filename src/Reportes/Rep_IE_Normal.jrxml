@@ -27,7 +27,7 @@
 				<text><![CDATA[Ingresos y Egresos]]></text>
 			</staticText>
 			<textField pattern="EEEEE dd MMMMM yyyy">
-				<reportElement x="506" y="26" width="100" height="20" uuid="2486a0f8-f6ad-412e-834b-9030d90ff1fc"/>
+				<reportElement x="506" y="26" width="259" height="20" uuid="2486a0f8-f6ad-412e-834b-9030d90ff1fc"/>
 				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
 			</textField>
 			<textField>

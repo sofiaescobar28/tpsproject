@@ -19,6 +19,8 @@ import AccesoDatos.UnidadesDeMedida;
 import Controladores.exceptions.NonexistentEntityException;
 import Controladores.exceptions.PreexistingEntityException;
 import Reportes.entidades.EEgresoIngreso;
+import Reportes.entidades.EIEResumen;
+import Reportes.entidades.IEReumenDS;
 import Reportes.entidades.IngresoEgresoDS;
 import gestor_de_proyectos.interfaces.ViewAdministrar_Proyecto;
 import gestor_de_proyectos.interfaces.ViewCategorias;
@@ -51,7 +53,9 @@ import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 import javax.swing.table.DefaultTableModel;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -792,27 +796,63 @@ public class IngresoEgresoJpaController implements Serializable {
                 ctrluni.iniciarForm();
             }
             else if (ae.getSource()== view.btnReporte) {
-                ObtenerDatos();
-                try{
-                    String nompro = view.lblNombre.getText().toString();
-                    String gasto = view.lblGasto.getText().toString();
-                    String ingreso = view.lblIngreso.getText().toString();
-                    String balance = view.lblBalance.getText().toString();
-                    Map parametros = new HashMap();
-                    parametros.put("Nombre",nompro);
-                    parametros.put("Gasto",gasto);
-                    parametros.put("Ingreso",ingreso);
-                    parametros.put("Balance",balance);
-                    
-                    JasperReport rep = (JasperReport) JRLoader.loadObject(getClass().getResource("/Reportes/Rep_IE_Normal.jasper"));                 
-                    JasperPrint jasperPrint = JasperFillManager.fillReport(rep, parametros,datasource);
-                    
-                    JasperViewer Jview = new JasperViewer(jasperPrint,false);
-                    Jview.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-                    Jview.setVisible(true);
-                }catch(Exception ex){
-                    JOptionPane.showMessageDialog(view, "error:"+ex);
+                //int resp = JOptionPane.showConfirmDialog(null, "Desea un reporte normal o un reporte de resumen mensual?", "Normal", JOptionPane., JOptionPane.QUESTION_MESSAGE);
+                
+                Object[] optiones = { "Normal", "Resumen", "Cancelar" };
+
+                JPanel panel = new JPanel();
+                panel.add(new JLabel("Desea un reporte normal o un resumen mensual?"));           
+
+                int resultado = JOptionPane.showOptionDialog(null, panel, "Reporte de gastos",
+                        JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE,
+                        null, optiones, null);
+                
+                if (resultado==0) {
+                    ObtenerDatos();
+                    try{
+                        String nompro = view.lblNombre.getText().toString();
+                        String gasto = view.lblGasto.getText().toString();
+                        String ingreso = view.lblIngreso.getText().toString();
+                        String balance = view.lblBalance.getText().toString();
+                        Map parametros = new HashMap();
+                        parametros.put("Nombre",nompro);
+                        parametros.put("Gasto",gasto);
+                        parametros.put("Ingreso",ingreso);
+                        parametros.put("Balance",balance);
+
+                        JasperReport rep = (JasperReport) JRLoader.loadObject(getClass().getResource("/Reportes/Rep_IE_Normal.jasper"));                 
+                        JasperPrint jasperPrint = JasperFillManager.fillReport(rep, parametros,datasource);
+
+                        JasperViewer Jview = new JasperViewer(jasperPrint,false);
+                        Jview.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+                        Jview.setVisible(true);
+                    }catch(Exception ex){
+                        JOptionPane.showMessageDialog(view, "error:"+ex);
+                    }
                 }
+                else if (resultado==1) {
+                    LlenarResumen();
+                    try{
+                        String nompro = view.lblNombre.getText().toString();
+                        String gasto = view.lblGasto.getText().toString();
+                        String ingreso = view.lblIngreso.getText().toString();
+                        String balance = view.lblBalance.getText().toString();
+                        Map parametros = new HashMap();
+                        parametros.put("Proyecto",nompro);
+                        parametros.put("Gastos",gasto);
+                        parametros.put("Ingresos",ingreso);
+                        parametros.put("Balance",balance);
+
+                        JasperReport rep = (JasperReport) JRLoader.loadObject(getClass().getResource("/Reportes/Rep_IE_Resumen.jasper"));                 
+                        JasperPrint jasperPrint = JasperFillManager.fillReport(rep, parametros,datasource2);
+
+                        JasperViewer Jview = new JasperViewer(jasperPrint,false);
+                        Jview.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+                        Jview.setVisible(true);
+                    }catch(Exception ex){
+                        JOptionPane.showMessageDialog(view, "error:"+ex);
+                    }
+                }                
             }
         }
     };
@@ -960,5 +1000,30 @@ public class IngresoEgresoJpaController implements Serializable {
             elemento.setMonto(Double.parseDouble(view.jTable1.getValueAt(f, 7).toString()));
             datasource.addIE(elemento);
         }
+    }
+    
+    IEReumenDS datasource2 = new IEReumenDS();
+    public void LlenarResumen(){
+       try {
+            claseConnect.AbrirConexionBD();
+            CallableStatement cs
+                    = claseConnect.con.prepareCall("{call LlamarResumen(?,?)}");
+            cs.setString(1, view.lblNombre.getText().trim());
+            cs.registerOutParameter(2, OracleTypes.CURSOR);
+
+            cs.executeQuery();
+
+            ResultSet rset = ((OracleCallableStatement) cs).getCursor(2);            
+            while (rset.next()) {
+                EIEResumen elemento = new EIEResumen();
+                elemento.setFecha(rset.getString("MES"));
+                elemento.setTipo(rset.getString("TIPO"));
+                elemento.setMonto(rset.getDouble("MONTO"));
+                datasource2.addResumen(elemento);
+            }                           
+            claseConnect.CerrarConexionBD();                         
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(view, "El registro que intenta eliminar no existe.");
+        }        
     }
 }

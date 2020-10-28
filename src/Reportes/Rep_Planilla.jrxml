@@ -24,7 +24,7 @@
 				<text><![CDATA[Planilla]]></text>
 			</staticText>
 			<textField pattern="EEEEE dd MMMMM yyyy">
-				<reportElement x="533" y="28" width="100" height="20" uuid="19fac44d-d32f-491d-9604-4e1f062ebe16"/>
+				<reportElement x="533" y="28" width="226" height="20" uuid="19fac44d-d32f-491d-9604-4e1f062ebe16"/>
 				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
 			</textField>
 		</band>
