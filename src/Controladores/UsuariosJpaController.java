@@ -536,13 +536,13 @@ public class UsuariosJpaController implements Serializable {
                     }
                     else
                     {
-                        if (_usuario==null) {                        
+                        if (_usuario==null) {
                             ArrayList<Usuarios> list;
                             list= new ArrayList<Usuarios>();
                             list=BuscarPorClave(viewCrearEditar.txtClave.getText().trim());
                             if (list==null) {
                                 viewCrearEditar.txtClave.setEditable(true);
-                                viewCrearEditar.txtClave.setEnabled(true);                            
+                                viewCrearEditar.txtClave.setEnabled(true);                                
                                 _usuario= new Usuarios();
                                 //_____________________________________________________________
                                 List<Usuarios> lista = findUsuariosEntities();
@@ -551,18 +551,51 @@ public class UsuariosJpaController implements Serializable {
                                     public int compare(Usuarios o1, Usuarios o2) {
                                         return o1.getUserId().compareTo(o2.getUserId());                                    
                                     }
-                                });
+                                });                                
                                 if (lista.size()>0) {
                                     BigDecimal id = new BigDecimal (Integer.parseInt(lista.get(lista.size()-1).getUserId().toString())+1);                                
                                     _usuario.setUserId(id);
                                 }else{
                                     _usuario.setUserId(new BigDecimal("1"));
                                 }
-                                //_____________________________________________________________
+                                int existe = existeCorreo(viewCrearEditar.txtCorreo.getText().toString().trim(), lista);
+                                if(existe==0){
+                                    //_____________________________________________________________
+                                    _usuario.setUserNombres(viewCrearEditar.txtNombUsr.getText());
+                                    _usuario.setUserClave(viewCrearEditar.txtClave.getText().toUpperCase());
+                                    _usuario.setUserCorreo(viewCrearEditar.txtCorreo.getText());
+                                    _usuario.setUserContrasena(viewCrearEditar.txtContra.getText());
+                                    if (viewCrearEditar.cmbEstado.getSelectedIndex()==1) {
+                                        _usuario.setUserEstado(new BigInteger(String.valueOf("1")));
+                                    }
+                                    else
+                                    {
+                                        _usuario.setUserEstado(new BigInteger(String.valueOf("0")));
+                                    }
+                                    try {
+                                        create(_usuario);
+                                        llenarTabla(findUsuariosEntities());
+                                        _usuario=null;
+                                        limpiarTXT();
+                                    } catch (Exception ex) {
+                                        JOptionPane.showMessageDialog(viewCrearEditar,"Ocurrió un error al guardar el usuario, por favor vuelva a intentarlo");
+                                    }
+                                }else{
+                                    JOptionPane.showMessageDialog(viewCrearEditar,"Este correo ya existe");
+                                }
+                            }else{
+                                JOptionPane.showMessageDialog(viewCrearEditar, "Este alias ya existe, escoja otro por favor");                            
+                            }
+                        }else{                            
+                            viewCrearEditar.txtClave.setEditable(false);
+                            viewCrearEditar.txtClave.setEnabled(false);
+                            String cor = viewCrearEditar.txtCorreo.getText().toString().trim();
+                            String cor2 =_usuario.getUserCorreo().trim();
+                            if (cor.equals(cor2)) {
                                 _usuario.setUserNombres(viewCrearEditar.txtNombUsr.getText());
                                 _usuario.setUserClave(viewCrearEditar.txtClave.getText().toUpperCase());
                                 _usuario.setUserCorreo(viewCrearEditar.txtCorreo.getText());
-                                _usuario.setUserContrasena(viewCrearEditar.txtContra.getText());
+                                _usuario.setUserContrasena(viewCrearEditar.txtContra.getText());                        
                                 if (viewCrearEditar.cmbEstado.getSelectedIndex()==1) {
                                     _usuario.setUserEstado(new BigInteger(String.valueOf("1")));
                                 }
@@ -570,38 +603,42 @@ public class UsuariosJpaController implements Serializable {
                                 {
                                     _usuario.setUserEstado(new BigInteger(String.valueOf("0")));
                                 }
-                                try {
-                                    create(_usuario);
+                                try {                            
+                                    edit(_usuario);
                                     llenarTabla(findUsuariosEntities());
                                     _usuario=null;
                                     limpiarTXT();
+                                    viewCrearEditar.dispose();
                                 } catch (Exception ex) {
-                                    JOptionPane.showMessageDialog(viewCrearEditar,"Ocurrió un error al guardar el usuario, por favor vuelva a intentarlo");
+                                    JOptionPane.showMessageDialog(viewCrearEditar,"Ocurrió un error al editar el usuario, por favor vuelva a intentarlo");
                                 }
                             }else{
-                                JOptionPane.showMessageDialog(viewCrearEditar, "Este alias ya existe, escoja otro por favor");                            
-                            }
-                        }else{                        
-                            viewCrearEditar.txtClave.setEditable(false);
-                            viewCrearEditar.txtClave.setEnabled(false);
-                            _usuario.setUserNombres(viewCrearEditar.txtNombUsr.getText());
-                            _usuario.setUserClave(viewCrearEditar.txtClave.getText().toUpperCase());
-                            _usuario.setUserCorreo(viewCrearEditar.txtCorreo.getText());
-                            _usuario.setUserContrasena(viewCrearEditar.txtContra.getText());                        
-                            if (viewCrearEditar.cmbEstado.getSelectedIndex()==1) {
-                                _usuario.setUserEstado(new BigInteger(String.valueOf("1")));
-                            }
-                            else
-                            {
-                                _usuario.setUserEstado(new BigInteger(String.valueOf("0")));
-                            }
-                            try {                            
-                                edit(_usuario);
-                                llenarTabla(findUsuariosEntities());
-                                _usuario=null;
-                                limpiarTXT();
-                            } catch (Exception ex) {
-                                JOptionPane.showMessageDialog(viewCrearEditar,"Ocurrió un error al editar el usuario, por favor vuelva a intentarlo");
+                                List<Usuarios> lista = findUsuariosEntities();
+                                int existe = existeCorreo(viewCrearEditar.txtCorreo.getText().toString().trim(), lista);
+                                if(existe==0){
+                                    _usuario.setUserNombres(viewCrearEditar.txtNombUsr.getText());
+                                    _usuario.setUserClave(viewCrearEditar.txtClave.getText().toUpperCase());
+                                    _usuario.setUserCorreo(viewCrearEditar.txtCorreo.getText());
+                                    _usuario.setUserContrasena(viewCrearEditar.txtContra.getText());                        
+                                    if (viewCrearEditar.cmbEstado.getSelectedIndex()==1) {
+                                        _usuario.setUserEstado(new BigInteger(String.valueOf("1")));
+                                    }
+                                    else
+                                    {
+                                        _usuario.setUserEstado(new BigInteger(String.valueOf("0")));
+                                    }
+                                    try {                            
+                                        edit(_usuario);
+                                        llenarTabla(findUsuariosEntities());
+                                        _usuario=null;
+                                        limpiarTXT();
+                                    } catch (Exception ex) {
+                                        JOptionPane.showMessageDialog(viewCrearEditar,"Ocurrió un error al editar el usuario, por favor vuelva a intentarlo");
+                                    }
+                                }else{
+                                    JOptionPane.showMessageDialog(viewCrearEditar,"Este correo ya existe");
+                                }
+                                
                             }
                         }
                     }                    
@@ -628,6 +665,17 @@ public class UsuariosJpaController implements Serializable {
             }
         }        
     };
+    
+    public int existeCorreo(String correo,List<Usuarios> lista){
+        int cantidad=0;
+        for (int i = 0; i < lista.size(); i++) {
+            if (lista.get(i).getUserCorreo().equals(correo)) {
+                cantidad++;
+                break;
+            }
+        }
+        return cantidad;
+    }
     //-----------------------llamar a procedimientos-----------------------------
     
     public ArrayList<Usuarios> BuscarPorClave(String s)
