@@ -7,6 +7,7 @@ package gestor_de_proyectos.interfaces;
 
 import AccesoDatos.Entity_Main;
 import Controladores.ProyectoJpaController;
+import java.awt.Color;
 
 /**
  *
@@ -18,6 +19,7 @@ public class ViewAdministrar_Proyecto extends javax.swing.JFrame {
      * Creates new form Administrar_Proyecto
      */
     public ViewAdministrar_Proyecto() {
+        this.getContentPane().setBackground(new Color(198,146,122));
         initComponents();
     }
 
@@ -46,6 +48,7 @@ public class ViewAdministrar_Proyecto extends javax.swing.JFrame {
         dgtProyectos = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setBackground(new java.awt.Color(198, 146, 122));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosed(java.awt.event.WindowEvent evt) {
                 formWindowClosed(evt);
@@ -155,7 +158,6 @@ public class ViewAdministrar_Proyecto extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel4)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(7, 7, 7)
                         .addComponent(btnNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)))
                 .addGap(54, 54, 54))

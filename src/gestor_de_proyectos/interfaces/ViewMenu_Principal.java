@@ -8,6 +8,7 @@ package gestor_de_proyectos.interfaces;
 import AccesoDatos.Entity_Main;
 import Controladores.ProyectoJpaController;
 import Controladores.UsuariosJpaController;
+import java.awt.Color;
 import java.awt.event.WindowEvent;
 
 /**
@@ -21,6 +22,7 @@ public class ViewMenu_Principal extends javax.swing.JFrame {
      */
     boolean salida = false;
     public ViewMenu_Principal() {
+        this.getContentPane().setBackground(new Color(177,54,0));
         initComponents();
     }
 
@@ -43,6 +45,7 @@ public class ViewMenu_Principal extends javax.swing.JFrame {
         btnCerrar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setBackground(new java.awt.Color(177, 54, 0));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosed(java.awt.event.WindowEvent evt) {
                 formWindowClosed(evt);
@@ -71,15 +74,25 @@ public class ViewMenu_Principal extends javax.swing.JFrame {
             }
         });
 
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Administrar Proyectos");
 
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Administrar Usuarios");
 
+        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("Administrar Generalidades");
 
-        lblNombre.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        lblNombre.setText("Gestor de Proyectos");
+        lblNombre.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        lblNombre.setForeground(new java.awt.Color(255, 255, 255));
+        lblNombre.setText("Menú Principal");
 
+        btnCerrar.setBackground(new java.awt.Color(102, 102, 0));
+        btnCerrar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnCerrar.setForeground(new java.awt.Color(255, 255, 255));
         btnCerrar.setText("Cerrar sesión");
         btnCerrar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -139,7 +152,7 @@ public class ViewMenu_Principal extends javax.swing.JFrame {
                         .addComponent(btnGeneral)
                         .addGap(18, 18, 18)
                         .addComponent(jLabel3)
-                        .addGap(0, 1, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addGap(106, 106, 106))
         );
 

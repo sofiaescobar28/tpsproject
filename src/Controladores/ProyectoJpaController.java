@@ -18,6 +18,7 @@ import gestor_de_proyectos.interfaces.ViewEditar_Proyecto;
 import gestor_de_proyectos.interfaces.ViewMenu_Principal;
 import gestor_de_proyectos.interfaces.ViewPago_de_personal_Historico;
 import gestor_de_proyectos.interfaces.ViewPlanilla;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -111,6 +112,7 @@ public class ProyectoJpaController implements Serializable {
     }
     
     public void iniciarForm(){
+        view.getContentPane().setBackground(new Color(198,146,122));
         view.setTitle("Administrar Proyectos");
         List<Proyecto> ls = findProyectoEntities();
         agregarATabla(ls);
