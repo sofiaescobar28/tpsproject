@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b780f893-ef73-4e90-8cf6-dd78911ebd60">
+	<property name="ireport.zoom" value="1.1000000000000005"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<field name="Cargo" class="java.lang.String"/>
+	<field name="Empleados activos" class="java.lang.Integer"/>
+	<variable name="Sumatoria" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[$F{Empleados activos}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement x="245" y="21" width="70" height="29" uuid="f9bdc1ef-7aff-4535-9706-8514b44ef368"/>
+				<textElement>
+					<font size="18" isBold="true" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Cargos]]></text>
+			</staticText>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="345" y="50" width="188" height="20" uuid="483e5c98-4ff3-4a6b-8e28-dece74f87f4e"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="25" splitType="Stretch">
+			<staticText>
+				<reportElement x="118" y="5" width="197" height="20" uuid="eeb28318-3857-460d-9295-28ee0f56b08e"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Cargo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="315" y="3" width="135" height="20" uuid="534a83d2-8337-4c75-910e-429c0760587d"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[Empleados activos]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="24" splitType="Stretch">
+			<textField>
+				<reportElement stretchType="RelativeToBandHeight" x="118" y="3" width="197" height="20" uuid="70a5a390-7456-4332-a4f7-d6bf0ec65c18"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{Cargo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="315" y="3" width="135" height="20" uuid="f84582b1-6e81-4ef0-869e-4e8ad665e2d5"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{Empleados activos}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="88" splitType="Stretch">
+			<textField>
+				<reportElement x="225" y="57" width="80" height="20" uuid="5f20db19-2e83-4891-8c36-c9b505914faf"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="305" y="57" width="40" height="20" uuid="886b1c77-66f0-49dd-a531-3f8ad0a5e33f"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="315" y="12" width="100" height="20" uuid="1d606519-0dbe-433a-875a-b0238981f825"/>
+				<text><![CDATA[Total de empleados:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="415" y="12" width="100" height="20" uuid="78b6beea-81b1-4abe-a4bc-4eea39e90156"/>
+				<textFieldExpression><![CDATA[$V{Sumatoria}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

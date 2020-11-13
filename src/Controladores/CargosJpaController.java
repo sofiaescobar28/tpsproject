@@ -9,6 +9,8 @@ import AccesoDatos.Cargos;
 import AccesoDatos.Conexion;
 import Controladores.exceptions.NonexistentEntityException;
 import Controladores.exceptions.PreexistingEntityException;
+import Reportes.entidades.CargosDS;
+import Reportes.entidades.ECargos;
 import gestor_de_proyectos.interfaces.ViewCargos;
 import gestor_de_proyectos.interfaces.ViewEditar_Cargo;
 import gestor_de_proyectos.interfaces.ViewNuevo_Cargo;
@@ -39,8 +41,14 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import javax.swing.JOptionPane;
 import javax.swing.RowFilter;
+import javax.swing.WindowConstants;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.view.JasperViewer;
 import oracle.jdbc.OracleCallableStatement;
 import oracle.jdbc.OracleTypes;
 
@@ -67,6 +75,7 @@ public class CargosJpaController implements Serializable {
         this.emf = emf;
         this.view = view;
         this.view.btnNuevoCargo.addActionListener(al);
+        this.view.btnReporte.addActionListener(al);
         this.view.dgvCargos.addMouseListener(new MouseListener() {
 
             public void mouseClicked(MouseEvent e) {
@@ -319,7 +328,19 @@ public class CargosJpaController implements Serializable {
                 nuevocargo.setVisible(true);
                 nuevocargo.getContentPane().setBackground(new Color(153,168,178));
                 nuevocargo.setLocationRelativeTo(null);
-            } else if (e.getSource() == viewEditarCargos.btnGuardarCambios) {
+            }else if(e.getSource()== view.btnReporte){
+                LlenarCargos();
+                try{
+                    JasperReport rep = (JasperReport) JRLoader.loadObject(getClass().getResource("/Reportes/Rep_Cargos.jasper"));                 
+                    JasperPrint jasperPrint = JasperFillManager.fillReport(rep, null,datasource);
+
+                    JasperViewer Jview = new JasperViewer(jasperPrint,false);
+                    Jview.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+                    Jview.setVisible(true);
+                }catch(Exception ex){
+                    JOptionPane.showMessageDialog(view, "error:"+ex);
+                }
+            }else if (e.getSource() == viewEditarCargos.btnGuardarCambios) {
                 if (!viewEditarCargos.txteditarcargo.getText().toString().isEmpty()) {
                     _cargos.setCargos(viewEditarCargos.txteditarcargo.getText().toString().trim());
                   
@@ -522,7 +543,27 @@ public class CargosJpaController implements Serializable {
 
         }
         return null;
-
     }
+    CargosDS datasource = new CargosDS();
+    public void LlenarCargos(){
+       try {
+            claseConnect.AbrirConexionBD();
+            CallableStatement cs
+                    = claseConnect.con.prepareCall("{call llamarCargos(?)}");            
+            cs.registerOutParameter(1, OracleTypes.CURSOR);
 
+            cs.executeQuery();
+
+            ResultSet rset = ((OracleCallableStatement) cs).getCursor(1);
+            while (rset.next()) {
+                ECargos elemento = new ECargos();
+                elemento.setCargo(rset.getString("CARGOS"));
+                elemento.setNum_Emp(rset.getInt("CONTEO"));                
+                datasource.addCargo(elemento);
+            }                           
+            claseConnect.CerrarConexionBD();                         
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(view, "Error: consulta llamar cargos");
+        }        
+    }
 }

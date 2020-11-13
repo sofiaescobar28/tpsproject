@@ -10,12 +10,12 @@ package Reportes.entidades;
  * @author Usuario
  */
 public class EGasto {
-    public String Nombre;
-    public String CargoO;
-    public String CargoT;
-    public String Fecha;
-    public double pago;
-    public String Comentario;
+    private String Nombre;
+    private String CargoO;
+    private String CargoT;
+    private String Fecha;
+    private double pago;
+    private String Comentario;
 
     public EGasto() {
     }
