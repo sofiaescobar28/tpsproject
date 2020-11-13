@@ -12,6 +12,7 @@ import Controladores.exceptions.PreexistingEntityException;
 import gestor_de_proyectos.interfaces.ViewCargos;
 import gestor_de_proyectos.interfaces.ViewEditar_Cargo;
 import gestor_de_proyectos.interfaces.ViewNuevo_Cargo;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -121,7 +122,8 @@ public class CargosJpaController implements Serializable {
     }
 
     public void iniciarForm() {
-        view.setTitle("Formulario Cargos");
+        view.setTitle("Cargos");
+        view.getContentPane().setBackground(new Color(198,146,122));
         List<Cargos> ls = findCargosEntities();
         agregarATabla(ls);
 
@@ -315,6 +317,7 @@ public class CargosJpaController implements Serializable {
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == view.btnNuevoCargo) {
                 nuevocargo.setVisible(true);
+                nuevocargo.getContentPane().setBackground(new Color(153,168,178));
                 nuevocargo.setLocationRelativeTo(null);
             } else if (e.getSource() == viewEditarCargos.btnGuardarCambios) {
                 if (!viewEditarCargos.txteditarcargo.getText().toString().isEmpty()) {
@@ -387,6 +390,7 @@ public class CargosJpaController implements Serializable {
 
             viewEditarCargos.txteditarcargo.setText(obtenerObjeto(fila).getCargos());
             viewEditarCargos.setLocationRelativeTo(null);
+            viewEditarCargos.getContentPane().setBackground(new Color(153,168,178));
             viewEditarCargos.setVisible(true);
 
         } else if (columna == 3) {

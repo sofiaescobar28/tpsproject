@@ -181,6 +181,7 @@ public class ViewMenu_Principal extends javax.swing.JFrame {
     private void btnGeneralMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnGeneralMouseClicked
         ViewGeneralidades general = new ViewGeneralidades();
         general.setVisible(true);
+        general.setTitle("Generalidades");
         general.setLocationRelativeTo(null);
         salida = true;
         this.dispose();

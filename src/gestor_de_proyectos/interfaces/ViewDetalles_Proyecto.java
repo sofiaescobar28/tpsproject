@@ -12,6 +12,7 @@ import AccesoDatos.UnidadesDeMedida;
 import Controladores.CategoriasJpaController;
 import Controladores.IngresoEgresoJpaController;
 import Controladores.UnidadesDeMedidaJpaController;
+import java.awt.Color;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.ParseException;
@@ -30,6 +31,7 @@ public class ViewDetalles_Proyecto extends javax.swing.JFrame {
      * Creates new form Detalles_Proyecto
      */
     public ViewDetalles_Proyecto() {
+        this.getContentPane().setBackground(new Color(153,168,178));
         initComponents();
     }
 
@@ -55,21 +57,28 @@ public class ViewDetalles_Proyecto extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        lblNombre.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        lblNombre.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         lblNombre.setText("Proyecto: ");
 
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel1.setText("Filtro:");
 
+        cmbFiltro.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         cmbFiltro.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Todos", "Egresos", "Ingresos", "Pérdida mercancía" }));
 
+        lblGasto.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         lblGasto.setText("Gasto: $");
 
+        lblIngreso.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         lblIngreso.setText("Ingreso: $");
 
+        lblBalance.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         lblBalance.setText("Balance: $");
 
+        btnReporte.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnReporte.setText("Reporte");
 
+        jTable1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null, null, null},
@@ -96,6 +105,7 @@ public class ViewDetalles_Proyecto extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(jTable1);
 
+        btnNuevo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnNuevo.setText("Nuevo registro");
         btnNuevo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -126,7 +136,7 @@ public class ViewDetalles_Proyecto extends javax.swing.JFrame {
                         .addComponent(lblIngreso)
                         .addGap(80, 80, 80)
                         .addComponent(lblBalance)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 189, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 116, Short.MAX_VALUE)
                         .addComponent(btnNuevo)
                         .addGap(18, 18, 18)
                         .addComponent(btnReporte)))
@@ -147,7 +157,7 @@ public class ViewDetalles_Proyecto extends javax.swing.JFrame {
                     .addComponent(btnReporte)
                     .addComponent(btnNuevo))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 378, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 369, Short.MAX_VALUE)
                 .addContainerGap())
         );
 

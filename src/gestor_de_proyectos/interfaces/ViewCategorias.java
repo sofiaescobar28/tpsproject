@@ -8,6 +8,7 @@ package gestor_de_proyectos.interfaces;
 import AccesoDatos.Entity_Main;
 import Controladores.CargosJpaController;
 import Controladores.CategoriasJpaController;
+import java.awt.Color;
 
 /**
  *
@@ -19,6 +20,7 @@ public class ViewCategorias extends javax.swing.JFrame {
      * Creates new form Categorías
      */
     public ViewCategorias() {
+        this.getContentPane().setBackground(new Color(198,146,122));
         initComponents();
     }
 
@@ -32,7 +34,6 @@ public class ViewCategorias extends javax.swing.JFrame {
     private void initComponents() {
 
         btngrupo2 = new javax.swing.ButtonGroup();
-        label6 = new java.awt.Label();
         jPanel1 = new javax.swing.JPanel();
         btnNuevaCategoria = new javax.swing.JButton();
         btnReporte = new javax.swing.JButton();
@@ -41,12 +42,12 @@ public class ViewCategorias extends javax.swing.JFrame {
         dgvCategorias = new javax.swing.JTable();
         cmbTipodeCate = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(1000, 500));
 
-        label6.setFont(new java.awt.Font("Impact", 0, 24)); // NOI18N
-        label6.setText("Categorías");
+        jPanel1.setBackground(new java.awt.Color(198, 146, 122));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -59,12 +60,16 @@ public class ViewCategorias extends javax.swing.JFrame {
             .addGap(0, 30, Short.MAX_VALUE)
         );
 
+        btnNuevaCategoria.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnNuevaCategoria.setText("Nueva Categoría");
 
+        btnReporte.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnReporte.setText("Reporte");
 
+        txtBuscar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         txtBuscar.setName("txtBuscar"); // NOI18N
 
+        dgvCategorias.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         dgvCategorias.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -84,9 +89,14 @@ public class ViewCategorias extends javax.swing.JFrame {
         dgvCategorias.setColumnSelectionAllowed(true);
         jScrollPane1.setViewportView(dgvCategorias);
 
+        cmbTipodeCate.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         cmbTipodeCate.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Todas las categorías", "Ingresos", "Egresos" }));
 
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel1.setText("Filtro:");
+
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jLabel2.setText("Categorías");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -100,19 +110,19 @@ public class ViewCategorias extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(label6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(151, 151, 151))
+                                .addGap(138, 138, 138)
+                                .addComponent(jLabel2))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel1)
-                                .addGap(18, 18, 18)
-                                .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 392, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cmbTipodeCate, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
-                        .addComponent(btnNuevaCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnReporte)))
+                                .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 392, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(12, 12, 12)
+                                .addComponent(cmbTipodeCate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnNuevaCategoria)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnReporte)))
+                        .addGap(0, 8, Short.MAX_VALUE)))
                 .addGap(19, 19, 19))
         );
         layout.setVerticalGroup(
@@ -122,9 +132,9 @@ public class ViewCategorias extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(25, 25, 25)
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                    .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(label6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jLabel2)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -135,7 +145,7 @@ public class ViewCategorias extends javax.swing.JFrame {
                         .addComponent(btnNuevaCategoria)
                         .addComponent(cmbTipodeCate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 267, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 271, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -187,9 +197,9 @@ public class ViewCategorias extends javax.swing.JFrame {
     public javax.swing.JComboBox<String> cmbTipodeCate;
     public javax.swing.JTable dgvCategorias;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private java.awt.Label label6;
     public javax.swing.JTextField txtBuscar;
     // End of variables declaration//GEN-END:variables
 }

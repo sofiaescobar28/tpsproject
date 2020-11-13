@@ -28,6 +28,7 @@ import gestor_de_proyectos.interfaces.viewEditar_Empleado;
 import gestor_de_proyectos.interfaces.viewEmpleados;
 import gestor_de_proyectos.interfaces.viewNuevo_Empleado;
 import gestor_de_proyectos.interfaces.viewPagar;
+import java.awt.Color;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -348,6 +349,7 @@ public class EmpleadosJpaController implements Serializable {
 
         viewPlanilla.setTitle("Planilla");
         viewPlanilla.lblNombre.setText("Planilla-Proyecto: " + nombre);
+        viewPlanilla.getContentPane().setBackground(new Color(153,168,178));
         agregarATablaPlanilla(ordenarLista());
         id_proy = id;
         viewPlanilla.setVisible(true);
@@ -396,6 +398,7 @@ public class EmpleadosJpaController implements Serializable {
             obtCargoACombo(vEditE.cmbcargo);
             vEditE.cmbcargo.setSelectedItem(_cargos.getCargos());
             vEditE.setLocationRelativeTo(null);
+            vEditE.getContentPane().setBackground(new Color(153,168,178));
             vEditE.setVisible(true);
         } else if (columna == 7) {
             obtenerObjetoP(fila);
@@ -662,6 +665,7 @@ public class EmpleadosJpaController implements Serializable {
 
                 obtCargoACombo(vNuevoE.cmbcargo);
                 vNuevoE.setVisible(true);
+                vNuevoE.getContentPane().setBackground(new Color(153,168,178));
                 vNuevoE.setLocationRelativeTo(null);
 
             } else if (e.getSource() == vNuevoE.btnGuardar) {
@@ -1111,6 +1115,7 @@ public class EmpleadosJpaController implements Serializable {
                 _emp = new Empleados();
                 obtCargoACombo(vNuevoE.cmbcargo);
                 vNuevoE.setVisible(true);
+                vNuevoE.getContentPane().setBackground(new Color(153,168,178));
                 vNuevoE.setLocationRelativeTo(null);
             } else if (ae.getSource() == vNuevoE.btnGuardar) {
                 if (!vNuevoE.txtEmpleado.getText().trim().isEmpty() && !vNuevoE.txtSalario.getText().trim().isEmpty()) {

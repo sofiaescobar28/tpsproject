@@ -11,6 +11,7 @@ import Controladores.exceptions.NonexistentEntityException;
 import Controladores.exceptions.PreexistingEntityException;
 import gestor_de_proyectos.interfaces.viewCrea_Editar_Unidad_Medida;
 import gestor_de_proyectos.interfaces.viewUnidades_de_medida;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -103,6 +104,7 @@ public class UnidadesDeMedidaJpaController implements Serializable {
     
     public void iniciarForm(){
         view.setTitle("Formulario Unidades de medida");
+        view.getContentPane().setBackground(new Color(198,146,122));
         List<UnidadesDeMedida> lista = findUnidadesDeMedidaEntities();
         llenarTabla(lista);
         view.setVisible(true);

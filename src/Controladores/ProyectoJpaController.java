@@ -122,6 +122,7 @@ public class ProyectoJpaController implements Serializable {
     
     public void iniciarFormCrearEditar(){
         view.setTitle("Crear/Editar Proyecto");
+        view.getContentPane().setBackground(new Color(153,168,178));
         view.setLocationRelativeTo(null);
     }
     
@@ -134,9 +135,9 @@ public class ProyectoJpaController implements Serializable {
     public void agregarATabla(List<Proyecto> obj){
         DefaultTableModel model = new DefaultTableModel();
         model.addColumn("ID");
-        model.addColumn("Proyecto");
-        model.addColumn("Fecha inicio");
-        model.addColumn("Estado");
+        model.addColumn("PROYECTO");
+        model.addColumn("FECHA INICIO");
+        model.addColumn("ESTADO");
         model.addColumn("");
         model.addColumn("");
         model.addColumn("");
@@ -185,9 +186,9 @@ public class ProyectoJpaController implements Serializable {
     public void agregarATabla(ArrayList<Proyecto> obj){
         DefaultTableModel model = new DefaultTableModel();
         model.addColumn("ID");
-        model.addColumn("Proyecto");
-        model.addColumn("Fecha inicio");
-        model.addColumn("Estado");
+        model.addColumn("PROYECTO");
+        model.addColumn("FECHA INICIO");
+        model.addColumn("ESTADO");
         model.addColumn("");
         model.addColumn("");
         model.addColumn("");
@@ -251,6 +252,7 @@ public class ProyectoJpaController implements Serializable {
             String nombre = view.dgtProyectos.getValueAt(fila, 1).toString();
             ctrlInEg.iniciarForm(id, nombre);
             detalles.setVisible(true);
+            detalles.getContentPane().setBackground(new Color(153,168,178));
             detalles.setLocationRelativeTo(null);
         }
         else if (columna == 5) {
@@ -262,6 +264,7 @@ public class ProyectoJpaController implements Serializable {
             editarPro.spnFecha.setValue(_proyectos.getProyFecha());
             editarPro.jTextField1.setVisible(false);
             editarPro.setTitle("Editar proyecto");
+            editarPro.getContentPane().setBackground(new Color(153,168,178));
             editarPro.setVisible(true);
             editarPro.setLocationRelativeTo(null);
         }
@@ -593,6 +596,7 @@ public class ProyectoJpaController implements Serializable {
                 CEproyecto.cmbEstado.setSelectedIndex(0);
                 CEproyecto.setTitle("Crear Proyecto");
                 CEproyecto.setVisible(true);
+                CEproyecto.getContentPane().setBackground(new Color(153,168,178));
                 CEproyecto.setLocationRelativeTo(null);
             }
             else if (ae.getSource() == CEproyecto.btnCrear) {

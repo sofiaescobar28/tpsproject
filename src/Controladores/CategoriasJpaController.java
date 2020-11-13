@@ -16,6 +16,7 @@ import gestor_de_proyectos.interfaces.ViewCategorias;
 import gestor_de_proyectos.interfaces.ViewEditar_Categoria;
 import gestor_de_proyectos.interfaces.ViewNueva_Categoria;
 import gestor_de_proyectos.interfaces.ViewNuevo_Cargo;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -129,7 +130,8 @@ public class CategoriasJpaController implements Serializable {
     }
 
     public void iniciarForm() {
-        viewCategorias.setTitle("Formulario Cargos");
+        viewCategorias.setTitle("Categorías");
+        viewCategorias.getContentPane().setBackground(new Color(198,146,122));
         List<Categorias> ls = findCategoriasEntities();
         agregarATabla(ls);
         viewCategorias.setVisible(true);
@@ -358,6 +360,7 @@ public class CategoriasJpaController implements Serializable {
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == viewCategorias.btnNuevaCategoria) {
                 viewNuevaCat.setVisible(true);
+                viewNuevaCat.getContentPane().setBackground(new Color(153,168,178));
                 viewNuevaCat.setLocationRelativeTo(null);
 
             } else if (e.getSource() == viewNuevaCat.btnCancelar) {
@@ -461,6 +464,7 @@ public class CategoriasJpaController implements Serializable {
             viewEditCate.cmbTipoCategoria.setSelectedIndex(_categorias.getCatTipo().intValue());
 
             viewEditCate.setLocationRelativeTo(null);
+            viewEditCate.getContentPane().setBackground(new Color(153,168,178));
             viewEditCate.setVisible(true);
 
         }

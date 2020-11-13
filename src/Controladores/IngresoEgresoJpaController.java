@@ -29,6 +29,7 @@ import gestor_de_proyectos.interfaces.ViewDetalles_Proyecto;
 import gestor_de_proyectos.interfaces.ViewEditar_Registro;
 import gestor_de_proyectos.interfaces.ViewPlanilla;
 import gestor_de_proyectos.interfaces.viewUnidades_de_medida;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -120,6 +121,7 @@ public class IngresoEgresoJpaController implements Serializable {
     
     public void iniciarForm(Integer id, String nombre){
         view.setTitle("Detalles de Proyecto");
+        view.getContentPane().setBackground(new Color(153,168,178));
         id_proy = id;
         id_segundo = id;
         nombre_proy = nombre;
@@ -416,6 +418,7 @@ public class IngresoEgresoJpaController implements Serializable {
         viewEditRegistro.jTextField1.setVisible(false);
         viewEditRegistro.setTitle("Editar registro");
         viewEditRegistro.setVisible(true);
+        viewEditRegistro.getContentPane().setBackground(new Color(153,168,178));
         viewEditRegistro.setLocationRelativeTo(null);
     }
     
@@ -715,6 +718,7 @@ public class IngresoEgresoJpaController implements Serializable {
 //                viewCreatRegistro.txtMonto.setText("");
         viewCreatRegistro.setTitle("Nuevo Registro");
         viewCreatRegistro.setVisible(true);
+        viewCreatRegistro.getContentPane().setBackground(new Color(153,168,178));
         viewCreatRegistro.setLocationRelativeTo(null);
     }
     

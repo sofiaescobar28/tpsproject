@@ -7,6 +7,7 @@ package gestor_de_proyectos.interfaces;
 
 import AccesoDatos.Entity_Main;
 import Controladores.EmpleadosJpaController;
+import java.awt.Color;
 
 /**
  *
@@ -18,6 +19,7 @@ public class viewEmpleados extends javax.swing.JFrame {
      * Creates new form Empleados
      */
     public viewEmpleados() {
+        this.getContentPane().setBackground(new Color(198,146,122));
         initComponents();
     }
 
@@ -37,19 +39,22 @@ public class viewEmpleados extends javax.swing.JFrame {
         jTableEmpleados = new javax.swing.JTable();
         txtBuscar = new javax.swing.JTextField();
         btnNuevoempleado = new javax.swing.JButton();
-        label6 = new java.awt.Label();
         jLabel1 = new javax.swing.JLabel();
+        lblNombre = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(1000, 500));
 
         buttonGroup1.add(radEmpleado);
+        radEmpleado.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         radEmpleado.setText("Empleado");
 
         buttonGroup1.add(rdCargo);
+        rdCargo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         rdCargo.setSelected(true);
         rdCargo.setText("Cargo");
 
+        jTableEmpleados.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jTableEmpleados.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -71,12 +76,16 @@ public class viewEmpleados extends javax.swing.JFrame {
             jTableEmpleados.getColumnModel().getColumn(1).setMinWidth(200);
         }
 
+        txtBuscar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+
+        btnNuevoempleado.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnNuevoempleado.setText("Nuevo empleado");
 
-        label6.setFont(new java.awt.Font("Impact", 0, 24)); // NOI18N
-        label6.setText("Empleados");
-
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel1.setText("Filtro:");
+
+        lblNombre.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        lblNombre.setText("Empleados");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -94,28 +103,26 @@ public class viewEmpleados extends javax.swing.JFrame {
                                 .addComponent(rdCargo, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addComponent(radEmpleado)
-                                .addGap(118, 118, 118)
-                                .addComponent(label6, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 575, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btnNuevoempleado, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 563, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnNuevoempleado, javax.swing.GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE)))))
                 .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lblNombre)
+                .addGap(338, 338, 338))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(rdCargo)
-                            .addComponent(radEmpleado)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(label6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap()
+                .addComponent(lblNombre)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(rdCargo)
+                    .addComponent(radEmpleado))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1)
@@ -170,7 +177,7 @@ public class viewEmpleados extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     public javax.swing.JTable jTableEmpleados;
-    private java.awt.Label label6;
+    private javax.swing.JLabel lblNombre;
     public javax.swing.JRadioButton radEmpleado;
     public javax.swing.JRadioButton rdCargo;
     public javax.swing.JTextField txtBuscar;

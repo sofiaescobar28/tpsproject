@@ -55,18 +55,29 @@ public class ViewAdministrar_Proyecto extends javax.swing.JFrame {
             }
         });
 
+        jPanel1.setBackground(new java.awt.Color(198, 146, 122));
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel1.setText("Estados:");
 
+        cmbEstados.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         cmbEstados.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Todos", "Activo", "Inactivo", "Finalizado" }));
 
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel2.setText("Años:");
 
+        cmbAnios.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         cmbAnios.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Todos" }));
 
-        jLabel3.setText("Proyecto");
+        txtBuscar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
+        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel3.setText("Proyecto:");
+
+        btnBuscar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnBuscar.setText("Buscar");
 
+        btnTodos.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnTodos.setText("Todos");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -82,7 +93,7 @@ public class ViewAdministrar_Proyecto extends javax.swing.JFrame {
                         .addComponent(txtBuscar)
                         .addGap(18, 18, 18))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap(240, Short.MAX_VALUE)
+                        .addContainerGap(191, Short.MAX_VALUE)
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(cmbEstados, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -114,13 +125,15 @@ public class ViewAdministrar_Proyecto extends javax.swing.JFrame {
                 .addContainerGap(24, Short.MAX_VALUE))
         );
 
-        lblNombre.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        lblNombre.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         lblNombre.setText("Proyectos");
 
         btnNuevo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/plus1.png"))); // NOI18N
 
+        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel4.setText("Nuevo proyecto");
 
+        dgtProyectos.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         dgtProyectos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -137,6 +150,7 @@ public class ViewAdministrar_Proyecto extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        dgtProyectos.setGridColor(new java.awt.Color(198, 146, 122));
         jScrollPane1.setViewportView(dgtProyectos);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -172,7 +186,7 @@ public class ViewAdministrar_Proyecto extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 331, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 320, Short.MAX_VALUE)
                         .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
                         .addGap(26, 26, 26)
