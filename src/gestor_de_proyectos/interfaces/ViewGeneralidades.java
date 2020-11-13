@@ -50,6 +50,11 @@ public class ViewGeneralidades extends javax.swing.JFrame {
         lblNombre = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+        });
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
@@ -258,6 +263,15 @@ public class ViewGeneralidades extends javax.swing.JFrame {
         menuPrincipal.setVisible(true);
         this.dispose();       
     }//GEN-LAST:event_btnUnidades4ActionPerformed
+
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        // TODO add your handling code here:
+        ViewMenu_Principal menu = new ViewMenu_Principal();
+        menu.setTitle("Menú Principal");
+        menu.setVisible(true);
+        menu.setLocationRelativeTo(null);
+        this.dispose();
+    }//GEN-LAST:event_formWindowClosed
 
     /**
      * @param args the command line arguments

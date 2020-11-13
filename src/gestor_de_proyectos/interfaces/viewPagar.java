@@ -5,6 +5,8 @@
  */
 package gestor_de_proyectos.interfaces;
 
+import java.awt.Color;
+
 /**
  *
  * @author Usuario
@@ -16,6 +18,12 @@ public class viewPagar extends javax.swing.JFrame {
      */
     public viewPagar() {
         initComponents();
+        this.getContentPane().setBackground(new Color(176,194,170));
+        jLabel1.setBackground(new Color(176,194,170));
+        jLabel2.setBackground(new Color(176,194,170));
+        jLabel3.setBackground(new Color(176,194,170));
+        jLabel4.setBackground(new Color(176,194,170));
+        label6.setBackground(new Color(176,194,170));
     }
 
     /**
@@ -44,27 +52,39 @@ public class viewPagar extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setBackground(new java.awt.Color(0, 0, 0));
 
+        txtEmpleado.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         txtEmpleado.setEnabled(false);
 
-        label6.setFont(new java.awt.Font("Impact", 0, 24)); // NOI18N
+        label6.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         label6.setText("Pagar");
 
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel1.setText("Empleado:");
 
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel2.setText("Cargo:");
 
+        cmbcargo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+
+        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel3.setText("Pago:");
 
+        txtPago.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         txtPago.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtPagoKeyTyped(evt);
             }
         });
 
+        btnCancelar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnCancelar.setText("Cancelar");
 
-        btnPagar.setText("Realizar Pago");
+        btnPagar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnPagar.setText("Realizar pago");
 
+        txtComentario.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+
+        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel4.setText("Comentario:");
 
         lblError.setBackground(new java.awt.Color(204, 0, 0));
@@ -95,15 +115,16 @@ public class viewPagar extends javax.swing.JFrame {
                                 .addComponent(lblError)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel5)
-                                .addGap(0, 0, Short.MAX_VALUE))
+                                .addGap(0, 129, Short.MAX_VALUE))
                             .addComponent(txtEmpleado)
                             .addComponent(cmbcargo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(txtComentario)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(54, 54, 54)
+                        .addGap(74, 74, 74)
+                        .addComponent(btnPagar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnCancelar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 142, Short.MAX_VALUE)
-                        .addComponent(btnPagar)))
+                        .addGap(37, 37, 37)))
                 .addGap(32, 32, 32))
             .addGroup(layout.createSequentialGroup()
                 .addGap(164, 164, 164)
@@ -137,7 +158,7 @@ public class viewPagar extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnPagar)
                     .addComponent(btnCancelar))
-                .addContainerGap(28, Short.MAX_VALUE))
+                .addContainerGap(25, Short.MAX_VALUE))
         );
 
         pack();

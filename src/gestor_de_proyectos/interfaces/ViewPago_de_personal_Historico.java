@@ -5,6 +5,8 @@
  */
 package gestor_de_proyectos.interfaces;
 
+import java.awt.Color;
+
 /**
  *
  * @author Manuel
@@ -16,6 +18,9 @@ public class ViewPago_de_personal_Historico extends javax.swing.JFrame {
      */
     public ViewPago_de_personal_Historico() {
         initComponents();
+        this.getContentPane().setBackground(new Color(153,168,178));
+        jLabel1.setBackground(new Color(153,168,178));
+        lblNomProy.setBackground(new Color(153,168,178));
     }
 
     /**
@@ -42,18 +47,24 @@ public class ViewPago_de_personal_Historico extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
+        txtBuscar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+
         buttonGroup1.add(radEmp);
+        radEmp.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         radEmp.setSelected(true);
         radEmp.setText("Empleado");
 
         buttonGroup1.add(radCom);
+        radCom.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         radCom.setText("Comentario");
 
-        lblNomProy.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        lblNomProy.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         lblNomProy.setText("Nombre del Proyecto");
 
+        btnReporte.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnReporte.setText("Reporte");
 
+        dgvpagos.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         dgvpagos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -73,12 +84,16 @@ public class ViewPago_de_personal_Historico extends javax.swing.JFrame {
         jScrollPane1.setViewportView(dgvpagos);
 
         buttonGroup1.add(radCarTemp);
+        radCarTemp.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         radCarTemp.setText("Cargo temporal");
 
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel1.setText("Filtro:");
 
+        btnTodo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnTodo.setText("Todos");
 
+        lblProID.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         lblProID.setText("jLabel2");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());

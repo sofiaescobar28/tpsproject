@@ -41,6 +41,11 @@ public class ViewUsuarios extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+        });
 
         cmbEstado.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
@@ -132,6 +137,15 @@ public class ViewUsuarios extends javax.swing.JFrame {
     private void btnTodosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTodosActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnTodosActionPerformed
+
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        // TODO add your handling code here:
+        ViewMenu_Principal menu = new ViewMenu_Principal();
+        menu.setTitle("Menú Principal");
+        menu.setVisible(true);
+        menu.setLocationRelativeTo(null);
+        this.dispose();
+    }//GEN-LAST:event_formWindowClosed
 
     /**
      * @param args the command line arguments
