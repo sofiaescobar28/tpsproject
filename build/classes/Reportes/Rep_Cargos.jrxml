@@ -32,14 +32,14 @@
 	<columnHeader>
 		<band height="25" splitType="Stretch">
 			<staticText>
-				<reportElement x="118" y="5" width="197" height="20" uuid="eeb28318-3857-460d-9295-28ee0f56b08e"/>
+				<reportElement x="28" y="2" width="197" height="20" uuid="eeb28318-3857-460d-9295-28ee0f56b08e"/>
 				<textElement textAlignment="Center">
 					<font size="14" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Cargo]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="315" y="3" width="135" height="20" uuid="534a83d2-8337-4c75-910e-429c0760587d"/>
+				<reportElement x="225" y="0" width="135" height="20" uuid="534a83d2-8337-4c75-910e-429c0760587d"/>
 				<textElement>
 					<font size="14"/>
 				</textElement>
@@ -50,12 +50,12 @@
 	<detail>
 		<band height="24" splitType="Stretch">
 			<textField>
-				<reportElement stretchType="RelativeToBandHeight" x="118" y="3" width="197" height="20" uuid="70a5a390-7456-4332-a4f7-d6bf0ec65c18"/>
+				<reportElement stretchType="RelativeToBandHeight" x="28" y="0" width="197" height="20" uuid="70a5a390-7456-4332-a4f7-d6bf0ec65c18"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{Cargo}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="315" y="3" width="135" height="20" uuid="f84582b1-6e81-4ef0-869e-4e8ad665e2d5"/>
+				<reportElement x="225" y="0" width="135" height="20" uuid="f84582b1-6e81-4ef0-869e-4e8ad665e2d5"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{Empleados activos}]]></textFieldExpression>
 			</textField>

@@ -244,14 +244,13 @@ public class UsuariosJpaController implements Serializable {
             int cont = 0;
             for (Object valor : obj){
                 if (obj.get(cont).getUserEstado().toString().equals("1")) {
-                    String destinatario = "josselynescobar464@gmail.com";
-                    //String destinatario =  obj.get(cont).getUserCorreo(); //A quien le quieres escribir.
+                    String destinatario =  obj.get(cont).getUserCorreo(); //A quien le quieres escribir.
                     String asunto = "Recuperar contraseña de Gestor de Proyectos";
                     String cuerpo = "Ha seleccionado recuperar contraseña. Su usuario es: " + obj.get(cont).getUserClave() + " y su contraseña es: " + obj.get(cont).getUserContrasena();
                     enviarConGMail(destinatario, asunto, cuerpo);
                 }
                 else{
-                    JOptionPane.showMessageDialog(view, "No puede realizar esta acción porque el usuario está inactivo");
+                    JOptionPane.showMessageDialog(view, "No puede realizar esta acción porque el usuario está inactivo.");
                 }
             }
             
@@ -279,7 +278,7 @@ public class UsuariosJpaController implements Serializable {
     
     public void enviarConGMail(String destinatario, String asunto, String cuerpo) {
         // Esto es lo que va delante de @gmail.com en tu cuenta de correo. Es el remitente también.
-        String remitente = "universo.desarrollo01";  //Para la dirección nomcuenta@gmail.com
+        String remitente = "universo.desarrollo01@gmail.com";  //Para la dirección nomcuenta@gmail.com
         String clave = "universodesa";
         Properties props = System.getProperties();
         props.put("mail.smtp.host", "smtp.gmail.com");  //El servidor SMTP de Google
@@ -323,7 +322,7 @@ public class UsuariosJpaController implements Serializable {
                         String met = verificarContra(view.txtUsuario.getText().trim().toString());
                         if (met != null) {
                             if (!view.txtContra.getText().trim().toString().equals(met)) {
-                                JOptionPane.showMessageDialog(view, "La contraseña es incorrecta");
+                                JOptionPane.showMessageDialog(view, "La contraseña es incorrecta.");
                             }
                             else{
                                 menu.setTitle("Menú principal");
@@ -333,11 +332,11 @@ public class UsuariosJpaController implements Serializable {
                             }
                         }
                         else{
-                            JOptionPane.showMessageDialog(view, "El usuario no existe.");
+                            JOptionPane.showMessageDialog(view, "El usuario es inactivo o no existe.");
                         }
                     }
                     else{
-                        JOptionPane.showMessageDialog(view, "El usuario es inactivo");
+                        JOptionPane.showMessageDialog(view, "El usuario es inactivo o no existe.");
                     }
                 }
             }
@@ -350,7 +349,7 @@ public class UsuariosJpaController implements Serializable {
                         validandoUsuario(correo(view.txtUsuario.getText().trim()));
                     }
                     else{
-                        JOptionPane.showMessageDialog(view, "Este usuario existe");
+                        JOptionPane.showMessageDialog(view, "Este usuario no existe.");
                     }
                 }
             }
