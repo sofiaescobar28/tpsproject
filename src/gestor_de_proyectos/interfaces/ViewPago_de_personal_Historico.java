@@ -64,6 +64,11 @@ public class ViewPago_de_personal_Historico extends javax.swing.JFrame {
         btnReporte.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnReporte.setText("Reporte");
 
+        dgvpagos = new javax.swing.JTable(){
+            public boolean isCellEditable(int rowIndex, int colIndex){
+                return false;
+            }
+        };
         dgvpagos.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         dgvpagos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -81,6 +86,7 @@ public class ViewPago_de_personal_Historico extends javax.swing.JFrame {
                 return types [columnIndex];
             }
         });
+        dgvpagos.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(dgvpagos);
 
         buttonGroup1.add(radCarTemp);

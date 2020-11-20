@@ -58,6 +58,11 @@ public class ViewCargos extends javax.swing.JFrame {
         btnReporte.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnReporte.setText("Reporte");
 
+        dgvCargos = new javax.swing.JTable(){
+            public boolean isCellEditable(int rowIndex, int colIndex){
+                return false;
+            }
+        };
         dgvCargos.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         dgvCargos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -76,6 +81,7 @@ public class ViewCargos extends javax.swing.JFrame {
             }
         });
         dgvCargos.setColumnSelectionAllowed(true);
+        dgvCargos.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(dgvCargos);
         dgvCargos.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         if (dgvCargos.getColumnModel().getColumnCount() > 0) {

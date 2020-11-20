@@ -44,6 +44,11 @@ public class viewUnidades_de_medida extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
+        dgvUnidades = new javax.swing.JTable(){
+            public boolean isCellEditable(int rowIndex, int colIndex){
+                return false;
+            }
+        };
         dgvUnidades.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -52,6 +57,7 @@ public class viewUnidades_de_medida extends javax.swing.JFrame {
                 "ID", "Unidad", "Editar"
             }
         ));
+        dgvUnidades.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(dgvUnidades);
 
         btnBuscar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N

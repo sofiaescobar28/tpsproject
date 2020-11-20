@@ -44,7 +44,10 @@ public class ViewCrear_Proyecto extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         btnCancelar = new javax.swing.JButton();
         btnCrear = new javax.swing.JButton();
-        spnFecha = new javax.swing.JSpinner();
+        Date date = new Date();
+        SpinnerDateModel sm =
+        new SpinnerDateModel(date, null, null, Calendar.DAY_OF_MONTH);
+        spnFecha = new javax.swing.JSpinner(sm);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -71,6 +74,8 @@ public class ViewCrear_Proyecto extends javax.swing.JFrame {
         btnCrear.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnCrear.setText("Crear");
 
+        JSpinner.DateEditor de = new JSpinner.DateEditor(spnFecha, "dd-MM-yyyy");
+        spnFecha.setEditor(de);
         spnFecha.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         spnFecha.setModel(new javax.swing.SpinnerDateModel());
 

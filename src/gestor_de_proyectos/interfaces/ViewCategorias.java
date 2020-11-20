@@ -69,6 +69,11 @@ public class ViewCategorias extends javax.swing.JFrame {
         txtBuscar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         txtBuscar.setName("txtBuscar"); // NOI18N
 
+        dgvCategorias = new javax.swing.JTable(){
+            public boolean isCellEditable(int rowIndex, int colIndex){
+                return false;
+            }
+        };
         dgvCategorias.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         dgvCategorias.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -87,6 +92,7 @@ public class ViewCategorias extends javax.swing.JFrame {
             }
         });
         dgvCategorias.setColumnSelectionAllowed(true);
+        dgvCategorias.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(dgvCategorias);
 
         cmbTipodeCate.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N

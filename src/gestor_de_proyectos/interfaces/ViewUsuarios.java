@@ -57,6 +57,11 @@ public class ViewUsuarios extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel1.setText("Estado:");
 
+        dgvUsuarios = new javax.swing.JTable(){
+            public boolean isCellEditable(int rowIndex, int colIndex){
+                return false;
+            }
+        };
         dgvUsuarios.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         dgvUsuarios.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -66,6 +71,7 @@ public class ViewUsuarios extends javax.swing.JFrame {
                 "ID", "Nombre", "Clave", "Correo", "Estado", "Contraseña", ""
             }
         ));
+        dgvUsuarios.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(dgvUsuarios);
 
         btnTodos.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N

@@ -46,6 +46,7 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerDateModel;
@@ -235,12 +236,13 @@ public class ProyectoJpaController implements Serializable {
     }
     
     public void llenarComboAnios(){
-        List<Integer> lstAnios = new ArrayList<>();
+        ArrayList<String> anios = new ArrayList();
         int year = Calendar.getInstance().get(Calendar.YEAR);
-        for (int i = year; i > 2014; i--) {
-            lstAnios.add(i);
+        anios.add("Todos");
+        for (int i = year+5; i > 2014; i--) {
+            anios.add(String.valueOf(i));
         }
-        view.cmbAnios.setModel(new DefaultComboBoxModel(lstAnios.toArray(new Integer[lstAnios.size()])));
+        view.cmbAnios.setModel(new DefaultComboBoxModel(anios.toArray()));
     }
     
     public void leerTabla(){
@@ -261,7 +263,7 @@ public class ProyectoJpaController implements Serializable {
             editarPro.jTextField1.setText(_proyectos.getProyId().toString());
             editarPro.txtProyecto.setText(_proyectos.getProyNombre());
             editarPro.cmbEstado.setSelectedIndex(Integer.parseInt(_proyectos.getProyEstado().toString()));
-            editarPro.spnFecha.setValue(_proyectos.getProyFecha());
+            editarPro.spinFecha.setValue(_proyectos.getProyFecha());
             editarPro.jTextField1.setVisible(false);
             editarPro.setTitle("Editar proyecto");
             editarPro.getContentPane().setBackground(new Color(153,168,178));
@@ -441,7 +443,7 @@ public class ProyectoJpaController implements Serializable {
         }
     }
     
-    public ArrayList<Proyecto> filtros(String estado, String anio, String texto){
+    public ArrayList<Proyecto> filtrosEAT(String estado, String anio, String texto){
         int status;
         if (estado.equals("Activo")) {
             status = 1;
@@ -481,7 +483,84 @@ public class ProyectoJpaController implements Serializable {
         return null;
     }
     
-    public ArrayList<Proyecto> filtros(String estado, String anio){
+    public ArrayList<Proyecto> filtrosET(String estado, String texto){
+        int status;
+        if (estado.equals("Activo")) {
+            status = 1;
+        }else if (estado.equals("Inactivo")) {
+            status = 0;
+        }else{
+            status = 2;
+        }
+        
+        try {
+            claseConnect.AbrirConexionBD();
+            CallableStatement cs = claseConnect.con.prepareCall("{call buscarEstadoTexto(?,?,?)}");
+            cs.setInt(1,status);
+            cs.setString(2, texto);
+            cs.registerOutParameter(3, OracleTypes.CURSOR);
+            cs.executeQuery();
+            
+            ResultSet rset = ((OracleCallableStatement) cs).getCursor(3);
+            ArrayList<Proyecto> Datos = new ArrayList<Proyecto>();
+            
+            while (rset.next()){
+                _proyectos = new Proyecto();
+                _proyectos.setProyId(rset.getBigDecimal("PROY_ID"));
+                _proyectos.setProyNombre(rset.getString("PROY_NOMBRE"));
+                _proyectos.setProyFecha(rset.getDate("PROY_FECHA"));
+                _proyectos.setProyEstado(new BigInteger(Integer.valueOf(rset.getInt("PROY_ESTADO")).toString()));
+                
+                Datos.add(_proyectos);
+            }
+            claseConnect.CerrarConexionBD();
+            return Datos;
+            
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(view, "Error: " + e.getMessage());
+        }
+        return null;
+    }
+    
+    public ArrayList<Proyecto> filtrosE(String estado){
+        int status;
+        if (estado.equals("Activo")) {
+            status = 1;
+        }else if (estado.equals("Inactivo")) {
+            status = 0;
+        }else{
+            status = 2;
+        }
+        
+        try {
+            claseConnect.AbrirConexionBD();
+            CallableStatement cs = claseConnect.con.prepareCall("{call buscarEstado(?,?)}");
+            cs.setInt(1,status);
+            cs.registerOutParameter(2, OracleTypes.CURSOR);
+            cs.executeQuery();
+            
+            ResultSet rset = ((OracleCallableStatement) cs).getCursor(2);
+            ArrayList<Proyecto> Datos = new ArrayList<Proyecto>();
+            
+            while (rset.next()){
+                _proyectos = new Proyecto();
+                _proyectos.setProyId(rset.getBigDecimal("PROY_ID"));
+                _proyectos.setProyNombre(rset.getString("PROY_NOMBRE"));
+                _proyectos.setProyFecha(rset.getDate("PROY_FECHA"));
+                _proyectos.setProyEstado(new BigInteger(Integer.valueOf(rset.getInt("PROY_ESTADO")).toString()));
+                
+                Datos.add(_proyectos);
+            }
+            claseConnect.CerrarConexionBD();
+            return Datos;
+            
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(view, "Error: " + e.getMessage());
+        }
+        return null;
+    }
+    
+    public ArrayList<Proyecto> filtrosEA(String estado, String anio){
         int status;
         if (estado.equals("Activo")) {
             status = 1;
@@ -520,7 +599,7 @@ public class ProyectoJpaController implements Serializable {
         return null;
     }
     
-    public ArrayList<Proyecto> filtrosAnioTexto(String anio, String texto){
+    public ArrayList<Proyecto> filtrosAT(String anio, String texto){
         
         try {
             claseConnect.AbrirConexionBD();
@@ -551,12 +630,42 @@ public class ProyectoJpaController implements Serializable {
         return null;
     }
     
-    public ArrayList<Proyecto> filtros(String anio){
+    public ArrayList<Proyecto> filtrosA(String anio){
         
         try {
             claseConnect.AbrirConexionBD();
             CallableStatement cs = claseConnect.con.prepareCall("{call buscarAnio(?,?)}");
             cs.setInt(1, Integer.parseInt(anio));
+            cs.registerOutParameter(2, OracleTypes.CURSOR);
+            cs.executeQuery();
+            
+            ResultSet rset = ((OracleCallableStatement) cs).getCursor(2);
+            ArrayList<Proyecto> Datos = new ArrayList<Proyecto>();
+            
+            while (rset.next()){
+                _proyectos = new Proyecto();
+                _proyectos.setProyId(rset.getBigDecimal("PROY_ID"));
+                _proyectos.setProyNombre(rset.getString("PROY_NOMBRE"));
+                _proyectos.setProyFecha(rset.getDate("PROY_FECHA"));
+                _proyectos.setProyEstado(new BigInteger(Integer.valueOf(rset.getInt("PROY_ESTADO")).toString()));
+                
+                Datos.add(_proyectos);
+            }
+            claseConnect.CerrarConexionBD();
+            return Datos;
+            
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(view, "Error: " + e.getMessage());
+        }
+        return null;
+    }
+    
+    public ArrayList<Proyecto> filtrosT(String texto){
+        
+        try {
+            claseConnect.AbrirConexionBD();
+            CallableStatement cs = claseConnect.con.prepareCall("{call buscarTextoB(?,?)}");
+            cs.setString(1, texto);
             cs.registerOutParameter(2, OracleTypes.CURSOR);
             cs.executeQuery();
             
@@ -602,7 +711,7 @@ public class ProyectoJpaController implements Serializable {
             else if (ae.getSource() == CEproyecto.btnCrear) {
                 try {
                     formCrear();
-                    CEproyecto.dispose();
+                    
                 } catch (ParseException ex) {
                     Logger.getLogger(ProyectoJpaController.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -627,33 +736,59 @@ public class ProyectoJpaController implements Serializable {
     public void busqueda(){
         if (view.cmbEstados.getSelectedIndex()>0) {
             //selecciono un estado
-            if (view.cmbAnios.getSelectedIndex()>=0) {
+            if (view.cmbAnios.getSelectedIndex()>0) {
                 //selecciono un año
                 if(!view.txtBuscar.getText().trim().toString().isEmpty()){
                     //escribio nombre
-                    ArrayList<Proyecto> list = filtros(view.cmbEstados.getSelectedItem().toString(), view.cmbAnios.getSelectedItem().toString(), view.txtBuscar.getText().trim());
+                    ArrayList<Proyecto> list = filtrosEAT(view.cmbEstados.getSelectedItem().toString(), view.cmbAnios.getSelectedItem().toString(), view.txtBuscar.getText().trim());
                     agregarATabla(list);
                 }
                 else{
                     //no escribio nombre
-                    ArrayList<Proyecto> list = filtros(view.cmbEstados.getSelectedItem().toString(), view.cmbAnios.getSelectedItem().toString());
+                    ArrayList<Proyecto> list = filtrosEA(view.cmbEstados.getSelectedItem().toString(), view.cmbAnios.getSelectedItem().toString());
+                    agregarATabla(list);
+                }
+            }
+            else {
+                //no seleccionó un año
+                if(!view.txtBuscar.getText().trim().toString().isEmpty()){
+                    //escribio nombre
+                    ArrayList<Proyecto> list = filtrosET(view.cmbEstados.getSelectedItem().toString(), view.txtBuscar.getText().trim());
+                    agregarATabla(list);
+                }
+                else{
+                    //no escribio nombre
+                    ArrayList<Proyecto> list = filtrosE(view.cmbEstados.getSelectedItem().toString());
                     agregarATabla(list);
                 }
             }
         }
         else{
             //no selecciono un estado
-            if (view.cmbAnios.getSelectedIndex()>=0) {
+            if (view.cmbAnios.getSelectedIndex()>0) {
                 //selecciono un año
                 if(!view.txtBuscar.getText().trim().toString().isEmpty()){
                     //escribio nombre
-                    ArrayList<Proyecto> list = filtrosAnioTexto(view.cmbAnios.getSelectedItem().toString(), view.txtBuscar.getText().trim());
+                    ArrayList<Proyecto> list = filtrosAT(view.cmbAnios.getSelectedItem().toString(), view.txtBuscar.getText().trim());
                     agregarATabla(list);
                 }
                 else{
                     //no escribio nombre
-                    ArrayList<Proyecto> list = filtros(view.cmbAnios.getSelectedItem().toString());
+                    ArrayList<Proyecto> list = filtrosA(view.cmbAnios.getSelectedItem().toString());
                     agregarATabla(list);
+                }
+            }
+            else {
+                //no seleccionó un año
+                if(!view.txtBuscar.getText().trim().toString().isEmpty()){
+                    //escribio nombre
+                    ArrayList<Proyecto> list = filtrosT(view.txtBuscar.getText().trim());
+                    agregarATabla(list);
+                }
+                else{
+                    //no escribio nombre
+                    List<Proyecto> ls = findProyectoEntities();
+                    agregarATabla(ls);
                 }
             }
         }
@@ -688,21 +823,23 @@ public class ProyectoJpaController implements Serializable {
                 
                 List<Proyecto> listp = findProyectoEntities();
                 Collections.sort(listp, new Comparator<Proyecto>() {
-                @Override
-                public int compare(Proyecto o1, Proyecto o2) {
-                    return o1.getProyId().compareTo(o2.getProyId());
-                }
+                    @Override
+                    public int compare(Proyecto o1, Proyecto o2) {
+                        return o1.getProyId().compareTo(o2.getProyId());
+                    }
 
-            });
+                });
             BigDecimal idcar = new BigDecimal(Integer.parseInt(listp.get(listp.size() - 1).getProyId().toString()) + 1);
 
                 _proyectos = new Proyecto();
+                _proyectos.setProyId(idcar);
                 _proyectos.setProyNombre(CEproyecto.txtProyecto.getText().trim().toString());
                 _proyectos.setProyEstado(new BigInteger(String.valueOf(status)));
                 _proyectos.setProyFecha(date);
 
                 try {
                     create(_proyectos);
+                    CEproyecto.dispose();
                     List<Proyecto> ls = findProyectoEntities();
                     agregarATabla(ls);
                 } catch (Exception ex) {
@@ -741,7 +878,7 @@ public class ProyectoJpaController implements Serializable {
                 }
             
                 SimpleDateFormat formater = new SimpleDateFormat("dd/MM/yyyy");
-                String spinnerValue = formater.format(editarPro.spnFecha.getValue());
+                String spinnerValue = formater.format(editarPro.spinFecha.getValue());
                 Date date = formater.parse(spinnerValue);
 
                 _proyectos = new Proyecto();
@@ -752,6 +889,7 @@ public class ProyectoJpaController implements Serializable {
 
                 try {
                     edit(_proyectos);
+                    editarPro.dispose();
                     List<Proyecto> ls = findProyectoEntities();
                     agregarATabla(ls);
                 } catch (Exception ex) {

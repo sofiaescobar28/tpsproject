@@ -6,6 +6,10 @@
 package gestor_de_proyectos.interfaces;
 
 import java.awt.Color;
+import java.util.Calendar;
+import java.util.Date;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerDateModel;
 
 /**
  *
@@ -36,10 +40,13 @@ public class ViewEditar_Proyecto extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         cmbEstado = new javax.swing.JComboBox<>();
         jLabel4 = new javax.swing.JLabel();
-        spnFecha = new javax.swing.JSpinner();
         btnCancelar = new javax.swing.JButton();
         btnEditar = new javax.swing.JButton();
         jTextField1 = new javax.swing.JTextField();
+        Date date = new Date();
+        SpinnerDateModel sm =
+        new SpinnerDateModel(date, null, null, Calendar.DAY_OF_MONTH);
+        spinFecha = new javax.swing.JSpinner(sm);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -60,9 +67,6 @@ public class ViewEditar_Proyecto extends javax.swing.JFrame {
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel4.setText("Fecha de inicio:");
 
-        spnFecha.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        spnFecha.setModel(new javax.swing.SpinnerDateModel());
-
         btnCancelar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnCancelar.setText("Cancelar");
 
@@ -70,6 +74,11 @@ public class ViewEditar_Proyecto extends javax.swing.JFrame {
         btnEditar.setText("Editar");
 
         jTextField1.setText("jTextField1");
+
+        JSpinner.DateEditor de = new JSpinner.DateEditor(spinFecha, "dd-MM-yyyy");
+        spinFecha.setEditor(de);
+        spinFecha.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        spinFecha.setModel(new javax.swing.SpinnerDateModel());
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -85,14 +94,15 @@ public class ViewEditar_Proyecto extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel2)
-                    .addComponent(cmbEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(spnFecha, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(txtProyecto, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGroup(layout.createSequentialGroup()
                             .addComponent(btnCancelar)
                             .addGap(18, 18, 18)
-                            .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(spinFecha, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(cmbEstado, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap(49, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -110,8 +120,8 @@ public class ViewEditar_Proyecto extends javax.swing.JFrame {
                     .addComponent(cmbEstado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(spnFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4))
+                    .addComponent(jLabel4)
+                    .addComponent(spinFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCancelar)
@@ -167,7 +177,7 @@ public class ViewEditar_Proyecto extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     public javax.swing.JTextField jTextField1;
-    public javax.swing.JSpinner spnFecha;
+    public javax.swing.JSpinner spinFecha;
     public javax.swing.JTextField txtProyecto;
     // End of variables declaration//GEN-END:variables
 }

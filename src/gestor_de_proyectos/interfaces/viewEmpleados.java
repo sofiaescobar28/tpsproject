@@ -54,6 +54,11 @@ public class viewEmpleados extends javax.swing.JFrame {
         rdCargo.setSelected(true);
         rdCargo.setText("Cargo");
 
+        jTableEmpleados = new javax.swing.JTable(){
+            public boolean isCellEditable(int rowIndex, int colIndex){
+                return false;
+            }
+        };
         jTableEmpleados.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jTableEmpleados.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -71,6 +76,7 @@ public class viewEmpleados extends javax.swing.JFrame {
                 return types [columnIndex];
             }
         });
+        jTableEmpleados.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(jTableEmpleados);
         if (jTableEmpleados.getColumnModel().getColumnCount() > 0) {
             jTableEmpleados.getColumnModel().getColumn(1).setMinWidth(200);

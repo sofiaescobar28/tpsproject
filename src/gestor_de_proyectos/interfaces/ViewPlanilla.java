@@ -45,6 +45,11 @@ public class ViewPlanilla extends javax.swing.JFrame {
 
         btnReporte.setText("Reporte");
 
+        dgvP = new javax.swing.JTable(){
+            public boolean isCellEditable(int rowIndex, int colIndex){
+                return false;
+            }
+        };
         dgvP.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -61,6 +66,7 @@ public class ViewPlanilla extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        dgvP.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(dgvP);
 
         btnBuscar.setText("Buscar");

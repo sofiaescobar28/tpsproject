@@ -709,13 +709,8 @@ public class IngresoEgresoJpaController implements Serializable {
     public void CrearRegistro(){
         viewCreatRegistro.cmbUnidad.removeAllItems();
         obtUnidadesACombo(viewCreatRegistro.cmbUnidad);
-//                viewCreatRegistro.txtDescripcion.setText("");
         viewCreatRegistro.cmbTipo.setSelectedIndex(0);
         viewCreatRegistro.cmbCategoria.removeAllItems();
-//                viewCreatRegistro.cmbCalidad.setSelectedIndex(0);
-//                viewCreatRegistro.txtCantidad.setText("");
-//                viewCreatRegistro.cmbUnidad.setSelectedIndex(0);
-//                viewCreatRegistro.txtMonto.setText("");
         viewCreatRegistro.setTitle("Nuevo Registro");
         viewCreatRegistro.setVisible(true);
         viewCreatRegistro.getContentPane().setBackground(new Color(153,168,178));

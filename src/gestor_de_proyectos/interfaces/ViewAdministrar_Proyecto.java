@@ -133,6 +133,11 @@ public class ViewAdministrar_Proyecto extends javax.swing.JFrame {
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel4.setText("Nuevo proyecto");
 
+        dgtProyectos = new javax.swing.JTable(){
+            public boolean isCellEditable(int rowIndex, int colIndex){
+                return false;
+            }
+        };
         dgtProyectos.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         dgtProyectos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -143,7 +148,7 @@ public class ViewAdministrar_Proyecto extends javax.swing.JFrame {
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false
+                true, true, true, true, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -151,6 +156,7 @@ public class ViewAdministrar_Proyecto extends javax.swing.JFrame {
             }
         });
         dgtProyectos.setGridColor(new java.awt.Color(198, 146, 122));
+        dgtProyectos.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(dgtProyectos);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());

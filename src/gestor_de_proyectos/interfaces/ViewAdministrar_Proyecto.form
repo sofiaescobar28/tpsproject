@@ -275,10 +275,10 @@
             </Property>
             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
               <Table columnCount="8" rowCount="0">
-                <Column editable="false" title="#" type="java.lang.Object"/>
-                <Column editable="false" title="Projecto" type="java.lang.Object"/>
-                <Column editable="false" title="Fecha de incio" type="java.lang.Object"/>
-                <Column editable="false" title="Estado" type="java.lang.Object"/>
+                <Column editable="true" title="#" type="java.lang.Object"/>
+                <Column editable="true" title="Projecto" type="java.lang.Object"/>
+                <Column editable="true" title="Fecha de incio" type="java.lang.Object"/>
+                <Column editable="true" title="Estado" type="java.lang.Object"/>
                 <Column editable="false" title="null" type="java.lang.Object"/>
                 <Column editable="false" title="null" type="java.lang.Object"/>
                 <Column editable="false" title="null" type="java.lang.Object"/>
@@ -289,10 +289,11 @@
               <Color blue="7a" green="92" red="c6" type="rgb"/>
             </Property>
             <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
-              <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
+              <TableHeader reorderingAllowed="false" resizingAllowed="true"/>
             </Property>
           </Properties>
           <AuxValues>
+            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="dgtProyectos = new javax.swing.JTable(){&#xa;    public boolean isCellEditable(int rowIndex, int colIndex){&#xa;        return false;&#xa;    }&#xa;};"/>
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
           </AuxValues>
         </Component>
