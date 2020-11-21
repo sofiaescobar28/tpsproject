@@ -5,6 +5,11 @@
  */
 package gestor_de_proyectos.interfaces;
 
+import java.util.Calendar;
+import java.util.Date;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerDateModel;
+
 /**
  *
  * @author josse
@@ -47,7 +52,10 @@ public class ViewEditar_Registro extends javax.swing.JFrame {
         txtMonto = new javax.swing.JTextField();
         btnCancelar = new javax.swing.JButton();
         btnGuardar = new javax.swing.JButton();
-        spnFecha = new javax.swing.JSpinner();
+        Date date = new Date();
+        SpinnerDateModel sm =
+        new SpinnerDateModel(date, null, null, Calendar.DAY_OF_MONTH);
+        spnFecha = new javax.swing.JSpinner(sm);
         jTextField1 = new javax.swing.JTextField();
         lblError = new javax.swing.JLabel();
         lblError2 = new javax.swing.JLabel();
@@ -117,6 +125,8 @@ public class ViewEditar_Registro extends javax.swing.JFrame {
         btnGuardar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnGuardar.setText("Guardar");
 
+        JSpinner.DateEditor de = new JSpinner.DateEditor(spnFecha, "dd-MM-yyyy");
+        spnFecha.setEditor(de);
         spnFecha.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         spnFecha.setModel(new javax.swing.SpinnerDateModel());
 
@@ -156,23 +166,21 @@ public class ViewEditar_Registro extends javax.swing.JFrame {
                         .addGap(27, 27, 27)
                         .addComponent(btnGuardar))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(56, 56, 56)
+                        .addGap(70, 70, 70)
                         .addComponent(jLabel7)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(spnFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(43, 43, 43)
-                                .addComponent(jLabel5))
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addGap(56, 56, 56)
-                                    .addComponent(jLabel8))
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                    .addComponent(jLabel6)
-                                    .addGap(1, 1, 1))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel6)
+                                .addGap(1, 1, 1))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.TRAILING))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblError2)
                             .addGroup(layout.createSequentialGroup()

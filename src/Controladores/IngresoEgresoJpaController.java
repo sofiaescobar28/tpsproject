@@ -125,6 +125,7 @@ public class IngresoEgresoJpaController implements Serializable {
         id_proy = id;
         id_segundo = id;
         nombre_proy = nombre;
+        view.cmbFiltro.setSelectedIndex(0);
         agregarATabla(registrosProyecto(id));
         double gasto = gastos(id);
         double ingreso = ingresos(id);
@@ -378,9 +379,6 @@ public class IngresoEgresoJpaController implements Serializable {
                 cont = cont +1 ;
                 model.addRow(Datos);
             }
-        }
-        else{
-            JOptionPane.showMessageDialog(view, "No se encuentran registros de este filtro.");
         }
         view.jTable1.setModel(model);
     }
@@ -717,21 +715,31 @@ public class IngresoEgresoJpaController implements Serializable {
         viewCreatRegistro.setLocationRelativeTo(null);
     }
     
+    public int buscarProyectoIDFiltro(String nombre) {
+        ArrayList<Proyecto> lst = new ArrayList<Proyecto>();
+        lst = ctrlPtoyecto.findSearch(nombre);
+        int idSearch = 0;
+        if (lst.size() > 0) {
+            idSearch = Integer.parseInt(lst.get(0).getProyId().toString());
+        }
+        return idSearch;
+    }
+    
     ActionListener al = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent ae) {
             if (ae.getSource() == view.cmbFiltro) {
                 if (view.cmbFiltro.getSelectedIndex() == 0) {
-                    agregarATabla(registrosProyecto(id_proy));
+                    agregarATabla(registrosProyecto(buscarProyectoIDFiltro(view.lblNombre.getText())));
                 }
                 else if (view.cmbFiltro.getSelectedIndex() == 1) {
-                    agregarATabla(registrosEgresos(id_proy));
+                    agregarATabla(registrosEgresos(buscarProyectoIDFiltro(view.lblNombre.getText())));
                 }
                 else if (view.cmbFiltro.getSelectedIndex() == 2) {
-                    agregarATabla(registrosIngresos(id_proy));
+                    agregarATabla(registrosIngresos(buscarProyectoIDFiltro(view.lblNombre.getText())));
                 }
                 else if (view.cmbFiltro.getSelectedIndex() == 3) {
-                    agregarATabla(registrosPerdidas(id_proy));
+                    agregarATabla(registrosPerdidas(buscarProyectoIDFiltro(view.lblNombre.getText())));
                 }
             }
             else if(ae.getSource() == viewEditRegistro.btnCancelar){
