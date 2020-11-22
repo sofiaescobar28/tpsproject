@@ -399,6 +399,7 @@ public class EmpleadosJpaController implements Serializable {
             vEditE.cmbcargo.setSelectedItem(_cargos.getCargos());
             vEditE.setLocationRelativeTo(null);
             vEditE.getContentPane().setBackground(new Color(153,168,178));
+            vEditE.setTitle("Editar Empleado");
             vEditE.setVisible(true);
         } else if (columna == 7) {
             obtenerObjetoP(fila);
@@ -666,6 +667,7 @@ public class EmpleadosJpaController implements Serializable {
                 obtCargoACombo(vNuevoE.cmbcargo);
                 vNuevoE.setVisible(true);
                 vNuevoE.getContentPane().setBackground(new Color(153,168,178));
+                vNuevoE.setTitle("Crear Empleado");
                 vNuevoE.setLocationRelativeTo(null);
 
             } else if (e.getSource() == vNuevoE.btnGuardar) {
@@ -696,6 +698,7 @@ public class EmpleadosJpaController implements Serializable {
                             } else {
                                 _emp.setEmpId(new BigDecimal(getEmpleadosCount() + 1));//asignamos id
                                 create(_emp);
+                                vNuevoE.dispose();
                                 agregarATabla(findEmpleadosEntities());
                             }
                         } catch (Exception ex) {
@@ -1164,6 +1167,7 @@ public class EmpleadosJpaController implements Serializable {
 
                     try {
                         edit(_emp);
+                        vEditE.dispose();
                         agregarATablaPlanilla(ordenarLista());
                     } catch (Exception ex) {
                         JOptionPane.showMessageDialog(vNuevoE, "Ha sucedido un error al modificar empleado..");

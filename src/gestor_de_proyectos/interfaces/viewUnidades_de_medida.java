@@ -39,6 +39,7 @@ public class viewUnidades_de_medida extends javax.swing.JFrame {
         btnBuscar = new javax.swing.JButton();
         btnNuevaUnidad = new javax.swing.JButton();
         lblNombre = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
 
         jLabel1.setText("jLabel1");
 
@@ -49,6 +50,7 @@ public class viewUnidades_de_medida extends javax.swing.JFrame {
                 return false;
             }
         };
+        dgvUnidades.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         dgvUnidades.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -60,6 +62,8 @@ public class viewUnidades_de_medida extends javax.swing.JFrame {
         dgvUnidades.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(dgvUnidades);
 
+        txtBuscar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+
         btnBuscar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Buscar1.png"))); // NOI18N
         btnBuscar.setText("Buscar");
@@ -70,6 +74,9 @@ public class viewUnidades_de_medida extends javax.swing.JFrame {
         lblNombre.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         lblNombre.setText("Unidades de Medida");
 
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel2.setText("Nombre:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -79,6 +86,8 @@ public class viewUnidades_de_medida extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 481, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(26, 26, 26)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -104,7 +113,9 @@ public class viewUnidades_de_medida extends javax.swing.JFrame {
                         .addGap(18, 18, 18))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(38, 38, 38)
-                        .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel2))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(24, 24, 24))
@@ -152,6 +163,7 @@ public class viewUnidades_de_medida extends javax.swing.JFrame {
     public javax.swing.JButton btnNuevaUnidad;
     public javax.swing.JTable dgvUnidades;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblNombre;
     public javax.swing.JTextField txtBuscar;

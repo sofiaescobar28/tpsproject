@@ -96,6 +96,8 @@ public class UnidadesDeMedidaJpaController implements Serializable {
             viewCrear_Editar.txtUnidadMed.setText(_unidad.getUmNombre());            
             
             viewCrear_Editar.setLocationRelativeTo(null);
+            viewCrear_Editar.getContentPane().setBackground(new Color(153,168,178));
+            viewCrear_Editar.setTitle("Editar Unidad de Medida");
             viewCrear_Editar.setVisible(true);
             idglobal = Integer.parseInt(view.dgvUnidades.getValueAt(fila, 0).toString());
         }
@@ -140,6 +142,8 @@ public class UnidadesDeMedidaJpaController implements Serializable {
                 idglobal=-1;
                 viewCrear_Editar.txtUnidadMed.setText(null);
                 viewCrear_Editar.setLocationRelativeTo(null);
+                viewCrear_Editar.getContentPane().setBackground(new Color(153,168,178));
+                viewCrear_Editar.setTitle("Crear Unidad de Medida");
                 viewCrear_Editar.setVisible(true);
             }
             else if (e.getSource()==viewCrear_Editar.btnGuardar) {
@@ -150,13 +154,13 @@ public class UnidadesDeMedidaJpaController implements Serializable {
                         _unidad.setUmId(new BigDecimal(TraerID()));
                         _unidad.setUmNombre(viewCrear_Editar.txtUnidadMed.getText().trim().toUpperCase());
                         try{
-                            if (findUnidadSearch(_unidad.getUmNombre()).size()>0) {
+                            if (findUnidadSearchCompleto(_unidad.getUmNombre()).size()>0) {
                                 JOptionPane.showMessageDialog(view,"Esa unidad ya existe");
                                 _unidad=null;
                             }else{
                                 create(_unidad);
                                 llenarTabla(findUnidadesDeMedidaEntities());
-                                JOptionPane.showMessageDialog(view,"Guardada!");
+                                viewCrear_Editar.dispose();
                                 _unidad=null;
                                 viewCrear_Editar.txtUnidadMed.setText(null);
                             }
@@ -170,7 +174,7 @@ public class UnidadesDeMedidaJpaController implements Serializable {
                         _unidad.setUmId(BigDecimal.valueOf(Double.valueOf(idglobal)));                       
                         _unidad.setUmNombre(viewCrear_Editar.txtUnidadMed.getText().trim().toUpperCase());                         
                         try{
-                            if (findUnidadSearch(_unidad.getUmNombre()).size()>0) {
+                            if (findUnidadSearchCompleto(_unidad.getUmNombre()).size()>0) {
                                 JOptionPane.showMessageDialog(view,"Esa unidad ya existe");                                
                             }else{
                                 edit(_unidad);
@@ -182,6 +186,9 @@ public class UnidadesDeMedidaJpaController implements Serializable {
                             JOptionPane.showMessageDialog(viewCrear_Editar, "Ha sucedido un error modificar.");
                         }                    
                     }                    
+                }
+                else{
+                    JOptionPane.showMessageDialog(viewCrear_Editar, "No puede dejar este campo vacío.");
                 }
             }
             else if (e.getSource()==viewCrear_Editar.btnCancelar) {
@@ -240,7 +247,43 @@ public class UnidadesDeMedidaJpaController implements Serializable {
             
         } catch (SQLException ex) {
 
-            JOptionPane.showMessageDialog(view, "El registro que intenta eliminar no existe.");
+            JOptionPane.showMessageDialog(view, "El registro no existe.");
+
+        }
+        return null;
+
+    }
+    
+    public ArrayList<UnidadesDeMedida> findUnidadSearchCompleto(String s) {
+
+        try {
+            claseConnect.AbrirConexionBD();
+            CallableStatement cs
+                    = claseConnect.con.prepareCall("{call findUnidadNombreCompleto(?,?)}");
+            cs.setString(1, s);
+            cs.registerOutParameter(2, OracleTypes.CURSOR);
+
+            cs.executeQuery();
+
+            ResultSet rset = ((OracleCallableStatement) cs).getCursor(2);
+            ArrayList<UnidadesDeMedida> Datos = new ArrayList<UnidadesDeMedida>();
+            
+                while (rset.next()) {
+                    _unidad = new UnidadesDeMedida();
+                    _unidad.setUmId(rset.getBigDecimal("UM_ID"));
+                    _unidad.setUmNombre(rset.getString("UM_NOMBRE"));
+
+                    Datos.add(_unidad);
+                }
+               
+            
+
+            claseConnect.CerrarConexionBD();
+             return Datos;
+            
+        } catch (SQLException ex) {
+
+            JOptionPane.showMessageDialog(view, "El registro no existe.");
 
         }
         return null;

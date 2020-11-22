@@ -707,8 +707,9 @@ public class IngresoEgresoJpaController implements Serializable {
     public void CrearRegistro(){
         viewCreatRegistro.cmbUnidad.removeAllItems();
         obtUnidadesACombo(viewCreatRegistro.cmbUnidad);
-        viewCreatRegistro.cmbTipo.setSelectedIndex(0);
         viewCreatRegistro.cmbCategoria.removeAllItems();
+        obtCategoriasACombo(viewCreatRegistro.cmbCategoria, 0);
+        viewCreatRegistro.cmbTipo.setSelectedIndex(0);
         viewCreatRegistro.setTitle("Nuevo Registro");
         viewCreatRegistro.setVisible(true);
         viewCreatRegistro.getContentPane().setBackground(new Color(153,168,178));
@@ -786,6 +787,8 @@ public class IngresoEgresoJpaController implements Serializable {
                 ViewCategorias cate = new ViewCategorias();
                 CategoriasJpaController ctrlcate = new CategoriasJpaController(Entity_Main.getInstance(), cate);
                 ctrlCategorias.iniciarForm();
+                cate.setLocationRelativeTo(null);
+                cate.setVisible(true);
             }
             else if (ae.getSource() == viewEditRegistro.btnAUnidad) {
                 viewUnidades_de_medida uni = new viewUnidades_de_medida();
@@ -796,6 +799,8 @@ public class IngresoEgresoJpaController implements Serializable {
                 ViewCategorias cate = new ViewCategorias();
                 CategoriasJpaController ctrlcate = new CategoriasJpaController(Entity_Main.getInstance(), cate);
                 ctrlCategorias.iniciarForm();
+                cate.setLocationRelativeTo(null);
+                cate.setVisible(true);
             }
             else if (ae.getSource() == viewCreatRegistro.btnAUnidad) {
                 viewUnidades_de_medida uni = new viewUnidades_de_medida();

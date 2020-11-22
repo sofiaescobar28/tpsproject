@@ -33,6 +33,7 @@ import java.security.Policy;
 import java.sql.CallableStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -340,6 +341,7 @@ public class GastoPersonalJpaController implements Serializable {
             }
         });
         if (_listado.size()>0) {
+            SimpleDateFormat objSDF = new SimpleDateFormat("dd-MM-yyyy");
             Object Datos[] = new Object[7];                        
             int pro;
             for (int i = 0; i < _listado.size(); i++) {
@@ -353,8 +355,8 @@ public class GastoPersonalJpaController implements Serializable {
                     Cargos c = new Cargos();
                     CargosJpaController ctrl = new CargosJpaController(Entity_Main.getInstance());
                     c=ctrl.findCargos(new BigDecimal(_listado.get(i).getGpCargo()));
-                    Datos[3]=c.getCargos();                
-                    Datos[4]=_listado.get(i).getGpFecha();
+                    Datos[3]=c.getCargos();
+                    Datos[4]=objSDF.format(_listado.get(i).getGpFecha());
                     Datos[5]=_listado.get(i).getGpPago();
                     Datos[6]=_listado.get(i).getGpComentario();
                     model.addRow(Datos);

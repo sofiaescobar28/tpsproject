@@ -38,11 +38,15 @@ public class ViewPlanilla extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        lblNombre.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        lblNombre.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         lblNombre.setText("Planilla - Proyecto: ");
 
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel1.setText("Nombre:");
 
+        txtBuscar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+
+        btnReporte.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnReporte.setText("Reporte");
 
         dgvP = new javax.swing.JTable(){
@@ -50,6 +54,7 @@ public class ViewPlanilla extends javax.swing.JFrame {
                 return false;
             }
         };
+        dgvP.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         dgvP.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -69,8 +74,10 @@ public class ViewPlanilla extends javax.swing.JFrame {
         dgvP.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(dgvP);
 
+        btnBuscar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnBuscar.setText("Buscar");
 
+        btnNuevoE.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnNuevoE.setText("Nuevo Empleado");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -81,21 +88,22 @@ public class ViewPlanilla extends javax.swing.JFrame {
                 .addGap(418, 418, 418)
                 .addComponent(lblNombre)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1)
-                .addGap(20, 20, 20))
             .addGroup(layout.createSequentialGroup()
-                .addGap(19, 19, 19)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnBuscar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 349, Short.MAX_VALUE)
-                .addComponent(btnNuevoE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnReporte)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(19, 19, 19)
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnBuscar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 295, Short.MAX_VALUE)
+                        .addComponent(btnNuevoE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnReporte))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane1)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -110,7 +118,7 @@ public class ViewPlanilla extends javax.swing.JFrame {
                     .addComponent(btnReporte)
                     .addComponent(btnBuscar)
                     .addComponent(btnNuevoE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 377, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );

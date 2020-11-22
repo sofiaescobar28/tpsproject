@@ -327,6 +327,7 @@ public class CargosJpaController implements Serializable {
             if (e.getSource() == view.btnNuevoCargo) {
                 nuevocargo.setVisible(true);
                 nuevocargo.getContentPane().setBackground(new Color(153,168,178));
+                nuevocargo.setTitle("Crear Cargo");
                 nuevocargo.setLocationRelativeTo(null);
             }else if(e.getSource()== view.btnReporte){
                 LlenarCargos();
@@ -412,6 +413,7 @@ public class CargosJpaController implements Serializable {
             viewEditarCargos.txteditarcargo.setText(obtenerObjeto(fila).getCargos());
             viewEditarCargos.setLocationRelativeTo(null);
             viewEditarCargos.getContentPane().setBackground(new Color(153,168,178));
+            viewEditarCargos.setTitle("Editar Cargo");
             viewEditarCargos.setVisible(true);
 
         } else if (columna == 3) {

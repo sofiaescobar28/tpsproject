@@ -361,6 +361,7 @@ public class CategoriasJpaController implements Serializable {
             if (e.getSource() == viewCategorias.btnNuevaCategoria) {
                 viewNuevaCat.setVisible(true);
                 viewNuevaCat.getContentPane().setBackground(new Color(153,168,178));
+                viewNuevaCat.setTitle("Crear Categoría");
                 viewNuevaCat.setLocationRelativeTo(null);
 
             } else if (e.getSource() == viewNuevaCat.btnCancelar) {
@@ -462,9 +463,10 @@ public class CategoriasJpaController implements Serializable {
             viewEditCate.txtEditarcategoria.setText(_categorias.getCatNombre());
 //            int val = _categorias.getCatId().intValue();
             viewEditCate.cmbTipoCategoria.setSelectedIndex(_categorias.getCatTipo().intValue());
-
+            
             viewEditCate.setLocationRelativeTo(null);
             viewEditCate.getContentPane().setBackground(new Color(153,168,178));
+            viewEditCate.setTitle("Editar Categoría");
             viewEditCate.setVisible(true);
 
         }
