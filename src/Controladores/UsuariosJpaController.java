@@ -423,6 +423,7 @@ public class UsuariosJpaController implements Serializable {
             viewCrearEditar.txtClave.setEnabled(false);
             
             viewCrearEditar.setLocationRelativeTo(null);
+            viewCrearEditar.setTitle("Editar Usuario");
             viewCrearEditar.setVisible(true);
         }        
     }
@@ -502,7 +503,8 @@ public class UsuariosJpaController implements Serializable {
                 limpiarTXT();
                 viewCrearEditar.txtClave.setEditable(true);
                 viewCrearEditar.txtClave.setEnabled(true);                
-                viewCrearEditar.setLocationRelativeTo(null);                
+                viewCrearEditar.setLocationRelativeTo(null);
+                viewCrearEditar.setTitle("Crear Usuario");
                 viewCrearEditar.setVisible(true);                
             }
             else if (e.getSource()==viewCrearEditar.btnCancelar) {
@@ -512,8 +514,19 @@ public class UsuariosJpaController implements Serializable {
                 viewCrearEditar.txtClave.setEnabled(true);
             }
             else if (e.getSource()==viewCrearEditar.btnGuardar) {
-                if (!viewCrearEditar.txtNombUsr.getText().trim().isEmpty() || !viewCrearEditar.txtClave.getText().trim().isEmpty() ||
-                        viewCrearEditar.txtCorreo.getText().trim().isEmpty() ||viewCrearEditar.txtContra.getText().trim().isEmpty()) {
+                if(viewCrearEditar.txtNombUsr.getText().trim().isEmpty()){
+                    JOptionPane.showMessageDialog(view,"Debe llenar el nombre de usuario.");
+                }
+                else if(viewCrearEditar.txtClave.getText().trim().isEmpty()){
+                    JOptionPane.showMessageDialog(view,"De escribir una clave para el usuario.");
+                }
+                else if(viewCrearEditar.txtCorreo.getText().trim().isEmpty()){
+                    JOptionPane.showMessageDialog(view,"Debe escribir un correo para el usuario.");
+                }
+                else if(viewCrearEditar.txtContra.getText().trim().isEmpty()){
+                    JOptionPane.showMessageDialog(view,"Debe escribir una contraseña para el usuario.");
+                } 
+                else{
                     
                     int Mayusculas=0, Minusculas=0, Cantidad=0;
                     String contra = viewCrearEditar.txtContra.getText().trim();

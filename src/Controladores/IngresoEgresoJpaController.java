@@ -116,6 +116,10 @@ public class IngresoEgresoJpaController implements Serializable {
         this.viewCreatRegistro.btnGuardar.addActionListener(al);
         this.viewCreatRegistro.btnACategoria.addActionListener(al);
         this.viewCreatRegistro.btnAUnidad.addActionListener(al);
+        this.viewCreatRegistro.idRefrescar1.addActionListener(al);
+        this.viewCreatRegistro.idRefrescar2.addActionListener(al);
+        this.viewEditRegistro.btnRefrescarCate.addActionListener(al);
+        this.viewEditRegistro.btnRefrescarUnidad.addActionListener(al);
         
     }
     
@@ -786,9 +790,9 @@ public class IngresoEgresoJpaController implements Serializable {
             else if (ae.getSource() == viewEditRegistro.btnACategoria) {
                 ViewCategorias cate = new ViewCategorias();
                 CategoriasJpaController ctrlcate = new CategoriasJpaController(Entity_Main.getInstance(), cate);
-                ctrlCategorias.iniciarForm();
                 cate.setLocationRelativeTo(null);
                 cate.setVisible(true);
+                ctrlCategorias.iniciarFormDetalle();
             }
             else if (ae.getSource() == viewEditRegistro.btnAUnidad) {
                 viewUnidades_de_medida uni = new viewUnidades_de_medida();
@@ -798,14 +802,43 @@ public class IngresoEgresoJpaController implements Serializable {
             else if (ae.getSource() == viewCreatRegistro.btnACategoria) {
                 ViewCategorias cate = new ViewCategorias();
                 CategoriasJpaController ctrlcate = new CategoriasJpaController(Entity_Main.getInstance(), cate);
-                ctrlCategorias.iniciarForm();
                 cate.setLocationRelativeTo(null);
                 cate.setVisible(true);
+                ctrlCategorias.iniciarFormDetalle();
             }
             else if (ae.getSource() == viewCreatRegistro.btnAUnidad) {
                 viewUnidades_de_medida uni = new viewUnidades_de_medida();
                 UnidadesDeMedidaJpaController ctrluni = new UnidadesDeMedidaJpaController(Entity_Main.getInstance(), uni);
                 ctrluni.iniciarForm();
+            }
+            else if (ae.getSource() == viewCreatRegistro.idRefrescar1){
+                if(viewCreatRegistro.cmbTipo.getSelectedIndex() == 0) {
+                   viewCreatRegistro.cmbCategoria.removeAllItems();
+                   obtCategoriasACombo(viewCreatRegistro.cmbCategoria, 0); 
+                }
+                else {
+                    viewCreatRegistro.cmbCategoria.removeAllItems();
+                    obtCategoriasACombo(viewCreatRegistro.cmbCategoria, 1); 
+                }
+            }
+            else if (ae.getSource() == viewCreatRegistro.idRefrescar2){
+                viewCreatRegistro.cmbUnidad.removeAllItems();
+                obtUnidadesACombo(viewCreatRegistro.cmbUnidad);
+            }
+            else if (ae.getSource() == viewEditRegistro.btnRefrescarUnidad){
+                viewEditRegistro.cmbUnidad.removeAllItems();
+                obtUnidadesACombo(viewEditRegistro.cmbUnidad);
+                viewEditRegistro.cmbUnidad.setSelectedItem(0);
+            }
+            else if (ae.getSource() == viewEditRegistro.btnRefrescarCate){
+                if(viewEditRegistro.cmbTipo.getSelectedIndex() == 0) {
+                   viewEditRegistro.cmbCategoria.removeAllItems();
+                   obtCategoriasACombo(viewEditRegistro.cmbCategoria, 0); 
+                }
+                else {
+                    viewEditRegistro.cmbCategoria.removeAllItems();
+                    obtCategoriasACombo(viewEditRegistro.cmbCategoria, 1); 
+                }
             }
             else if (ae.getSource()== view.btnReporte) {
                 //int resp = JOptionPane.showConfirmDialog(null, "Desea un reporte normal o un reporte de resumen mensual?", "Normal", JOptionPane., JOptionPane.QUESTION_MESSAGE);

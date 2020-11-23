@@ -137,6 +137,13 @@ public class CategoriasJpaController implements Serializable {
         viewCategorias.setVisible(true);
         viewCategorias.setLocationRelativeTo(null);
     }
+    
+    public void iniciarFormDetalle() {
+        viewCategorias.setTitle("Categorías");
+        viewCategorias.getContentPane().setBackground(new Color(198,146,122));
+        List<Categorias> ls = findCategoriasEntities();
+        agregarATabla(ls);
+    }
 
     public ArrayList<Categorias> findSearch(String s) {
 
@@ -389,6 +396,7 @@ public class CategoriasJpaController implements Serializable {
                             create(_categorias);
                             viewNuevaCat.txtNuevocategoria.setText("");
                             agregarATabla(findCategoriasEntities());
+                            viewNuevaCat.dispose();
                         }
                     } catch (Exception ex) {
                         JOptionPane.showMessageDialog(viewNuevaCat, "Sucedió un error al crear categoría.");
@@ -416,6 +424,7 @@ public class CategoriasJpaController implements Serializable {
                         } else {
                             edit(_categorias);
                             agregarATabla(findCategoriasEntities());
+                            viewEditCate.dispose();
                         }
                     } catch (Exception ex) {
                         Logger.getLogger(CategoriasJpaController.class.getName()).log(Level.SEVERE, null, ex);

@@ -22,6 +22,7 @@ public class ViewGeneralidades extends javax.swing.JFrame {
     /**
      * Creates new form Generalidades
      */
+    boolean salida = false;
     public ViewGeneralidades() {
         this.getContentPane().setBackground(new Color(177,54,0));
         initComponents();
@@ -256,21 +257,24 @@ public class ViewGeneralidades extends javax.swing.JFrame {
 
     private void btnUnidades4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUnidades4ActionPerformed
         // TODO add your handling code here:
-        ViewMenu_Principal menuPrincipal = new ViewMenu_Principal();
-        menuPrincipal.setLocationRelativeTo(null);
-        menuPrincipal.getContentPane().setBackground(new Color(177,54,0));
-        menuPrincipal.setTitle("Menú Principal");
-        menuPrincipal.setVisible(true);
+        ViewMenu_Principal menu = new ViewMenu_Principal();
+        menu.setTitle("Menú Principal");
+        menu.setVisible(true);
+        menu.setLocationRelativeTo(null);
+        salida = true;
         this.dispose();       
     }//GEN-LAST:event_btnUnidades4ActionPerformed
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
         // TODO add your handling code here:
-        ViewMenu_Principal menu = new ViewMenu_Principal();
-        menu.setTitle("Menú Principal");
-        menu.setVisible(true);
-        menu.setLocationRelativeTo(null);
-        this.dispose();
+        if (salida == false) {
+            ViewMenu_Principal menu = new ViewMenu_Principal();
+            menu.setTitle("Menú Principal");
+            menu.setVisible(true);
+            menu.setLocationRelativeTo(null);
+            salida = true;
+            this.dispose();
+        }
     }//GEN-LAST:event_formWindowClosed
 
     /**
