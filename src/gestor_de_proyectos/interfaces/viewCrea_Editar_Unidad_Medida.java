@@ -36,6 +36,11 @@ public class viewCrea_Editar_Unidad_Medida extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         txtUnidadMed.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtUnidadMed.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtUnidadMedKeyTyped(evt);
+            }
+        });
 
         btnGuardar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnGuardar.setText("Guardar");
@@ -89,6 +94,12 @@ public class viewCrea_Editar_Unidad_Medida extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void txtUnidadMedKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtUnidadMedKeyTyped
+        // TODO add your handling code here:
+        if (txtUnidadMed.getText().length()== 20) 
+            evt.consume(); 
+    }//GEN-LAST:event_txtUnidadMedKeyTyped
 
     /**
      * @param args the command line arguments

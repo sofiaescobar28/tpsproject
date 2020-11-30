@@ -43,6 +43,11 @@ public class ViewNuevo_Cargo extends javax.swing.JFrame {
 
         txtNuevocargo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         txtNuevocargo.setToolTipText("Nombre del cargo");
+        txtNuevocargo.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNuevocargoKeyTyped(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel1.setText("Cargo:");
@@ -85,6 +90,12 @@ public class ViewNuevo_Cargo extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void txtNuevocargoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNuevocargoKeyTyped
+        // TODO add your handling code here:
+        if (txtNuevocargo.getText().length()== 50) 
+            evt.consume(); 
+    }//GEN-LAST:event_txtNuevocargoKeyTyped
 
     /**
      * @param args the command line arguments

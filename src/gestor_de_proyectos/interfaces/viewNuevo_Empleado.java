@@ -54,8 +54,18 @@ public class viewNuevo_Empleado extends javax.swing.JFrame {
         jLabel3.setText("Salario:");
 
         txtEmpleado.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtEmpleado.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtEmpleadoKeyTyped(evt);
+            }
+        });
 
         txtSalario.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtSalario.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtSalarioKeyTyped(evt);
+            }
+        });
 
         btnGuardar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnGuardar.setText("Guardar");
@@ -69,6 +79,11 @@ public class viewNuevo_Empleado extends javax.swing.JFrame {
         jLabel4.setText("Teléfono:");
 
         txtTelefono.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtTelefono.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtTelefonoKeyTyped(evt);
+            }
+        });
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel5.setText("Estado:");
@@ -151,6 +166,24 @@ public class viewNuevo_Empleado extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void txtEmpleadoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEmpleadoKeyTyped
+        // TODO add your handling code here:
+        if (txtEmpleado.getText().length()== 100) 
+            evt.consume(); 
+    }//GEN-LAST:event_txtEmpleadoKeyTyped
+
+    private void txtTelefonoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTelefonoKeyTyped
+        // TODO add your handling code here:
+        if (txtTelefono.getText().length()== 20) 
+            evt.consume(); 
+    }//GEN-LAST:event_txtTelefonoKeyTyped
+
+    private void txtSalarioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSalarioKeyTyped
+        // TODO add your handling code here:
+        if (txtSalario.getText().length()== 6) 
+            evt.consume(); 
+    }//GEN-LAST:event_txtSalarioKeyTyped
 
     /**
      * @param args the command line arguments

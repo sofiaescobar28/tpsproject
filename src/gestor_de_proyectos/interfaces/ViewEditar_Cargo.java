@@ -36,6 +36,11 @@ public class ViewEditar_Cargo extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         txteditarcargo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txteditarcargo.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txteditarcargoKeyTyped(evt);
+            }
+        });
 
         btnCancelar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnCancelar.setText("Cancelar");
@@ -87,6 +92,12 @@ public class ViewEditar_Cargo extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void txteditarcargoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txteditarcargoKeyTyped
+        // TODO add your handling code here:
+        if (txteditarcargo.getText().length()== 50) 
+            evt.consume(); 
+    }//GEN-LAST:event_txteditarcargoKeyTyped
 
     /**
      * @param args the command line arguments

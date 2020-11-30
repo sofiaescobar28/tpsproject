@@ -38,6 +38,11 @@ public class ViewEditar_Categoria extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         txtEditarcategoria.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtEditarcategoria.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtEditarcategoriaKeyTyped(evt);
+            }
+        });
 
         cmbTipoCategoria.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         cmbTipoCategoria.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Ingreso", "Egreso" }));
@@ -103,6 +108,12 @@ public class ViewEditar_Categoria extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void txtEditarcategoriaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEditarcategoriaKeyTyped
+        // TODO add your handling code here:
+        if (txtEditarcategoria.getText().length()== 50) 
+            evt.consume(); 
+    }//GEN-LAST:event_txtEditarcategoriaKeyTyped
 
     /**
      * @param args the command line arguments

@@ -83,6 +83,11 @@ public class viewPagar extends javax.swing.JFrame {
         btnPagar.setText("Realizar pago");
 
         txtComentario.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtComentario.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtComentarioKeyTyped(evt);
+            }
+        });
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel4.setText("Comentario:");
@@ -177,7 +182,15 @@ public class viewPagar extends javax.swing.JFrame {
         }else{
             this.lblError.setText("");
         }
+        if (txtPago.getText().length()== 7) 
+            evt.consume(); 
     }//GEN-LAST:event_txtPagoKeyTyped
+
+    private void txtComentarioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtComentarioKeyTyped
+        // TODO add your handling code here:
+        if (txtComentario.getText().length()== 10) 
+            evt.consume(); 
+    }//GEN-LAST:event_txtComentarioKeyTyped
 
     /**
      * @param args the command line arguments

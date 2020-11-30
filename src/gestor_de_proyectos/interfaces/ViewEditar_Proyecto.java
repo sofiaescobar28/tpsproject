@@ -57,6 +57,11 @@ public class ViewEditar_Proyecto extends javax.swing.JFrame {
         jLabel1.setText("Proyecto:");
 
         txtProyecto.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtProyecto.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtProyectoKeyTyped(evt);
+            }
+        });
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel3.setText("Estado:");
@@ -132,6 +137,12 @@ public class ViewEditar_Proyecto extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void txtProyectoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtProyectoKeyTyped
+        // TODO add your handling code here:
+        if (txtProyecto.getText().length()== 50) 
+            evt.consume(); 
+    }//GEN-LAST:event_txtProyectoKeyTyped
 
     /**
      * @param args the command line arguments

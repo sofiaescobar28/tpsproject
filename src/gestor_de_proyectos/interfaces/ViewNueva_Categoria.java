@@ -38,6 +38,11 @@ public class ViewNueva_Categoria extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         txtNuevocategoria.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtNuevocategoria.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNuevocategoriaKeyTyped(evt);
+            }
+        });
 
         btnCancelar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnCancelar.setText("Cancelar");
@@ -90,7 +95,7 @@ public class ViewNueva_Categoria extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(txtNuevocategoria, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE))
+                    .addComponent(txtNuevocategoria))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cmbTipoCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -104,6 +109,12 @@ public class ViewNueva_Categoria extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void txtNuevocategoriaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNuevocategoriaKeyTyped
+        // TODO add your handling code here:
+        if (txtNuevocategoria.getText().length()== 50) 
+            evt.consume(); 
+    }//GEN-LAST:event_txtNuevocategoriaKeyTyped
 
     /**
      * @param args the command line arguments
