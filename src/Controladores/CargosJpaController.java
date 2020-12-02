@@ -418,7 +418,9 @@ public class CargosJpaController implements Serializable {
 
         } else if (columna == 3) {
 
-            int resp = JOptionPane.showConfirmDialog(null, "¿Realmente desea eliminar el cargo?", "Confirmar", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            int cantidad = puedeEliminar(Double.parseDouble(view.dgvCargos.getValueAt(fila, 0).toString()));
+            if (cantidad == 0){
+                int resp = JOptionPane.showConfirmDialog(null, "¿Realmente desea eliminar el cargo?", "Confirmar", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
             if (resp == 0) {
                 try {
                     destroy(obtenerObjeto(fila).getCargosId());
@@ -432,6 +434,9 @@ public class CargosJpaController implements Serializable {
                 }
 
             }
+            }else{
+                JOptionPane.showMessageDialog(view, "Este cargo está siendo ocupado, no puede ser eliminado");
+            }            
         }
 //        int columna = view.jtableProducto.getSelectedColumn();
         idglobal = Integer.parseInt(view.dgvCargos.getValueAt(fila, 0).toString());
@@ -567,5 +572,30 @@ public class CargosJpaController implements Serializable {
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(view, "Error: consulta llamar cargos");
         }        
+    }
+    public int puedeEliminar(double car_cod){        
+       try {
+            claseConnect.AbrirConexionBD();
+            CallableStatement cs
+                    = claseConnect.con.prepareCall("{call ocupaCargo(?,?)}");            
+            cs.setDouble(1, car_cod);
+            cs.registerOutParameter(2, OracleTypes.CURSOR);
+
+            cs.executeQuery();
+
+            ResultSet rset = ((OracleCallableStatement) cs).getCursor(2);
+            ArrayList<Cargos> Datos = new ArrayList<Cargos>();
+            while (rset.next()) {
+                _cargos = new Cargos();
+                _cargos.setCargosId(rset.getBigDecimal("CARGOS_ID"));
+                _cargos.setCargos(rset.getString("CARGOS"));
+                Datos.add(_cargos);
+            }                          
+            claseConnect.CerrarConexionBD();                         
+            return Datos.size();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(view, "Error: consulta preguntar si el cargo está ocupado");
+            return -1;
+        }
     }
 }
